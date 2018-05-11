@@ -1,0 +1,38 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="ehcache.xsd" updateCheck="true"
+	monitoring="autodetect" dynamicConfig="true" name="ood-cache">
+
+	<diskStore path="java.io.tmpdir/cache-dev" />
+
+	<defaultCache maxElementsInMemory="10000" eternal="false"
+		overflowToDisk="false" timeToIdleSeconds="3600"
+		timeToLiveSeconds="3600">
+	</defaultCache>
+
+	<cache name="org.hibernate.cache.internal.StandardQueryCache"
+		maxElementsInMemory="10000" eternal="false" overflowToDisk="false"
+		timeToIdleSeconds="3600" timeToLiveSeconds="3600">
+	</cache>
+
+	<cache name="org.hibernate.cache.spi.UpdateTimestampsCache"
+		maxElementsInMemory="10000"
+		eternal="true"
+		overflowToDisk="false">
+	</cache>
+
+	<cache name="bet.entity-cache"
+		maxElementsInMemory="10000" eternal="false" overflowToDisk="false" 
+		timeToIdleSeconds="3600" timeToLiveSeconds="3600">
+	</cache>
+
+	<cache name="bet.collection-cache"
+		   maxElementsInMemory="10000" eternal="false" overflowToDisk="false"
+		   timeToIdleSeconds="3600" timeToLiveSeconds="3600">
+	</cache>
+
+	<cache name="bet.query-cache"
+		maxElementsInMemory="10000" eternal="false" overflowToDisk="false" 
+		timeToIdleSeconds="3600" timeToLiveSeconds="3600">
+	</cache>
+
+</ehcache>

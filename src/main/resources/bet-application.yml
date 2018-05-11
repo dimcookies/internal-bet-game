@@ -1,0 +1,51 @@
+endpoints:
+  enabled: false
+  health:
+    enabled: true
+  jmx:
+    domain: bet
+spring:
+  mvc:
+    favicon:
+      enabled: false
+  profiles:
+    active: dev
+  session:
+    store-type: None
+    timeout: 1800   
+  jpa:
+    database: POSTGRESQL
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+    properties:
+      hibernate.cache.use_second_level_cache: true
+      hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
+      hibernate.cache.use_query_cache: true
+      net.sf.ehcache.configurationResourceName: /bet-ehcache.xml
+      hibernate.generate_statistics: false
+  datasource:
+    url: jdbc:postgresql://rdbms:5432/bet
+    username: bet
+    password: upstream
+    driver-class-name: org.postgresql.Driver
+  jackson:
+    serialization: 
+      WRITE_DATES_AS_TIMESTAMPS: false
+project_code: BET_DEVELOPMENT
+flyway:
+    enabled: false
+    table: db_migration_history
+    sqlMigrationSuffix: .Final.sql
+    schemas: bet
+    outOfOrder: true
+    initOnMigrate: true
+management:
+  add-application-context-header: false
+application:
+    encryptKey: 1234567890qwertyuiopasdf
+    live_scores:
+      url: http://localhost:8080/test/live_scores
+    database-schema: bet
+    node:
+         state-write-interval-mins: 30
+         list-read-interval-secs: 1
