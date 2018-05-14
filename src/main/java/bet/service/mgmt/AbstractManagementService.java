@@ -15,10 +15,6 @@ public abstract class AbstractManagementService<T extends Serializable, V extend
 	@Autowired
 	protected CrudRepository<T, V> repository;
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.upstreamsystems.dryad.ood.api.mgmt.ManagementService#create(com.upstreamsystems.dryad.ood.api.dto.ManagementDto)
-	 */
 	@Override
 	public E create(E dto) {
 
@@ -28,10 +24,6 @@ public abstract class AbstractManagementService<T extends Serializable, V extend
 		return dto;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.upstreamsystems.dryad.ood.api.mgmt.ManagementService#update(com.upstreamsystems.dryad.ood.api.dto.ManagementDto)
-	 */
 	@Override
 	public E update(E dto) {
 

@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "Management-api")
 @RestController
 @RequestMapping("/config/odd")
-public class OddController extends AbstractOodController<OddDto, Integer, Odd> {
+public class OddController extends AbstractBetController<OddDto, Integer, Odd> {
 
 }

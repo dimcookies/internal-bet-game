@@ -42,10 +42,18 @@ flyway:
 management:
   add-application-context-header: false
 application:
+    timezone: Europe/Athens
     encryptKey: 1234567890qwertyuiopasdf
-    live_scores:
-      url: http://localhost:8080/test/live_scores
+    live_feed:
+      interval: 20000
+      footballapiorg:
+        url: http://localhost:8000/games.json
+#       url: http://api.football-data.org/v1/competitions/467/fixtures
+        token: X
     database-schema: bet
+    email:
+      username: X
+      password: X
     node:
          state-write-interval-mins: 30
          list-read-interval-secs: 1

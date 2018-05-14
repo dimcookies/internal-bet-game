@@ -1,37 +1,33 @@
-package bet.utils;
+package bet.service.livefeed;
 
-import bet.BetApplication;
 import bet.api.constants.GameStatus;
-import bet.api.constants.OverResult;
-import bet.api.constants.ScoreResult;
-import bet.api.dto.GameDto;
 import bet.model.Game;
 import bet.model.Odd;
 import bet.repository.BetRepository;
 import bet.repository.GameRepository;
 import bet.repository.OddRepository;
-import bet.service.mgmt.GameService;
+import bet.service.utils.GameScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @Component
+@Profile("live")
 public class LiveScoreFeedScheduler {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(LiveScoreFeedScheduler.class);
 
-	@Value("${application.live_scores.url}")
-	private String liveScoresUrl;
+	@Value("${application.live_feed.interval:10000}")
+	private final int interval = 10000;
 
-	@Autowired
-	private RestTemplate restTemplate;
+	private ZonedDateTime lastUpdateDate;
 
 	@Autowired
 	private GameRepository gameRepository;
@@ -42,43 +38,58 @@ public class LiveScoreFeedScheduler {
 	@Autowired
 	private BetRepository betRepository;
 
-	@Scheduled(fixedRate = 10000)
+	@Autowired
+	private LiveFeed liveFeed;
+
+	@Autowired
+	private GameScheduler gameScheduler;
+
+	@Scheduled(fixedRate = interval)
 	public void getLiveScores() {
 		LOGGER.info("Check live scores");
-		ResponseEntity<GameDto[]> responseEntity = restTemplate.getForEntity(liveScoresUrl, GameDto[].class);
-		Arrays.stream(responseEntity.getBody()).forEach(gameDto -> {
+		ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
+		if(!gameScheduler.hasActiveGame(now)) {
+			LOGGER.trace("No active games");
+			return;
+		}
+		liveFeed.getLiveFeed().forEach(gameDto -> {
 			Game dbGame = gameRepository.findOne(gameDto.getId());
-			if(dbGame.getStatus().equals(GameStatus.FINISHED)) {
+			if (dbGame.getStatus().equals(GameStatus.FINISHED)) {
 				return;
 			}
 			Game liveGame = gameDto.toEntity();
 
-			if(liveGame.getGoalsHome() != dbGame.getGoalsHome() || liveGame.getGoalsAway() != dbGame.getGoalsAway()) {
+			if (liveGame.getGoalsHome() != dbGame.getGoalsHome() || liveGame.getGoalsAway() != dbGame.getGoalsAway()) {
 				LOGGER.info(liveGame.toString());
 				//update game entry
 				gameRepository.save(liveGame);
 				//get odd results
-				int [] oddPoints = getOdds(liveGame);
+				int[] oddPoints = getOdds(liveGame);
 
 				betRepository.findByGame(liveGame).forEach(bet -> {
-					if(bet.getScoreResult().equals(liveGame.getScoreResult())) {
+					if (bet.getScoreResult().equals(liveGame.getScoreResult())) {
 						bet.setResultPoints(oddPoints[0]);
-						if((!liveGame.isGroupStage()) && bet.getOverResult().equals(liveGame.getOverResult())) {
+						if ((!liveGame.isGroupStage()) && bet.getOverResult().equals(liveGame.getOverResult())) {
 							bet.setOverPoints(oddPoints[1]);
 						}
 					}
 				});
 			}
 		});
+		this.lastUpdateDate = now;
 	}
 
 	private int[] getOdds(Game game) {
 		Odd odd = oddRepository.findOneByGame(game);
 
-		int overPoints = (int)( odd.getOddForOver(game.getOverResult()) * 0.5 * odd.getMultiplier());
+		int overPoints = (int) (odd.getOddForOver(game.getOverResult()) * 0.5 * odd.getMultiplier());
 
 		int scorePoints = (int) (odd.getOddForScore(game.getScoreResult()) * odd.getMultiplier());
 
-		return new int[] {scorePoints, overPoints};
+		return new int[] { scorePoints, overPoints };
+	}
+
+	public ZonedDateTime getLastUpdateDate() {
+		return lastUpdateDate;
 	}
 }
