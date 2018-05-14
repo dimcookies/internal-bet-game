@@ -39,4 +39,8 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
+	public User(String name) {
+		this.name = name;
+	}
+
 }

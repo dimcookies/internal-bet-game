@@ -46,6 +46,7 @@ public class LiveScoreFeedScheduler {
 
 	@Scheduled(fixedRate = interval)
 	public void getLiveScores() {
+		//betRepository.listAllPoints()
 		LOGGER.info("Check live scores");
 		ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
 		if(!gameScheduler.hasActiveGame(now)) {

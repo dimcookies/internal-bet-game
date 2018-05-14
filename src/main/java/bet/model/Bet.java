@@ -47,24 +47,19 @@ public class Bet implements Serializable {
 	@Column(name = "OVER_BET")
 	private OverResult overResult;
 
-	@Column(name = "OVER_POiNTS")
+	@Column(name = "OVER_POINTS")
 	private int overPoints;
-
-	@Column(name = "COMPUTED")
-	private boolean computed;
 
 	public Bet() {
 		super();
 	}
 
-	public Bet(int id, Integer gameId, Integer userId, ScoreResult scoreResult, int resultPoints, OverResult overResult, int overPoints, boolean computed) {
-		this.id = id;
+	public Bet(Integer gameId, Integer userId, ScoreResult scoreResult, int resultPoints, OverResult overResult, int overPoints) {
 		this.game = new Game(gameId);
 		this.user = new User(userId);
 		this.scoreResult = scoreResult;
 		this.resultPoints = resultPoints;
 		this.overResult = overResult;
 		this.overPoints = overPoints;
-		this.computed = computed;
 	}
 }

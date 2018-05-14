@@ -1,38 +1,48 @@
 package bet.service;
 
 import bet.api.dto.GameDto;
+import bet.model.Odd;
 import bet.repository.GameRepository;
+import bet.repository.OddRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public final class GamesInitializer {
+public class GamesInitializer {
 
-	private GamesInitializer() {
+	public GamesInitializer() {
 		super();
 	}
 
 	@Autowired
 	private GameRepository gameRepository;
 
+	@Autowired
+	private OddRepository oddRepository;
+
 	@PostConstruct
+	@Transactional
 	public void initialize() {
 		//gameRepository.deleteAll();
 		if(!gameRepository.findAll().iterator().hasNext()) {
 			ObjectMapper mapper = new ObjectMapper();
-			TypeReference<List<GameDto>> typeReference = new TypeReference<List<GameDto>>() {
-			};
+			TypeReference<List<GameDto>> typeReference = new TypeReference<List<GameDto>>() {};
 			InputStream inputStream = TypeReference.class.getResourceAsStream("/games.json");
 			try {
 				List<GameDto> games = mapper.readValue(inputStream, typeReference);
 				gameRepository.save(games.stream().map(gameDto -> gameDto.toEntity()).collect(Collectors.toList()));
+				games.forEach(gameDto -> {
+					Odd testOdd = new Odd(0, gameDto.getId(), 1.2f, 2.2f, 3.4f, 4.5f, 5.5f);
+					oddRepository.save(testOdd);
+				});
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}

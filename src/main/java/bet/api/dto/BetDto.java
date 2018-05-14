@@ -29,8 +29,6 @@ public class BetDto implements ManagementDto<Bet, Integer> {
 
 	private int overPoints;
 
-	private boolean computed;
-
 	public BetDto() {
 	}
 
@@ -44,14 +42,13 @@ public class BetDto implements ManagementDto<Bet, Integer> {
 			setResultPoints(entity.getResultPoints());
 			setOverResult(entity.getOverResult());
 			setOverPoints(entity.getOverPoints());
-			setComputed(entity.isComputed());
 		}
 	}
 
 	@Override
 	public Bet toEntity() {
-		return new Bet(this.id, this.gameId, this.userId, this.scoreResult,
-				this.resultPoints, this.overResult, this.overPoints, this.computed);
+		return new Bet(this.gameId, this.userId, this.scoreResult,
+				this.resultPoints, this.overResult, this.overPoints);
 	}
 
 }
