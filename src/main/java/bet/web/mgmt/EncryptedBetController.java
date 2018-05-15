@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
+import java.util.List;
 
 @Api(value = "Management-api")
 @RestController
@@ -44,17 +45,24 @@ public class EncryptedBetController extends AbstractBetController<EncryptedBetDt
 		throw new RuntimeException();
 	}
 
-	@RequestMapping(path = "/create2", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path = "/createWithUser", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public EncryptedBetDto create2(@RequestBody EncryptedBetDto model, Principal principal) {
 		User user = userRepository.findOneByName(principal.getName());
 		model.setUserId(user.getId());
 		return service.create(model);
 	}
 
-	@RequestMapping(path = "/update2", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path = "/updateWithUser", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public EncryptedBetDto update2(@RequestBody EncryptedBetDto model, Principal principal) {
 		User user = userRepository.findOneByName(principal.getName());
 		model.setUserId(user.getId());
 		return service.update(model);
+	}
+
+
+	@RequestMapping(path = "/createAll", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<EncryptedBetDto> createAll(@RequestBody List<EncryptedBetDto> bets, Principal principal) {
+		User user = userRepository.findOneByName(principal.getName());
+		return encryptedBetService.createAll(bets, user);
 	}
 }

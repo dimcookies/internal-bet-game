@@ -1,5 +1,6 @@
-package bet.base;
+package bet.utils;
 
+import bet.base.AbstractBetIntegrationTest;
 import bet.repository.GameRepository;
 import bet.service.GamesInitializer;
 import bet.service.utils.GameScheduler;

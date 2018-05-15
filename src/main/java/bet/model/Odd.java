@@ -65,11 +65,11 @@ public class Odd implements Serializable {
 	@Transient
 	public float getOddForScore(ScoreResult result) {
 		switch (result) {
-		case SCORE_1:
+		case HOME_1:
 			return oddsHome;
-		case SCORE_2:
+		case AWAY_2:
 			return oddsAway;
-		case SCORE_X:
+		case DRAW_X:
 			return oddsTie;
 		default:
 			throw new RuntimeException("Invalid score result:" + result);

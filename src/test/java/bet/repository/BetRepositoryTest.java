@@ -14,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 public class BetRepositoryTest extends AbstractBetIntegrationTest {
 
@@ -44,10 +42,10 @@ public class BetRepositoryTest extends AbstractBetIntegrationTest {
         List<Game> games = Lists.newArrayList(gameRepository.findAll());
         int userId1 =  userRepository.findOneByName("user1").getId();
         int userId2 =  userRepository.findOneByName("user2").getId();
-        betRepository.save(new Bet(null, games.get(0).getId(), userId1, ScoreResult.SCORE_1, 100, OverResult.OVER, 200));
-        betRepository.save(new Bet(null, games.get(1).getId(), userId1, ScoreResult.SCORE_1, 300, OverResult.OVER, 400));
-        betRepository.save(new Bet(null, games.get(0).getId(), userId2, ScoreResult.SCORE_1, 500, OverResult.OVER, 600));
-        betRepository.save(new Bet(null, games.get(1).getId(), userId2, ScoreResult.SCORE_1, 700, OverResult.OVER, 800));
+        betRepository.save(new Bet(null, games.get(0).getId(), userId1, ScoreResult.HOME_1, 100, OverResult.OVER, 200));
+        betRepository.save(new Bet(null, games.get(1).getId(), userId1, ScoreResult.HOME_1, 300, OverResult.OVER, 400));
+        betRepository.save(new Bet(null, games.get(0).getId(), userId2, ScoreResult.HOME_1, 500, OverResult.OVER, 600));
+        betRepository.save(new Bet(null, games.get(1).getId(), userId2, ScoreResult.HOME_1, 700, OverResult.OVER, 800));
         Map<String, Integer> points = betRepository.listAllPoints();
 
         assertEquals(2, points.size());

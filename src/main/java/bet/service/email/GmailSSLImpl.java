@@ -1,6 +1,7 @@
 package bet.service.email;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.Properties;
@@ -13,6 +14,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 @Component
+@Profile("live")
 public class GmailSSLImpl implements EmailSender {
 
 	@Value("${application.email.username}")

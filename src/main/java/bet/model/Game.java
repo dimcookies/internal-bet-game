@@ -84,7 +84,7 @@ public class Game implements Serializable {
 
 	@Transient
 	public ScoreResult getScoreResult() {
-		return goalsHome > goalsAway ? ScoreResult.SCORE_1 : goalsHome < goalsAway ? ScoreResult.SCORE_2 : ScoreResult.SCORE_X;
+		return goalsHome > goalsAway ? ScoreResult.HOME_1 : goalsHome < goalsAway ? ScoreResult.AWAY_2 : ScoreResult.DRAW_X;
 	};
 
 	@Transient
