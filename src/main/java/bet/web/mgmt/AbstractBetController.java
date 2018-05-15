@@ -29,7 +29,6 @@ public abstract class AbstractBetController<V extends ManagementDto<E, T>, T ext
 	@Autowired
 	protected ManagementService<E, T, V> service;
 
-
 	@RequestMapping(path = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public V create(@RequestBody V model) {
 		return service.create(model);

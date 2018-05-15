@@ -31,6 +31,15 @@ public class User implements Serializable {
 	@Column(name = "NAME")
 	private String name;
 
+	@Column(name = "EMAIL")
+	private String email;
+
+	@Column(name = "PASSWORD")
+	private String password;
+
+	@Column(name = "ROLE")
+	private String role;
+
 	public User() {
 		super();
 	}
@@ -39,8 +48,12 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
-	public User(String name) {
+	public User(Integer id, String name, String email, String password, String role) {
+		this.id = id;
 		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.role = role;
 	}
 
 }

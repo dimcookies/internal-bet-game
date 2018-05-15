@@ -22,7 +22,7 @@ public class EncryptUtils {
 		cipher = Cipher.getInstance("AES/ECB/NoPadding");
 	}
 
-	private String encrypt(String text, String username) throws Exception {
+	public String encrypt(String text, String username) throws Exception {
 		byte[] keyBytes = (username + mainKey).substring(1, 25).getBytes();
 		SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");
 
@@ -37,7 +37,7 @@ public class EncryptUtils {
 		return new String(encodedBytes);
 	}
 
-	private String decrypt(String encrypted, String username) throws Exception {
+	public String decrypt(String encrypted, String username) throws Exception {
 		byte[] keyBytes = (username + mainKey).substring(1, 25).getBytes();
 		SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");
 

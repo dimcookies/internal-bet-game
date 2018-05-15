@@ -21,7 +21,7 @@ public class GmailSSLImpl implements EmailSender {
 	@Value("${application.email.password}")
 	private String password;
 
-	public void sendEmail(String emailTo) {
+	public void sendEmail(String emailTo, String subject, String body) {
 		Properties props = new Properties();
 		props.put("mail.smtp.host", "smtp.gmail.com");
 		props.put("mail.smtp.socketFactory.port", "465");
@@ -37,21 +37,18 @@ public class GmailSSLImpl implements EmailSender {
 				});
 
 		try {
-
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(username));
 			message.setRecipients(Message.RecipientType.TO,
 					InternetAddress.parse(emailTo));
 			message.setRecipients(Message.RecipientType.CC,
 					InternetAddress.parse(username));
-			message.setSubject("WC2018 Bet Submit");
+			message.setSubject(subject);
 //			message.setText("Dear Mail Crawler," +
 //					"\n\n No spam to my email, please!");
-			message.setContent("<html><body>Test1 <b>Test2</b></body></html>", "text/html; charset=utf-8");
+			message.setContent(body, "text/html; charset=utf-8");
 
 			Transport.send(message);
-
-			System.out.println("Done");
 
 		} catch (MessagingException e) {
 			throw new RuntimeException(e);

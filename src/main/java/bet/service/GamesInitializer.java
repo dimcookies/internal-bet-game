@@ -1,9 +1,11 @@
 package bet.service;
 
 import bet.api.dto.GameDto;
+import bet.api.dto.UserDto;
 import bet.model.Odd;
 import bet.repository.GameRepository;
 import bet.repository.OddRepository;
+import bet.service.mgmt.UserService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +30,16 @@ public class GamesInitializer {
 	@Autowired
 	private OddRepository oddRepository;
 
+	@Autowired
+	private UserService userService;
+
 	@PostConstruct
 	@Transactional
 	public void initialize() {
 		//gameRepository.deleteAll();
+		if(userService.list().size() == 0) {
+			userService.create(new UserDto("koukis","koukis@upstreamsystems.com", "koukis", "ADMIN"));
+		}
 		if(!gameRepository.findAll().iterator().hasNext()) {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<List<GameDto>> typeReference = new TypeReference<List<GameDto>>() {};

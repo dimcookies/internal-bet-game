@@ -12,12 +12,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "BET", schema = "BET")
+@Table(name = "ENCRYPTED_BET", schema = "BET")
 @DynamicInsert
 @DynamicUpdate
 @Data
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "bet.entity-cache")
-public class Bet implements Serializable {
+public class EncryptedBet implements Serializable {
 
 	private static final long serialVersionUID = -5924099885411409739L;
 
@@ -38,31 +38,21 @@ public class Bet implements Serializable {
 	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "dev.entity-cache")
 	private User user;
 
-	@Enumerated(EnumType.STRING)
 	@Column(name = "RESULT_BET")
-	private ScoreResult scoreResult;
+	private String scoreResult;
 
-	@Column(name = "RESULT_POINTS")
-	private int resultPoints;
-
-	@Enumerated(EnumType.STRING)
 	@Column(name = "OVER_BET")
-	private OverResult overResult;
+	private String overResult;
 
-	@Column(name = "OVER_POINTS")
-	private int overPoints;
-
-	public Bet() {
+	public EncryptedBet() {
 		super();
 	}
 
-	public Bet(Integer id, Integer gameId, Integer userId, ScoreResult scoreResult, int resultPoints, OverResult overResult, int overPoints) {
+	public EncryptedBet(Integer id, Integer gameId, Integer userId, String scoreResult, String overResult) {
 		this.id = id;
 		this.game = new Game(gameId);
 		this.user = new User(userId);
 		this.scoreResult = scoreResult;
-		this.resultPoints = resultPoints;
 		this.overResult = overResult;
-		this.overPoints = overPoints;
 	}
 }

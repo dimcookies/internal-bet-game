@@ -35,18 +35,19 @@ public class BetRepositoryTest extends AbstractBetIntegrationTest {
     public void setUp() {
         super.setUp();
         gamesInitializer.initialize();
-        userRepository.save(new User("user1"));
-        userRepository.save(new User("user2"));
+        userRepository.save(new User(null, "user1", "user1", "", ""));
+        userRepository.save(new User(null, "user2", "user2", "", ""));
     }
 
     @Test
     public void testListAllPoints() {
-        List<User> users = Lists.newArrayList(userRepository.findAll());
         List<Game> games = Lists.newArrayList(gameRepository.findAll());
-        betRepository.save(new Bet(games.get(0).getId(), users.get(0).getId(), ScoreResult.SCORE_1, 100, OverResult.OVER, 200));
-        betRepository.save(new Bet(games.get(1).getId(), users.get(0).getId(), ScoreResult.SCORE_1, 300, OverResult.OVER, 400));
-        betRepository.save(new Bet(games.get(0).getId(), users.get(1).getId(), ScoreResult.SCORE_1, 500, OverResult.OVER, 600));
-        betRepository.save(new Bet(games.get(1).getId(), users.get(1).getId(), ScoreResult.SCORE_1, 700, OverResult.OVER, 800));
+        int userId1 =  userRepository.findOneByName("user1").getId();
+        int userId2 =  userRepository.findOneByName("user2").getId();
+        betRepository.save(new Bet(null, games.get(0).getId(), userId1, ScoreResult.SCORE_1, 100, OverResult.OVER, 200));
+        betRepository.save(new Bet(null, games.get(1).getId(), userId1, ScoreResult.SCORE_1, 300, OverResult.OVER, 400));
+        betRepository.save(new Bet(null, games.get(0).getId(), userId2, ScoreResult.SCORE_1, 500, OverResult.OVER, 600));
+        betRepository.save(new Bet(null, games.get(1).getId(), userId2, ScoreResult.SCORE_1, 700, OverResult.OVER, 800));
         Map<String, Integer> points = betRepository.listAllPoints();
 
         assertEquals(2, points.size());

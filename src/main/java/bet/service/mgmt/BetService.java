@@ -25,4 +25,13 @@ public class BetService extends AbstractManagementService<Bet, Integer, BetDto> 
 		}).collect(Collectors.toList());
 	}
 
+	@Override
+	public BetDto create(BetDto dto) {
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public BetDto update(BetDto dto) {
+		throw new NotImplementedException();
+	}
 }

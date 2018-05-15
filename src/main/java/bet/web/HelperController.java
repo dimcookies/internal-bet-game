@@ -31,4 +31,14 @@ public class HelperController {
 		ZonedDateTime lastUpdate = liveScoreFeedScheduler.getLastUpdateDate();
 		return lastUpdate != null ? lastUpdate.withZoneSameInstant(ZoneId.of(timezone)).toString() : "";
 	}
+
+	@RequestMapping(value = "/test1", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
+	public String test1() throws Exception {
+		return "test1";
+	}
+
+	@RequestMapping(value = "/test2", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
+	public String test2() throws Exception {
+		return "test2";
+	}
 }
