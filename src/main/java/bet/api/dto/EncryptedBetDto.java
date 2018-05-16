@@ -26,15 +26,18 @@ public class EncryptedBetDto implements ManagementDto<EncryptedBet, Integer> {
 
 	private String overResult;
 
+	private String betDate;
+
 	public EncryptedBetDto() {
 	}
 
-	public EncryptedBetDto(Integer id, Integer gameId, Integer userId, String scoreResult, String overResult) {
+	public EncryptedBetDto(Integer id, Integer gameId, Integer userId, String scoreResult, String overResult, String betDate) {
 		this.id = id;
 		this.gameId = gameId;
 		this.userId = userId;
 		this.scoreResult = scoreResult;
 		this.overResult = overResult;
+		this.betDate = betDate;
 	}
 
 	@Override
@@ -45,12 +48,13 @@ public class EncryptedBetDto implements ManagementDto<EncryptedBet, Integer> {
 			setUserId(entity.getUser().getId());
 			setScoreResult(entity.getScoreResult());
 			setOverResult(entity.getOverResult());
+			setBetDate(entity.getBetDate().toString());
 		}
 	}
 
 	@Override
 	public EncryptedBet toEntity() {
-		return new EncryptedBet(this.id, this.gameId, this.userId, this.scoreResult, this.overResult);
+		return new EncryptedBet(this.id, this.gameId, this.userId, this.scoreResult, this.overResult, ZonedDateTime.parse(this.betDate));
 	}
 
 }

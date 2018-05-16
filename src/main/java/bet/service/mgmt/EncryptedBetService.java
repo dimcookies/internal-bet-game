@@ -15,15 +15,22 @@ import bet.service.email.EmailSender;
 import bet.service.utils.EncryptUtils;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.transaction.Transactional;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class EncryptedBetService extends AbstractManagementService<EncryptedBet, Integer, EncryptedBetDto> {
+
+	@Value("${application.allowedMatchDays}")
+	private String[] allowedMatchDays;
 
 	@Autowired
 	private EncryptUtils encryptUtils;
@@ -36,9 +43,6 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 
 	@Autowired
 	private EmailSender emailSender;
-
-	@Autowired
-	private UserRepository userRepository;
 
 	@Autowired
 	private GameRepository gameRepository;
@@ -90,7 +94,7 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 	public void decryptAndCopy() {
 		list().forEach(dto -> {
 			Bet bet = new Bet(null, dto.getGameId(), dto.getUserId(), ScoreResult.valueOf(dto.getScoreResult()),
-					0, dto.getOverResult() != null ? OverResult.valueOf(dto.getOverResult()) : null, 0);
+					0, dto.getOverResult() != null ? OverResult.valueOf(dto.getOverResult()) : null, 0, ZonedDateTime.parse(dto.getBetDate()));
 			betRepository.save(bet);
 			repository.delete(dto.getId());
 		});
@@ -98,12 +102,22 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 
 	@Transactional
 	public List<EncryptedBetDto> createAll(List<EncryptedBetDto> bets, User user) {
+		List<Integer> allowedDays = Arrays.asList(allowedMatchDays).stream().map(Integer::parseInt).collect(Collectors.toList());
+
+		bets.forEach(encryptedBetDto -> {
+			Game game = gameRepository.findOne(encryptedBetDto.getGameId());
+			if(allowedDays.indexOf(game.getMatchDay()) == -1) {
+				throw new RuntimeException("User " + user.getName() + " tried to create not allowed game:" + game + " Whole request:" + bets + " Allowed days:" + allowedDays);
+			}
+		});
+
 		encryptedBetRepository.deleteByUser(user);
 		String body = String.format("<html><body><table border=1>%s</table></body></html>", getEmailBody(bets));
 		emailSender.sendEmail(user.getEmail(), "WC2018 Bet", body);
-
+		ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
 		return bets.stream().map(encryptedBetDto -> {
 			encryptedBetDto.setUserId(user.getId());
+			encryptedBetDto.setBetDate(now.toString());
 			return encryptedBetDto;
 		}).map(encryptedBetDto -> create(encryptedBetDto)).collect(Collectors.toList());
 	}

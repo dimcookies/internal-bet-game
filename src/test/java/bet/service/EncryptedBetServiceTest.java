@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -57,10 +59,12 @@ public class EncryptedBetServiceTest extends AbstractBetIntegrationTest {
         int userId2 = users.get(1).getId();
         int gameId1 = games.get(0).getId();
         int gameId2 = games.get(1).getId();
-        encryptedBetService.create(new EncryptedBetDto(null, gameId1, userId1, ScoreResult.HOME_1.toString(), OverResult.OVER.toString()));
-        encryptedBetService.create(new EncryptedBetDto(null, gameId2, userId1, ScoreResult.AWAY_2.toString(), OverResult.UNDER.toString()));
-        encryptedBetService.create(new EncryptedBetDto(null, gameId1, userId2, ScoreResult.DRAW_X.toString(), OverResult.OVER.toString()));
-        encryptedBetService.create(new EncryptedBetDto(null, gameId2, userId2, ScoreResult.DRAW_X.toString(), OverResult.UNDER.toString()));
+        String now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC")).toString();
+
+        encryptedBetService.create(new EncryptedBetDto(null, gameId1, userId1, ScoreResult.HOME_1.toString(), OverResult.OVER.toString(), now));
+        encryptedBetService.create(new EncryptedBetDto(null, gameId2, userId1, ScoreResult.AWAY_2.toString(), OverResult.UNDER.toString(), now));
+        encryptedBetService.create(new EncryptedBetDto(null, gameId1, userId2, ScoreResult.DRAW_X.toString(), OverResult.OVER.toString(), now));
+        encryptedBetService.create(new EncryptedBetDto(null, gameId2, userId2, ScoreResult.DRAW_X.toString(), null, now));
 
         assertEquals(4, encryptedBetService.list().size());
 
@@ -77,7 +81,7 @@ public class EncryptedBetServiceTest extends AbstractBetIntegrationTest {
         assertTrue(bets.stream().anyMatch(bet -> bet.getUser().getId() == userId2 && bet.getGame().getId() == gameId1
                 && bet.getScoreResult().equals(ScoreResult.DRAW_X) && bet.getOverResult().equals(OverResult.OVER)));
         assertTrue(bets.stream().anyMatch(bet -> bet.getUser().getId() == userId2 && bet.getGame().getId() == gameId2
-                && bet.getScoreResult().equals(ScoreResult.DRAW_X) && bet.getOverResult().equals(OverResult.UNDER)));
+                && bet.getScoreResult().equals(ScoreResult.DRAW_X) && bet.getOverResult() == null));
 
     }
 
@@ -89,10 +93,11 @@ public class EncryptedBetServiceTest extends AbstractBetIntegrationTest {
         User user = users.get(0);
         int gameId1 = games.get(0).getId();
         int gameId2 = games.get(1).getId();
+        String now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC")).toString();
 
         IntStream.range(0,3).forEach(value -> {
-            List<EncryptedBetDto> bets = Arrays.asList(new EncryptedBetDto(null, gameId1, null, ScoreResult.HOME_1.toString(), OverResult.OVER.toString()),
-                    new EncryptedBetDto(null, gameId2, null, ScoreResult.AWAY_2.toString(), OverResult.UNDER.toString()));
+            List<EncryptedBetDto> bets = Arrays.asList(new EncryptedBetDto(null, gameId1, null, ScoreResult.HOME_1.toString(), OverResult.OVER.toString(), now),
+                    new EncryptedBetDto(null, gameId2, null, ScoreResult.AWAY_2.toString(), OverResult.UNDER.toString(), now));
 
             encryptedBetService.createAll(bets, user);
 

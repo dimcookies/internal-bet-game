@@ -45,19 +45,19 @@ public class EncryptedBetController extends AbstractBetController<EncryptedBetDt
 		throw new RuntimeException();
 	}
 
-	@RequestMapping(path = "/createWithUser", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public EncryptedBetDto create2(@RequestBody EncryptedBetDto model, Principal principal) {
-		User user = userRepository.findOneByName(principal.getName());
-		model.setUserId(user.getId());
-		return service.create(model);
-	}
-
-	@RequestMapping(path = "/updateWithUser", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public EncryptedBetDto update2(@RequestBody EncryptedBetDto model, Principal principal) {
-		User user = userRepository.findOneByName(principal.getName());
-		model.setUserId(user.getId());
-		return service.update(model);
-	}
+//	@RequestMapping(path = "/createWithUser", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+//	public EncryptedBetDto create2(@RequestBody EncryptedBetDto model, Principal principal) {
+//		User user = userRepository.findOneByName(principal.getName());
+//		model.setUserId(user.getId());
+//		return service.create(model);
+//	}
+//
+//	@RequestMapping(path = "/updateWithUser", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+//	public EncryptedBetDto update2(@RequestBody EncryptedBetDto model, Principal principal) {
+//		User user = userRepository.findOneByName(principal.getName());
+//		model.setUserId(user.getId());
+//		return service.update(model);
+//	}
 
 
 	@RequestMapping(path = "/createAll", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

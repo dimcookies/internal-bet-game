@@ -44,6 +44,7 @@ management:
 application:
     timezone: Europe/Athens
     encryptKey: 1234567890qwertyuiopasdf
+    allowedMatchDays: 1,2,3
     live_feed:
       interval: 20000
       footballapiorg:

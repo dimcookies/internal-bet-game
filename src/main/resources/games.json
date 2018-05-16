@@ -10,7 +10,7 @@
     "awayTeamName":"Saudi Arabia",
     "awayTeamId":801,
     "result":{
-      "goalsHomeTeam":3,
+      "goalsHomeTeam":0,
       "goalsAwayTeam":0
     },
     "odds":null
@@ -26,7 +26,7 @@
     "awayTeamName":"Uruguay",
     "awayTeamId":758,
     "result":{
-      "goalsHomeTeam":1,
+      "goalsHomeTeam":0,
       "goalsAwayTeam":0
     },
     "odds":null
@@ -42,8 +42,8 @@
     "awayTeamName":"Iran",
     "awayTeamId":840,
     "result":{
-      "goalsHomeTeam":1,
-      "goalsAwayTeam":1
+      "goalsHomeTeam":0,
+      "goalsAwayTeam":0
     },
     "odds":null
   },
@@ -58,8 +58,8 @@
     "awayTeamName":"Spain",
     "awayTeamId":760,
     "result":{
-      "goalsHomeTeam":2,
-      "goalsAwayTeam":2
+      "goalsHomeTeam":0,
+      "goalsAwayTeam":0
     },
     "odds":null
   },
@@ -107,7 +107,7 @@
     "awayTeamId":782,
     "result":{
       "goalsHomeTeam":0,
-      "goalsAwayTeam":1
+      "goalsAwayTeam":0
     },
     "odds":null
   },

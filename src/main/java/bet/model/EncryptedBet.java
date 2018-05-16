@@ -3,13 +3,14 @@ package bet.model;
 import bet.api.constants.OverResult;
 import bet.api.constants.ScoreResult;
 import lombok.Data;
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "ENCRYPTED_BET", schema = "BET")
@@ -44,15 +45,20 @@ public class EncryptedBet implements Serializable {
 	@Column(name = "OVER_BET")
 	private String overResult;
 
+	@Column(name = "BET_DATE")
+	@Type(type = "java.time.ZonedDateTime")
+	private ZonedDateTime betDate;
+
 	public EncryptedBet() {
 		super();
 	}
 
-	public EncryptedBet(Integer id, Integer gameId, Integer userId, String scoreResult, String overResult) {
+	public EncryptedBet(Integer id, Integer gameId, Integer userId, String scoreResult, String overResult, ZonedDateTime betDate) {
 		this.id = id;
 		this.game = new Game(gameId);
 		this.user = new User(userId);
 		this.scoreResult = scoreResult;
 		this.overResult = overResult;
+		this.betDate = betDate;
 	}
 }

@@ -94,7 +94,7 @@ public class Game implements Serializable {
 
 	@Transient
 	public boolean isGroupStage() {
-		return this.matchDay > 3;
+		return this.matchDay < 4;
 	}
 
 }

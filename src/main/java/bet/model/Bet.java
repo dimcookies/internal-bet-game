@@ -3,13 +3,14 @@ package bet.model;
 import bet.api.constants.OverResult;
 import bet.api.constants.ScoreResult;
 import lombok.Data;
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "BET", schema = "BET")
@@ -52,11 +53,16 @@ public class Bet implements Serializable {
 	@Column(name = "OVER_POINTS")
 	private int overPoints;
 
+	@Column(name = "BET_DATE")
+	@Type(type = "java.time.ZonedDateTime")
+	private ZonedDateTime betDate;
+
 	public Bet() {
 		super();
 	}
 
-	public Bet(Integer id, Integer gameId, Integer userId, ScoreResult scoreResult, int resultPoints, OverResult overResult, int overPoints) {
+	public Bet(Integer id, Integer gameId, Integer userId, ScoreResult scoreResult, int resultPoints, OverResult overResult,
+			int overPoints, ZonedDateTime betDate) {
 		this.id = id;
 		this.game = new Game(gameId);
 		this.user = new User(userId);
@@ -64,5 +70,6 @@ public class Bet implements Serializable {
 		this.resultPoints = resultPoints;
 		this.overResult = overResult;
 		this.overPoints = overPoints;
+		this.betDate = betDate;
 	}
 }

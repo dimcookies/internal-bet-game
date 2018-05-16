@@ -35,6 +35,19 @@ public class GameDto implements ManagementDto<Game, Integer> {
 	public GameDto() {
 	}
 
+	public GameDto(GameStatus status, int matchday, String homeTeamName, int homeTeamId, String awayTeamName, int awayTeamId,
+			String date, int goalsHomeTeam, int goalsAwayTeam) {
+		this.status = status;
+		this.matchday = matchday;
+		this.homeTeamName = homeTeamName;
+		this.homeTeamId = homeTeamId;
+		this.awayTeamName = awayTeamName;
+		this.awayTeamId = awayTeamId;
+		this.date = date;
+		ResultDto resultDto = new ResultDto(goalsHomeTeam, goalsAwayTeam);
+		this.setResult(resultDto);
+	}
+
 	@Override
 	public void fromEntity(Game entity) {
 		if (entity != null) {
