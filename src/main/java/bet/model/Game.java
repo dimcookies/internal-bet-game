@@ -3,6 +3,7 @@ package bet.model;
 import bet.api.constants.GameStatus;
 import bet.api.constants.OverResult;
 import bet.api.constants.ScoreResult;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
@@ -50,6 +51,7 @@ public class Game implements Serializable {
 	@Column(name = "STATUS")
 	private GameStatus status;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
 	@Column(name = "MATCH_DAY")
 	private int matchDay;
 

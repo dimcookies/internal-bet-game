@@ -36,7 +36,6 @@ public class GamesInitializer {
 	@PostConstruct
 	@Transactional
 	public void initialize() {
-		//gameRepository.deleteAll();
 		if(userService.list().size() == 0) {
 			userService.create(new UserDto("koukis","koukis@upstreamsystems.com", "koukis", "ADMIN"));
 		}

@@ -4,6 +4,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import twitter4j.*;
 
 import javax.servlet.ServletContext;
 import java.io.BufferedReader;
@@ -19,13 +20,14 @@ public class TestController {
 		this.servletContext = servletContext;
 	}
 
-	@RequestMapping(value = "/test/live_scores", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String liveScore() throws Exception {
-		String result = new BufferedReader(
-				new InputStreamReader(getClass().getClassLoader().getResourceAsStream("games.json"))).lines()
-						.collect(Collectors.joining("\n"));
+//	@RequestMapping(value = "/test/live_scores", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+//	public String liveScore() throws Exception {
+//		String result = new BufferedReader(
+//				new InputStreamReader(getClass().getClassLoader().getResourceAsStream("games.json"))).lines()
+//						.collect(Collectors.joining("\n"));
+//
+//		return result;
+//
+//	}
 
-		return result;
-
-	}
 }

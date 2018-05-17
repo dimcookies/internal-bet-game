@@ -31,6 +31,7 @@ spring:
   jackson:
     serialization: 
       WRITE_DATES_AS_TIMESTAMPS: false
+      write-dates-as-timestamps: false
 project_code: BET_DEVELOPMENT
 flyway:
     enabled: false

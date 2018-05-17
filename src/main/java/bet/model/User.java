@@ -2,6 +2,7 @@ package bet.model;
 
 import bet.api.constants.OverResult;
 import bet.api.constants.ScoreResult;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -31,12 +32,15 @@ public class User implements Serializable {
 	@Column(name = "NAME")
 	private String name;
 
+	@JsonIgnore
 	@Column(name = "EMAIL")
 	private String email;
 
+	@JsonIgnore
 	@Column(name = "PASSWORD")
 	private String password;
 
+	@JsonIgnore
 	@Column(name = "ROLE")
 	private String role;
 
