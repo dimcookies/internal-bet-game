@@ -51,7 +51,7 @@ public class Game implements Serializable {
 	@Column(name = "STATUS")
 	private GameStatus status;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
 	@Column(name = "MATCH_DAY")
 	private int matchDay;
 

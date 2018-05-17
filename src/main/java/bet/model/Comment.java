@@ -1,5 +1,6 @@
 package bet.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
@@ -36,6 +37,7 @@ public class Comment implements Serializable {
 	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "dev.entity-cache")
 	private User user;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
 	@Column(name = "COMMENT_DATE")
 	@Type(type = "java.time.ZonedDateTime")
 	private ZonedDateTime commentDate;

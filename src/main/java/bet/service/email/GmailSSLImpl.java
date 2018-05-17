@@ -53,7 +53,7 @@ public class GmailSSLImpl implements EmailSender {
 			Transport.send(message);
 
 		} catch (MessagingException e) {
-			throw new RuntimeException(e);
+			//throw new RuntimeException(e);
 		}
 	}
 }

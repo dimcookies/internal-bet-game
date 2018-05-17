@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.security.Principal;
 import java.util.List;
@@ -37,12 +38,12 @@ public class EncryptedBetController extends AbstractBetController<EncryptedBetDt
 
 	@RequestMapping(path = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public EncryptedBetDto create(@RequestBody EncryptedBetDto model) {
-		throw new RuntimeException();
+		throw new NotImplementedException();
 	}
 
 	@RequestMapping(path = "/update", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public EncryptedBetDto update(@RequestBody EncryptedBetDto model) {
-		throw new RuntimeException();
+		throw new NotImplementedException();
 	}
 
 //	@RequestMapping(path = "/createWithUser", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

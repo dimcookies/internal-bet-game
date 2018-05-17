@@ -47,7 +47,7 @@ public class GamesInitializer {
 				List<GameDto> games = mapper.readValue(inputStream, typeReference);
 				gameRepository.save(games.stream().map(gameDto -> gameDto.toEntity()).collect(Collectors.toList()));
 				games.forEach(gameDto -> {
-					Odd testOdd = new Odd(0, gameDto.getId(), 1.2f, 2.2f, 3.4f, 4.5f, 5.5f);
+					Odd testOdd = new Odd(null, gameDto.getId(), 1, 1, 1, 1, 1);
 					oddRepository.save(testOdd);
 				});
 			} catch (Exception e) {

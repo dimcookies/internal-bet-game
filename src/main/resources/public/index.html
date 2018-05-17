@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+    <style>
+    /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+    .row.content {height: 1500px}
+
+    /* Set gray background color and 100% height */
+    .sidenav {
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #555;
+      color: white;
+      padding: 15px;
+    }
+
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height: auto;}
+    }
+  </style>
+
+    <script>
+        var app = angular.module('myApp', []);
+
+        app.controller('myCtrl', function($scope, $http) {
+            $http.get("/ws/allRss").then(function (response) {
+                $scope.allRss = response.data;
+            });
+            $http.get("/ws/allComments?limit=1000").then(function (response) {
+                $scope.allComments = response.data;
+            });
+            $http.get("/ws/allPoints").then(function (response) {
+                $scope.allPoints = response.data;
+            });
+
+            $http.get("/ws/allGames").then(function (response) {
+                $scope.allMatches = response.data;
+            });
+
+            $http.get("/ws/allBets").then(function (response) {
+                $scope.allBets = response.data;
+            });
+
+            $http.get("http://localhost:8080/ws/lastupdate").then(function (response) {
+                $scope.lastUpdate = response.data;
+            });
+
+            $scope.new_comment = "";
+            $scope.pointsVisible = true;
+            $scope.commentsVisible = false;
+            $scope.matchesVisible = false;
+            $scope.matchVisible = false;
+            $scope.userVisible = false;
+            $scope.showPoints = function() {
+              $scope.pointsVisible = true;
+              $scope.commentsVisible = false;
+              $scope.matchesVisible = false;
+              $scope.matchVisible = false;
+              $scope.userVisible = false;
+            };
+            $scope.showComments = function() {
+              $scope.pointsVisible = false;
+              $scope.commentsVisible = true;
+              $scope.matchesVisible = false;
+              $scope.matchVisible = false;
+              $scope.userVisible = false;
+            };
+            $scope.showMatches = function() {
+              $scope.pointsVisible = false;
+              $scope.commentsVisible = false;
+              $scope.matchesVisible = true;
+              $scope.matchVisible = false;
+              $scope.userVisible = false;
+            };
+            $scope.showMatch = function(gameId) {
+              $scope.selectedGame = gameId
+              $scope.pointsVisible = false;
+              $scope.commentsVisible = false;
+              $scope.matchesVisible = false;
+              $scope.matchVisible = true;
+              $scope.userVisible = false;
+            };
+            $scope.addComment = function() {
+                $http.post("http://localhost:8080/ws/addComment?comment="+$scope.new_comment).then(function (response) {
+                    $http.get("http://localhost:8080/ws/allComments?limit=1000").then(function (response) {
+                        $scope.allComments = response.data;
+                    });
+                    $scope.new_comment = "";
+                });
+
+            };
+        });
+    </script>
+</head>
+<body>
+
+<div class="container-fluid" ng-app="myApp" ng-controller="myCtrl">
+    <div class="row content">
+        <div class="col-sm-3 sidenav">
+            <h4>Navigation</h4>
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="#" ng-click="showPoints()">Points</a></li>
+                <li><a href="#" ng-click="showComments()">Comments</a></li>
+                <li><a href="#" ng-click="showMatches()">Games</a></li>
+            </ul>
+            <h4>Comments</h4>
+            <ul class="nav nav-pills nav-stacked">
+                <li ng-repeat="comment in allComments | limitTo:10">
+                    <a><b>{{ comment.user.name }}:</b> {{ comment.comment }} ({{ comment.commentDate }}) </a>
+                </li>
+            </ul><br>
+            <div class="input-group">
+                <input ng-model="new_comment" type="text" class="form-control" placeholder="Comment" maxlength="200">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" ng-click="addComment()">
+                         <span class="glyphicon glyphicon-send"></span>
+                    </button>
+                </span>
+            </div>
+            <br/>
+            <h4>News</h4>
+            <ul class="nav nav-pills nav-stacked">
+                <li ng-repeat="rss in allRss">
+                    <a target="_blank" href="{{ rss.link }}">{{ rss.title }}</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-sm-9" ng-show="pointsVisible">
+            <h4><small>Point leaders</small></h4>
+            <h4><small>Last Update: {{ lastUpdate }}</small></h4>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Points</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="(key, value) in allPoints">
+                    <th scope="row">{{ $index+1 }}</th>
+                    <td><a href="users?user={{ key }}">{{ key }}</a></td>
+                    <td>{{ value }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-sm-9" ng-show="commentsVisible">
+            <h4><small>Comments</small></h4>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Comment</th>
+                    <th scope="col">Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="comment in allComments">
+                    <td>{{ comment.user.name }}</td>
+                    <td>{{ comment.comment }}</td>
+                    <td>{{ comment.commentDate }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-sm-9" ng-show="matchesVisible">
+            <h4><small>Games</small></h4>
+            <h4><small>Last Update: {{ lastUpdate }}</small></h4>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Home</th>
+                    <th scope="col">Away</th>
+                    <th scope="col">Goals Home</th>
+                    <th scope="col">Goals Away</th>
+                    <th scope="col">Status</th>
+                    <th scope="col" colspan="5" style="text-align:center">Odds</th>
+                </tr>
+                <tr>
+                    <th scope="col" colspan="6"></th>
+                    <th scope="col">1</th>
+                    <th scope="col">X</th>
+                    <th scope="col">2</th>
+                    <th scope="col">Under</th>
+                    <th scope="col">Over</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="game in allMatches">
+                    <td><a href="#" ng-click="showMatch(game.game.id)">{{ game.game.gameDate }}<a/></td>
+                    <td>{{ game.game.awayName }}</td>
+                    <td>{{ game.game.homeName }}</td>
+                    <td>{{ game.game.goalsHome }}</td>
+                    <td>{{ game.game.goalsAway }}</td>
+                    <td>{{ game.game.status }}</td>
+                    <td>{{ game.oddsHome }}</td>
+                    <td>{{ game.oddsTie }}</td>
+                    <td>{{ game.oddsUnder }}</td>
+                    <td>{{ game.oddsAway }}</td>
+                    <td>{{ game.oddsOver }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-sm-9" ng-show="matchVisible">
+            <h4><small>Game {{ selectedGame }}</small></h4>
+            <h4><small>Last Update: {{ lastUpdate }}</small></h4>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">User</th>
+                    <th scope="col">Score Bet</th>
+                    <th scope="col">Over Bet</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="bet in allBets | filter : bet: bet.game.id=selectedGame">
+                    <td>{{ bet.user.name }}</td>
+                    <td>{{ bet.scoreResult }}</td>
+                    <td>{{ bet.overResult }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<footer class="container-fluid">
+    <p>WC2018 Upstream Systems</p>
+</footer>
+
+</body>
+</html>

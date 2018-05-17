@@ -52,7 +52,7 @@ public class HelperController {
 	@RequestMapping(value = "/ws/lastupdate", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
 	public String liveFeedLastUpdate() throws Exception {
 		ZonedDateTime lastUpdate = liveScoreFeedScheduler.getLastUpdateDate();
-		return lastUpdate != null ? lastUpdate.withZoneSameInstant(ZoneId.of(timezone)).toString() : "";
+		return lastUpdate != null ? lastUpdate.withZoneSameInstant(ZoneId.of(timezone)).toString() : "N/A";
 	}
 
 	@RequestMapping(value = "/ws/allPoints", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -91,6 +91,9 @@ public class HelperController {
 
 	@RequestMapping(value = "/ws/addComment", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public Comment allComments(@RequestParam(value = "comment", required = true) String comment, Principal principal) throws Exception {
+		if(comment.length() > 200) {
+			comment = comment.substring(0,200)+"...";
+		}
 		User user = userRepository.findOneByName(principal.getName());
 		Comment c = new Comment(comment, user, ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Europe/Athens")));
 		return commentRepository.save(c);

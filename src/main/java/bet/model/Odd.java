@@ -52,7 +52,7 @@ public class Odd implements Serializable {
 		super();
 	}
 
-	public Odd(int id, int gameId, float oddsHome, float oddsAway, float oddsTie, float oddsOver, float oddsUnder) {
+	public Odd(Integer id, int gameId, float oddsHome, float oddsAway, float oddsTie, float oddsOver, float oddsUnder) {
 		this.id = id;
 		this.game = new Game(gameId);
 		this.oddsHome = oddsHome;
