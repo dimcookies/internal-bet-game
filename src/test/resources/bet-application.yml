@@ -31,6 +31,7 @@ spring:
   jackson:
     serialization: 
       WRITE_DATES_AS_TIMESTAMPS: false
+      write-dates-as-timestamps: false
 project_code: BET_DEVELOPMENT
 flyway:
     enabled: false
@@ -55,6 +56,7 @@ application:
     email:
       username: X
       password: X
+    rss_feed: http://www.fifa.com/worldcup/news/rss.xml, http://www.espnfc.com/fifa-world-cup/4/rss, https://www.uefa.com/rssfeed/worldcup/rss.xml
     node:
          state-write-interval-mins: 30
          list-read-interval-secs: 1

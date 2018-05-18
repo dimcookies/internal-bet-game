@@ -60,10 +60,4 @@ public class EncryptedBetController extends AbstractBetController<EncryptedBetDt
 //		return service.update(model);
 //	}
 
-
-	@RequestMapping(path = "/createAll", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<EncryptedBetDto> createAll(@RequestBody List<EncryptedBetDto> bets, Principal principal) {
-		User user = userRepository.findOneByName(principal.getName());
-		return encryptedBetService.createAll(bets, user);
-	}
 }

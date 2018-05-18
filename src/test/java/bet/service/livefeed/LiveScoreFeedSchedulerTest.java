@@ -8,9 +8,11 @@ import bet.api.dto.GameDto;
 import bet.base.AbstractBetIntegrationTest;
 import bet.model.Bet;
 import bet.model.Game;
+import bet.model.Odd;
 import bet.model.User;
 import bet.repository.BetRepository;
 import bet.repository.GameRepository;
+import bet.repository.OddRepository;
 import bet.repository.UserRepository;
 import bet.service.GamesInitializer;
 import bet.service.livefeed.LiveScoreFeedScheduler;
@@ -46,6 +48,9 @@ public class LiveScoreFeedSchedulerTest extends AbstractBetIntegrationTest {
     @Autowired
     private GameRepository gameRepository;
 
+    @Autowired
+    private OddRepository oddRepository;
+
     @Before
     public void setUp() {
         super.setUp();
@@ -61,6 +66,7 @@ public class LiveScoreFeedSchedulerTest extends AbstractBetIntegrationTest {
         GameDto groupGame = new GameDto();
         groupGame.fromEntity(groupGames.get(0));
 
+        updateOdd(groupGame.getId(), 1.2f,3.4f,2.2f,5.5f,4.5f);
         Bet bet = betRepository.save(new Bet(null, groupGame.getId(), userId1, ScoreResult.HOME_1, 0, null, 0, now));
 
         changeMatchScore(groupGame, 1,0);
@@ -96,6 +102,8 @@ public class LiveScoreFeedSchedulerTest extends AbstractBetIntegrationTest {
         List<Game> playoffGames = gameRepository.findByMatchDay(4);
         GameDto playOffGame = new GameDto();
         playOffGame.fromEntity(playoffGames.get(0));
+        updateOdd(playOffGame.getId(), 1.2f,3.4f,2.2f,5.5f,4.5f);
+
         Bet bet2 = betRepository.save(new Bet(null, playOffGame.getId(), userId1, ScoreResult.HOME_1, 0, OverResult.UNDER, 0, now));
 
         changeMatchScore(playOffGame, 1,0);
@@ -137,6 +145,8 @@ public class LiveScoreFeedSchedulerTest extends AbstractBetIntegrationTest {
         List<Game> finalGames = gameRepository.findByMatchDay(8);
         GameDto finalGame = new GameDto();
         finalGame.fromEntity(finalGames.get(0));
+        updateOdd(finalGame.getId(), 1.2f,3.4f,2.2f,5.5f,4.5f);
+
         Bet bet3 = betRepository.save(new Bet(null, finalGame.getId(), userId1, ScoreResult.HOME_1, 0, OverResult.UNDER, 0, now));
 
         changeMatchScore(finalGame, 2,0);
@@ -155,6 +165,17 @@ public class LiveScoreFeedSchedulerTest extends AbstractBetIntegrationTest {
         dto.getResult().setGoalsHomeTeam(goalsHomeTeam);
         dto.getResult().setGoalsAwayTeam(goalsAwayTeam);
         liveScoreFeedScheduler.checkMatchChanged(dto);
+    }
+
+    private void updateOdd(int gameId, float oddHome, float oddTie, float oddAway, float oddUnder, float oddOver) {
+        Odd odd = oddRepository.findOneByGame(gameRepository.findOne(gameId));
+        odd.setOddsHome(oddHome);
+        odd.setOddsTie(oddTie);
+        odd.setOddsAway(oddAway);
+        odd.setOddsUnder(oddUnder);
+        odd.setOddsOver(oddOver);
+        oddRepository.save(odd);
+
     }
 
     private void checkPoints(int betId, int resultPoints, int overPoints) {

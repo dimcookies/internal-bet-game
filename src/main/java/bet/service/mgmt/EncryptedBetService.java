@@ -100,6 +100,11 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 		});
 	}
 
+	public List<EncryptedBetDto> list(User user) {
+		return list().stream().filter(encryptedBetDto -> encryptedBetDto.getUserId()
+				.equals(user.getId())).collect(Collectors.toList());
+	}
+
 	@Transactional
 	public List<EncryptedBetDto> createAll(List<EncryptedBetDto> bets, User user) {
 		List<Integer> allowedDays = Arrays.asList(allowedMatchDays).stream().map(Integer::parseInt).collect(Collectors.toList());
@@ -115,11 +120,14 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 		String body = String.format("<html><body><table border=1>%s</table></body></html>", getEmailBody(bets));
 		emailSender.sendEmail(user.getEmail(), "WC2018 Bet", body);
 		ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
-		return bets.stream().map(encryptedBetDto -> {
+		List<EncryptedBetDto> result = bets.stream().map(encryptedBetDto -> {
+			encryptedBetDto.setId(null);
 			encryptedBetDto.setUserId(user.getId());
 			encryptedBetDto.setBetDate(now.toString());
 			return encryptedBetDto;
 		}).map(encryptedBetDto -> create(encryptedBetDto)).collect(Collectors.toList());
+
+		return result;
 	}
 
 	private String getEmailBody(List<EncryptedBetDto> bets) {

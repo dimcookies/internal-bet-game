@@ -41,6 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.dataSource(dataSource)
 				.passwordEncoder(passwordEncoder);
 
+		//FIXME TODO REMOVE
 		auth.inMemoryAuthentication()
 				.withUser("admin").password("admin").roles("ADMIN");
 
@@ -81,17 +82,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		http.authorizeRequests().anyRequest().hasRole("ADMIN");//.fullyAuthenticated();
-		http.authorizeRequests()
-				.antMatchers("/test1").hasRole("USER");
+		http.cors().and().csrf().disable().
+				authorizeRequests()
+				.antMatchers("/config/**").hasAuthority("ADMIN")// hasRole("ADMIN")
+				.antMatchers("/swagger-ui.html").hasAuthority("ADMIN")//.hasRole("ADMIN")
+				.anyRequest().fullyAuthenticated();
+
+
+		//http.authorizeRequests().anyRequest().fullyAuthenticated();
+//		http.authorizeRequests().antMatchers("/*").hasRole("USER");
+//		http.authorizeRequests().antMatchers("/ws/**").hasRole("USER");
+//		http.authorizeRequests().antMatchers("/resources/**").hasRole("USER");
+//		http.authorizeRequests().antMatchers("/public/**").hasRole("USER");
+//		http.authorizeRequests()
+//		http.authorizeRequests().antMatchers("/swagger-ui.html").hasRole("ADMIN");
+
 		http.httpBasic();
-		http.csrf().disable();
+//		http.csrf().disable();
 
 	}
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring()
-				.antMatchers("/resources/**", "/public/**", "/css/**", "/js/**", "/images/**", "/ws/**");
+				.antMatchers("/css/**", "/js/**", "/images/**"/*"/resources/**","/public/**", "/ws/**"*/);
 	}
+
 }

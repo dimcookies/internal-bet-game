@@ -1,8 +1,10 @@
 package bet.web;
 
+import bet.api.dto.EncryptedBetDto;
 import bet.model.*;
 import bet.repository.*;
 import bet.service.livefeed.LiveScoreFeedScheduler;
+import bet.service.mgmt.EncryptedBetService;
 import com.google.common.collect.Lists;
 import org.apache.tomcat.util.digester.ArrayStack;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +21,7 @@ import java.io.InputStreamReader;
 import java.security.Principal;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -46,8 +46,14 @@ public class HelperController {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private EncryptedBetService encryptedBetService;
+
 	@Value("${application.timezone}")
 	private String timezone;
+
+	@Value("${application.allowedMatchDays}")
+	private String allowedMatchDays;
 
 	@RequestMapping(value = "/ws/lastupdate", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
 	public String liveFeedLastUpdate() throws Exception {
@@ -55,24 +61,43 @@ public class HelperController {
 		return lastUpdate != null ? lastUpdate.withZoneSameInstant(ZoneId.of(timezone)).toString() : "N/A";
 	}
 
+	@RequestMapping(value = "/ws/allowedMatchDays", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
+	public String allowedMatchDays() throws Exception {
+		return allowedMatchDays;
+	}
+
+	@RequestMapping(value = "/config/liveupdate", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
+	public String liveupdate() throws Exception {
+		liveScoreFeedScheduler.getLiveScores(false);
+		return "OK";
+	}
+
 	@RequestMapping(value = "/ws/allPoints", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public Map<String, Integer> allPoints() throws Exception {
+	public List<Map<String, String>> allPoints() throws Exception {
 		Map<String, Integer> allPoints = betRepository.listAllPoints();
-		return allPoints;
+		return allPoints.entrySet().stream().sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue()))
+				.map(e -> new HashMap<String, String>() {{
+					put("username", e.getKey());
+					put("points", e.getValue().toString());
+				}}).collect(Collectors.toList());
 	}
 
 	@RequestMapping(value = "/ws/allGames", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public List<Odd> allGames(@RequestParam(value = "matchDays", required = false) List<Integer> matchDays) throws Exception {
+	public List<Odd> allGames(@RequestParam(value = "matchDays", required = false) List<Integer> matchDays,
+			@RequestParam(value = "matchId", required = false) Integer matchId) throws Exception {
 		return Lists.newArrayList(oddRepository.findAll()).stream()
 				.filter(odd -> matchDays == null || matchDays.indexOf(odd.getGame().getMatchDay()) != -1)
+				.filter(odd -> matchId == null || matchId.equals(odd.getGame().getId()))
 				.collect(Collectors.toList());
 	}
 
 	@RequestMapping(value = "/ws/allBets", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public List<Bet> allBets(@RequestParam(value = "userId", required = false) Integer userId,
+			@RequestParam(value = "userName", required = false) String userName,
 			@RequestParam(value = "gameId", required = false) Integer gameId) throws Exception {
 		return Lists.newArrayList(betRepository.findAll()).stream()
 				.filter(bet -> userId == null || bet.getUser().getId().equals(userId))
+				.filter(bet -> userName == null || bet.getUser().getName().equals(userName))
 				.filter(bet -> gameId == null || bet.getGame().getId().equals(gameId))
 				.collect(Collectors.toList());
 	}
@@ -99,5 +124,16 @@ public class HelperController {
 		return commentRepository.save(c);
 	}
 
+	@RequestMapping(path = "/createAllBets", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<EncryptedBetDto> createAllBets(@RequestBody List<EncryptedBetDto> bets, Principal principal) {
+		User user = userRepository.findOneByName(principal.getName());
+		return encryptedBetService.createAll(bets, user);
+	}
+
+	@RequestMapping(path = "/listAllBets", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<EncryptedBetDto> createAllBets(Principal principal) {
+		User user = userRepository.findOneByName(principal.getName());
+		return encryptedBetService.list(user);
+	}
 
 }

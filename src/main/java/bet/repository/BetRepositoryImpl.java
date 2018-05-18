@@ -19,7 +19,6 @@ public class BetRepositoryImpl implements BetRepositoryCustom {
 	@PersistenceContext
 	private EntityManager entityManager;
 
-
 	public Map<String, Integer> listAllPoints() {
 		List<Bet> bets = entityManager.createQuery("from Bet").getResultList();
 		return bets.stream()

@@ -45,15 +45,21 @@ public class LiveScoreFeedScheduler {
 
 	@Scheduled(fixedRate = interval)
 	public void getLiveScores() {
+		getLiveScores(true);
+	}
+
+	public void getLiveScores(boolean checkForActiveMatches) {
 		LOGGER.trace("Check live scores");
 		ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
-		if(!gameScheduler.hasActiveGame(now)) {
-			LOGGER.trace("No active games");
-			return;
+
+		if(checkForActiveMatches) {
+			if(!gameScheduler.hasActiveGame(now)) {
+				LOGGER.trace("No active games");
+				return;
+			}
 		}
-		liveFeed.getLiveFeed().forEach(gameDto -> {
-			checkMatchChanged(gameDto);
-		});
+
+		liveFeed.getLiveFeed().forEach(gameDto -> checkMatchChanged(gameDto));
 		this.lastUpdateDate = now;
 	}
 
@@ -68,8 +74,7 @@ public class LiveScoreFeedScheduler {
 		//if score has changed
 		if (liveGame.getGoalsHome() != dbGame.getGoalsHome() || liveGame.getGoalsAway() != dbGame.getGoalsAway()) {
 			LOGGER.info("Game changed:" + liveGame.toString());
-			//update game entry
-			gameRepository.save(liveGame);
+
 			//get odd results (0-> result points 1->over points)
 			int[] oddPoints = getPoints(liveGame);
 
@@ -94,6 +99,9 @@ public class LiveScoreFeedScheduler {
 				betRepository.save(bet);
 			});
 		}
+
+		//update game entry
+		gameRepository.save(liveGame);
 	}
 
 	private int[] getPoints(Game game) {
