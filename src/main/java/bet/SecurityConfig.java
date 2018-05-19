@@ -34,16 +34,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth)
 			throws Exception {
-		auth.
-				jdbcAuthentication()
-				.usersByUsernameQuery("select name, password, 1 from ALLOWED_USERS where name=?")
-				.authoritiesByUsernameQuery("select u.name, u.role from ALLOWED_USERS u where u.name=?")
-				.dataSource(dataSource)
-				.passwordEncoder(passwordEncoder);
+//		auth.
+//				jdbcAuthentication()
+//				.usersByUsernameQuery("select name, password, 1 from ALLOWED_USERS where name=?")
+//				.authoritiesByUsernameQuery("select u.name, u.role from ALLOWED_USERS u where u.name=?")
+//				.dataSource(dataSource)
+//				.passwordEncoder(passwordEncoder);
 
 		//FIXME TODO REMOVE
 		auth.inMemoryAuthentication()
-				.withUser("admin").password("admin").roles("ADMIN");
+				.withUser("koukis").password("koukis").roles("ADMIN").authorities("ADMIN");
 
 //		userRepository.findAll().forEach(user -> {
 //			try {

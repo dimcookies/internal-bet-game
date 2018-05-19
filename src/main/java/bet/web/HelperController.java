@@ -116,7 +116,9 @@ public class HelperController {
 
 	@RequestMapping(value = "/ws/addComment", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public Comment allComments(@RequestParam(value = "comment", required = true) String comment, Principal principal) throws Exception {
-		if(comment.length() > 200) {
+		if(comment == null || comment.length() == 0) {
+			return null;
+		} else if(comment.length() > 200) {
 			comment = comment.substring(0,200)+"...";
 		}
 		User user = userRepository.findOneByName(principal.getName());
@@ -124,13 +126,13 @@ public class HelperController {
 		return commentRepository.save(c);
 	}
 
-	@RequestMapping(path = "/createAllBets", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path = "/ws/createAllBets", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<EncryptedBetDto> createAllBets(@RequestBody List<EncryptedBetDto> bets, Principal principal) {
 		User user = userRepository.findOneByName(principal.getName());
 		return encryptedBetService.createAll(bets, user);
 	}
 
-	@RequestMapping(path = "/listAllBets", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path = "/ws/listAllBets", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<EncryptedBetDto> createAllBets(Principal principal) {
 		User user = userRepository.findOneByName(principal.getName());
 		return encryptedBetService.list(user);

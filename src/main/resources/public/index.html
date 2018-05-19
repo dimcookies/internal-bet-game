@@ -111,13 +111,16 @@
             $scope.showMatch = function(gameId) {
               $http.get("http://localhost:8080/ws/allGames?matchId="+gameId).then(function (response) {
                 $scope.selectedGame = response.data[0];
-                $scope.selectedGameId = gameId;
-                $scope.pointsVisible = false;
-                $scope.commentsVisible = false;
-                $scope.matchesVisible = false;
-                $scope.matchVisible = true;
-                $scope.userVisible = false;
-                $scope.editVisible = false;
+                $http.get("http://localhost:8080/ws/allBets?gameId="+gameId).then(function (response) {
+                    $scope.allBets = response.data;
+                    $scope.selectedGameId = gameId;
+                    $scope.pointsVisible = false;
+                    $scope.commentsVisible = false;
+                    $scope.matchesVisible = false;
+                    $scope.matchVisible = true;
+                    $scope.userVisible = false;
+                    $scope.editVisible = false;
+                });
                });
             };
             $scope.showUser = function(userName) {
@@ -135,14 +138,77 @@
             $scope.showEdit = function() {
               $http.get("http://localhost:8080/ws/allGames?matchDays="+$scope.allowedMatchDays).then(function (response) {
                 $scope.selectedGames = response.data;
-                $scope.pointsVisible = false;
-                $scope.commentsVisible = false;
-                $scope.matchesVisible = false;
-                $scope.matchVisible = false;
-                $scope.userVisible = false;
-                $scope.editVisible = true;
+
+                $http.get("http://localhost:8080/ws/listAllBets").then(function (response) {
+                        savedBets = response.data;
+                        console.log(savedBets);
+
+                        $scope.pointsVisible = false;
+                        $scope.commentsVisible = false;
+                        $scope.matchesVisible = false;
+                        $scope.matchVisible = false;
+                        $scope.userVisible = false;
+                        $scope.editVisible = true;
+                        $scope.userBets={};
+                        $scope.userOverBets={};
+                        $scope.editError = false;
+                        $scope.editSuccess = false;
+                        $scope.disableSubmit = false;
+
+
+                        for(var idx in savedBets) {
+                        savedBet=savedBets[idx];
+                        //console.log(savedBet.gameId);
+                            $scope.userBets[savedBet.gameId] = savedBet.scoreResult;
+                            $scope.userOverBets[savedBet.gameId] = savedBet.overResult;
+                        }
+                        //console.log($scope.userBets);
+                        //console.log($scope.userOverBets);
+                });
+
+                //for(var game in $scope.selectedGames) {
+                //    if (!$scope.userBets.hasOwnProperty(game.game.id)) {
+                //        $scope.userBets[game.game.id] = null;
+                //        $scope.userOverBets[game.game.id] = null;
+                //    }
+                //}
                });
             };
+
+            $scope.saveBets = function() {
+                $scope.disableSubmit = true;
+                isPlayoffStage = $scope.allowedMatchDays.split(',') < 3;
+                console.log(isPlayoffStage);
+                $scope.editError = false;
+                $scope.editSuccess = false;
+                for (var i = 0; i < $scope.selectedGames.length; i++) {
+                    game=$scope.selectedGames[i];
+                    if($scope.userBets[game.game.id] == null) {
+                      $scope.editError = true;
+                      return;
+                    }
+
+                    if(isPlayoffStage && $scope.userOverBets[game.game.id] == null) {
+                      $scope.editError = true;
+                      return;
+                    }
+                }
+
+                ar = [];
+                for(var key in $scope.userBets) {
+                  var value = $scope.userBets[key];
+                  dct = { "gameId": key, "overResult": $scope.userOverBets[key], "scoreResult": $scope.userBets[key] }
+                  ar.push(dct);
+                }
+
+                //console.log(ar);
+                var parameter = JSON.stringify(ar);
+                $http.post("http://localhost:8080/ws/createAllBets", parameter).then(function (response) {
+                    $scope.editSuccess = true;
+                    $scope.disableSubmit = true;
+                });
+            };
+
             $scope.addComment = function() {
                 $http.post("http://localhost:8080/ws/addComment?comment="+$scope.new_comment).then(function (response) {
                     $http.get("http://localhost:8080/ws/allComments?limit=1000").then(function (response) {
@@ -352,59 +418,69 @@
         <div class="col-sm-9" ng-show="editVisible">
             <h4><small>Games</small></h4>
             <h4><small>Last Update: {{ lastUpdate }}</small></h4>
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th scope="col">Date</th>
-                    <th scope="col">Home</th>
-                    <th scope="col">Away</th>
-                    <th scope="col">Goals Home</th>
-                    <th scope="col">Goals Away</th>
-                    <th scope="col">Status</th>
-                    <th scope="col" colspan="7" style="text-align:center">Odds</th>
-                </tr>
-                <tr>
-                    <th scope="col" colspan="6"></th>
-                    <th scope="col">1</th>
-                    <th scope="col">X</th>
-                    <th scope="col">2</th>
-                    <th scope="col">Bet</th>
-                    <th scope="col">Under</th>
-                    <th scope="col">Over</th>
-                    <th scope="col">Bet</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="game in selectedGames">
-                    <td>{{ game.game.gameDate }}</td>
-                    <td>{{ game.game.homeName }}</td>
-                    <td>{{ game.game.awayName }}</td>
-                    <td>{{ game.game.goalsHome }}</td>
-                    <td>{{ game.game.goalsAway }}</td>
-                    <td>{{ game.game.status }}</td>
-                    <td>{{ game.oddsHome }}</td>
-                    <td>{{ game.oddsTie }}</td>
-                    <td>{{ game.oddsAway }}</td>
-                    <td>
-                        <select>
-                            <option value=""></option>
-                            <option value="HOME_1">HOME_1</option>
-                            <option value="TIE_X">TIE_X</option>
-                            <option value="AWAY_2">AWAY_2</option>
-                        </select>
-                    </td>
-                    <td>{{ game.oddsUnder }}</td>
-                    <td>{{ game.oddsOver }}</td>
-                    <td>
-                        <select ng-show="game.game.matchDay > 3">
-                            <option value=""></option>
-                            <option value="UNDER">UNDER</option>
-                            <option value="OVER">OVER</option>
-                        </select>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <form name="editform">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Home</th>
+                        <th scope="col">Away</th>
+                        <th scope="col">Goals Home</th>
+                        <th scope="col">Goals Away</th>
+                        <th scope="col">Status</th>
+                        <th scope="col" colspan="7" style="text-align:center">Odds</th>
+                    </tr>
+                    <tr>
+                        <th scope="col" colspan="6"></th>
+                        <th scope="col">1</th>
+                        <th scope="col">X</th>
+                        <th scope="col">2</th>
+                        <th scope="col">Bet</th>
+                        <th scope="col">Under</th>
+                        <th scope="col">Over</th>
+                        <th scope="col">Bet</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="game in selectedGames">
+                        <td>{{ game.game.gameDate }}</td>
+                        <td>{{ game.game.homeName }}</td>
+                        <td>{{ game.game.awayName }}</td>
+                        <td>{{ game.game.goalsHome }}</td>
+                        <td>{{ game.game.goalsAway }}</td>
+                        <td>{{ game.game.status }}</td>
+                        <td>{{ game.oddsHome }}</td>
+                        <td>{{ game.oddsTie }}</td>
+                        <td>{{ game.oddsAway }}</td>
+                        <td >
+                            <select ng-model="userBets[game.game.id]" required  style="{{ userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}">
+                                <option value=""></option>
+                                <option value="HOME_1">HOME_1</option>
+                                <option value="DRAW_X">DRAW_X</option>
+                                <option value="AWAY_2">AWAY_2</option>
+                            </select>
+                        </td>
+                        <td>{{ game.oddsUnder }}</td>
+                        <td>{{ game.oddsOver }}</td>
+                        <td>
+                            <select ng-show="game.game.matchDay > 3" ng-model="userOverBets[game.game.id]" style="{{ userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}" required>
+                                <option value=""></option>
+                                <option value="UNDER">UNDER</option>
+                                <option value="OVER">OVER</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="13">
+                            <button type="button" ng-disabled="enableSubmit" class="btn btn-success" ng-click="saveBets()">Submit Bets</button><br/>
+                            <br/>
+                            <div ng-show="editError" style="color:red">Missing fields</div>
+                            <div ng-show="editSuccess" style="color:green">Bets saved successfully</div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
         </div>
 
 
