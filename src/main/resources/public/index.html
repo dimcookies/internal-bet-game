@@ -44,12 +44,12 @@
                 $scope.allRss = response.data;
             });
 
-            $http.get("http://localhost:8080/ws/allowedMatchDays").then(function (response) {
+            $http.get("/ws/allowedMatchDays").then(function (response) {
                 $scope.allowedMatchDays = response.data;
             });
 
             (function tick() {
-                $http.get("http://localhost:8080/ws/lastupdate").then(function (response) {
+                $http.get("/ws/lastupdate").then(function (response) {
                     $scope.lastUpdate = response.data;
                     $timeout(tick, 60000);
                 });
@@ -60,7 +60,7 @@
             });
 
             (function tick2() {
-                 $http.get("http://localhost:8080/ws/allComments?limit=1000").then(function (response) {
+                 $http.get("/ws/allComments?limit=1000").then(function (response) {
                             $scope.allComments = response.data;
                             $timeout(tick2, 60000);
                 });
@@ -109,9 +109,9 @@
 
             };
             $scope.showMatch = function(gameId) {
-              $http.get("http://localhost:8080/ws/allGames?matchId="+gameId).then(function (response) {
+              $http.get("/ws/allGames?matchId="+gameId).then(function (response) {
                 $scope.selectedGame = response.data[0];
-                $http.get("http://localhost:8080/ws/allBets?gameId="+gameId).then(function (response) {
+                $http.get("/ws/allBets?gameId="+gameId).then(function (response) {
                     $scope.allBets = response.data;
                     $scope.selectedGameId = gameId;
                     $scope.pointsVisible = false;
@@ -124,7 +124,7 @@
                });
             };
             $scope.showUser = function(userName) {
-              $http.get("http://localhost:8080/ws/allBets?userName="+userName).then(function (response) {
+              $http.get("/ws/allBets?userName="+userName).then(function (response) {
                 $scope.selectedBets = response.data;
                 $scope.selectedUser = userName;
                 $scope.pointsVisible = false;
@@ -136,10 +136,10 @@
                });
             };
             $scope.showEdit = function() {
-              $http.get("http://localhost:8080/ws/allGames?matchDays="+$scope.allowedMatchDays).then(function (response) {
+              $http.get("/ws/allGames?matchDays="+$scope.allowedMatchDays).then(function (response) {
                 $scope.selectedGames = response.data;
 
-                $http.get("http://localhost:8080/ws/listAllBets").then(function (response) {
+                $http.get("/ws/listAllBets").then(function (response) {
                         savedBets = response.data;
                         console.log(savedBets);
 
@@ -203,15 +203,15 @@
 
                 //console.log(ar);
                 var parameter = JSON.stringify(ar);
-                $http.post("http://localhost:8080/ws/createAllBets", parameter).then(function (response) {
+                $http.post("/ws/createAllBets", parameter).then(function (response) {
                     $scope.editSuccess = true;
                     $scope.disableSubmit = true;
                 });
             };
 
             $scope.addComment = function() {
-                $http.post("http://localhost:8080/ws/addComment?comment="+$scope.new_comment).then(function (response) {
-                    $http.get("http://localhost:8080/ws/allComments?limit=1000").then(function (response) {
+                $http.post("/ws/addComment?comment="+$scope.new_comment).then(function (response) {
+                    $http.get("/ws/allComments?limit=1000").then(function (response) {
                         $scope.allComments = response.data;
                     });
                     $scope.new_comment = "";
