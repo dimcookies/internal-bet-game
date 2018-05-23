@@ -61,6 +61,11 @@ public class HelperController {
 		return lastUpdate != null ? lastUpdate.withZoneSameInstant(ZoneId.of(timezone)).toString() : "N/A";
 	}
 
+	@RequestMapping(value = "/ws/participations", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
+	public String participations() throws Exception {
+		return ""+Lists.newArrayList(userRepository.findAll()).size();
+	}
+
 	@RequestMapping(value = "/ws/allowedMatchDays", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
 	public String allowedMatchDays() throws Exception {
 		return allowedMatchDays;
