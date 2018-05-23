@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 @Configuration
@@ -34,16 +35,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth)
 			throws Exception {
-//		auth.
-//				jdbcAuthentication()
-//				.usersByUsernameQuery("select name, password, 1 from ALLOWED_USERS where name=?")
-//				.authoritiesByUsernameQuery("select u.name, u.role from ALLOWED_USERS u where u.name=?")
-//				.dataSource(dataSource)
-//				.passwordEncoder(passwordEncoder);
+		auth.
+				jdbcAuthentication()
+				.usersByUsernameQuery("select name, password, 1 from ALLOWED_USERS where name=?")
+				.authoritiesByUsernameQuery("select u.name, u.role from ALLOWED_USERS u where u.name=?")
+				.dataSource(dataSource)
+				.passwordEncoder(passwordEncoder);
 
 		//FIXME TODO REMOVE
-		auth.inMemoryAuthentication()
-				.withUser("koukis").password("koukis").roles("ADMIN").authorities("ADMIN");
+//		auth.inMemoryAuthentication()
+//				.withUser("koukis").password("koukis").roles("ADMIN").authorities("ADMIN");
 
 //		userRepository.findAll().forEach(user -> {
 //			try {
@@ -106,6 +107,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring()
 				.antMatchers("/css/**", "/js/**", "/images/**"/*"/resources/**","/public/**", "/ws/**"*/);
+	}
+
+	public static void main(String[] args) throws NoSuchAlgorithmException {
+		MessageDigest md = MessageDigest.getInstance("MD5");
+		md.update("TEST".getBytes());
+		System.out.println(new String(Base64.getEncoder().encode(md.digest())));
 	}
 
 }
