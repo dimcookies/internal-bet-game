@@ -22,8 +22,9 @@ public class EncryptUtils {
 		cipher = Cipher.getInstance("AES/ECB/NoPadding");
 	}
 
-	public String encrypt(String text, String username) throws Exception {
-		byte[] keyBytes = (username + mainKey).substring(1, 25).getBytes();
+	public String encrypt(String text, String salt) throws Exception {
+
+		byte[] keyBytes = (salt + mainKey).substring(0, 24).getBytes();
 		SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");
 
 		byte[] input = String.format("%16s", text).getBytes();
@@ -37,8 +38,8 @@ public class EncryptUtils {
 		return new String(encodedBytes);
 	}
 
-	public String decrypt(String encrypted, String username) throws Exception {
-		byte[] keyBytes = (username + mainKey).substring(1, 25).getBytes();
+	public String decrypt(String encrypted, String salt) throws Exception {
+		byte[] keyBytes = (salt + mainKey).substring(0, 24).getBytes();
 		SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");
 
 		byte[] decodedBytes = Base64.getDecoder().decode(encrypted.getBytes());

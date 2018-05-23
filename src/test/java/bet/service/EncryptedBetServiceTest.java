@@ -5,9 +5,11 @@ import bet.api.constants.ScoreResult;
 import bet.api.dto.EncryptedBetDto;
 import bet.base.AbstractBetIntegrationTest;
 import bet.model.Bet;
+import bet.model.EncryptedBet;
 import bet.model.Game;
 import bet.model.User;
 import bet.repository.BetRepository;
+import bet.repository.EncryptedBetRepository;
 import bet.repository.GameRepository;
 import bet.repository.UserRepository;
 import bet.service.GamesInitializer;
@@ -24,6 +26,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class EncryptedBetServiceTest extends AbstractBetIntegrationTest {
@@ -33,6 +36,9 @@ public class EncryptedBetServiceTest extends AbstractBetIntegrationTest {
 
     @Autowired
     private EncryptedBetService encryptedBetService;
+
+    @Autowired
+    private EncryptedBetRepository encryptedBetRepository;
 
     @Autowired
     private GamesInitializer gamesInitializer;
@@ -52,6 +58,27 @@ public class EncryptedBetServiceTest extends AbstractBetIntegrationTest {
     }
 
     @Test
+    public void testEncryptionSalt() {
+        List<User> users = Lists.newArrayList(userRepository.findAll());
+        List<Game> games = Lists.newArrayList(gameRepository.findAll());
+        int userId1 = users.get(0).getId();
+        int userId2 = users.get(1).getId();
+        int gameId1 = games.get(0).getId();
+        int gameId2 = games.get(1).getId();
+        String now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC")).toString();
+
+        encryptedBetService.create(new EncryptedBetDto(null, gameId1, userId1, ScoreResult.HOME_1.toString(), OverResult.OVER.toString(), now));
+        encryptedBetService.create(new EncryptedBetDto(null, gameId2, userId1, ScoreResult.HOME_1.toString(), OverResult.OVER.toString(), now));
+        encryptedBetService.create(new EncryptedBetDto(null, gameId1, userId2, ScoreResult.HOME_1.toString(), OverResult.OVER.toString(), now));
+        encryptedBetService.create(new EncryptedBetDto(null, gameId2, userId2, ScoreResult.HOME_1.toString(), OverResult.OVER.toString(), now));
+
+        List<EncryptedBet> encryptedBets = Lists.newArrayList(encryptedBetRepository.findAll());
+
+        assertEquals(4, encryptedBets.stream().map(EncryptedBet::getScoreResult).collect(Collectors.toSet()).size());
+        assertEquals(4, encryptedBets.stream().map(EncryptedBet::getOverResult).collect(Collectors.toSet()).size());
+    }
+
+    @Test
     public void testDecryptAndCopy() {
         List<User> users = Lists.newArrayList(userRepository.findAll());
         List<Game> games = Lists.newArrayList(gameRepository.findAll());
@@ -67,6 +94,8 @@ public class EncryptedBetServiceTest extends AbstractBetIntegrationTest {
         encryptedBetService.create(new EncryptedBetDto(null, gameId2, userId2, ScoreResult.DRAW_X.toString(), null, now));
 
         assertEquals(4, encryptedBetService.list().size());
+
+
 
         encryptedBetService.decryptAndCopy();
 

@@ -64,25 +64,34 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 	}
 
 	private void encryptBets(EncryptedBetDto dto) {
+		String salt = getSalt(dto);
 		try {
 			if(dto.getOverResult() != null) {
-				dto.setOverResult(encryptUtils.encrypt(dto.getOverResult(), dto.getUserId().toString()));
+				dto.setOverResult(encryptUtils.encrypt(dto.getOverResult(), salt));
 			}
-			dto.setScoreResult(encryptUtils.encrypt(dto.getScoreResult(), dto.getUserId().toString()));
+			dto.setScoreResult(encryptUtils.encrypt(dto.getScoreResult(), salt));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	private void decryptBets(EncryptedBetDto dto) {
+		String salt = getSalt(dto);
 		try {
 			if(dto.getOverResult() != null) {
-				dto.setOverResult(encryptUtils.decrypt(dto.getOverResult(), dto.getUserId().toString()));
+				dto.setOverResult(encryptUtils.decrypt(dto.getOverResult(), salt));
 			}
-			dto.setScoreResult(encryptUtils.decrypt(dto.getScoreResult(), dto.getUserId().toString()));
+			dto.setScoreResult(encryptUtils.decrypt(dto.getScoreResult(), salt));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	private String getSalt(EncryptedBetDto dto) {
+		String userId = dto.getUserId().toString();
+		String gameId = dto.getGameId().toString();
+
+		return userId.substring(0,Math.min(10, userId.length())) + gameId.substring(0,Math.min(10, gameId.length()));
 	}
 
 	@Override

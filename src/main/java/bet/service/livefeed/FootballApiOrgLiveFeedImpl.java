@@ -3,6 +3,7 @@ package bet.service.livefeed;
 import bet.api.dto.GameDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -14,7 +15,8 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public class FootballApiOrgImpl implements LiveFeed {
+@Profile("live")
+public class FootballApiOrgLiveFeedImpl implements LiveFeed {
 
 	@Value("${application.live_feed.footballapiorg.url}")
 	private String liveFeedUrl;
