@@ -1,10 +1,12 @@
 package bet.web;
 
 import bet.api.dto.EncryptedBetDto;
+import bet.api.dto.UserDto;
 import bet.model.*;
 import bet.repository.*;
 import bet.service.livefeed.LiveScoreFeedScheduler;
 import bet.service.mgmt.EncryptedBetService;
+import bet.service.mgmt.UserService;
 import com.google.common.collect.Lists;
 import org.apache.tomcat.util.digester.ArrayStack;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletContext;
@@ -47,7 +50,13 @@ public class HelperController {
 	private UserRepository userRepository;
 
 	@Autowired
+    private UserService userService;
+
+	@Autowired
 	private EncryptedBetService encryptedBetService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 	@Value("${application.timezone}")
 	private String timezone;
@@ -120,7 +129,7 @@ public class HelperController {
 	}
 
 	@RequestMapping(value = "/ws/addComment", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public Comment allComments(@RequestParam(value = "comment", required = true) String comment, Principal principal) throws Exception {
+	public Comment addComments(@RequestParam(value = "comment", required = true) String comment, Principal principal) throws Exception {
 		if(comment == null || comment.length() == 0) {
 			return null;
 		} else if(comment.length() > 200) {
@@ -142,5 +151,19 @@ public class HelperController {
 		User user = userRepository.findOneByName(principal.getName());
 		return encryptedBetService.list(user);
 	}
+
+
+    @RequestMapping(value = "/ws/changePassword", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
+    public String changePassword(@RequestParam(value = "password", required = true) String password, Principal principal) throws Exception {
+	    if(password == null || password.length() == 0) {
+	        throw new RuntimeException();
+        }
+        User user = userRepository.findOneByName(principal.getName());
+        UserDto userDto = new UserDto();
+        userDto.fromEntity(user);
+        userDto.setPassword(password);
+        userService.update(userDto);
+        return "OK";
+    }
 
 }
