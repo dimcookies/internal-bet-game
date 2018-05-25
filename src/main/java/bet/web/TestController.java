@@ -1,10 +1,12 @@
 package bet.web;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletContext;
 
-@RestController
+@Controller
 public class TestController {
 
 	private final ServletContext servletContext;
@@ -20,7 +22,12 @@ public class TestController {
 //						.collect(Collectors.joining("\n"));
 //
 //		return result;
-//
 //	}
+
+	@GetMapping("/login")
+	public String login() {
+		return "login";
+	}
+
 
 }

@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
 import java.security.MessageDigest;
@@ -87,7 +88,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				authorizeRequests()
 				.antMatchers("/config/**").hasAuthority("ADMIN")// hasRole("ADMIN")
 				.antMatchers("/swagger-ui.html").hasAuthority("ADMIN")//.hasRole("ADMIN")
-				.anyRequest().fullyAuthenticated();
+				.anyRequest().fullyAuthenticated()
+
+				.and()
+				.formLogin()
+				.loginPage("/login")
+				.permitAll()
+				.and()
+				.logout()
+				.invalidateHttpSession(true)
+				.clearAuthentication(true)
+				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+				.logoutSuccessUrl("/login?logout")
+				.permitAll();
+
+
+//		http.httpBasic();
 
 
 		//http.authorizeRequests().anyRequest().fullyAuthenticated();
@@ -98,7 +114,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //		http.authorizeRequests()
 //		http.authorizeRequests().antMatchers("/swagger-ui.html").hasRole("ADMIN");
 
-		http.httpBasic();
 //		http.csrf().disable();
 
 	}
