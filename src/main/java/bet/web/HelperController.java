@@ -26,6 +26,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RestController
 public class HelperController {
@@ -59,6 +60,9 @@ public class HelperController {
 
 	@Autowired
 	private FriendRepository friendRepository;
+
+	@Autowired
+	private RankHistoryRepository rankHistoryRepository;
 
 	@Value("${application.timezone}")
 	private String timezone;
@@ -202,5 +206,29 @@ public class HelperController {
 					put("riskIndex", e.getValue().toString());
 				}}).collect(Collectors.toList());
 	}
+
+	@RequestMapping(value = "/ws/rankHistory", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public List<RankHistory> rankHistory(@RequestParam(value = "userName", required = false) String userName) throws Exception {
+
+		return StreamSupport.stream(rankHistoryRepository.findAll().spliterator(), false)
+				.filter(rankHistory -> userName == null || rankHistory.getUser().getName().equals(userName))
+				.sorted((o1, o2) -> {
+					int cmp1 = o1.getRankDate().compareTo(o2.getRankDate());
+					if(cmp1 != 0) {
+						return  cmp1;
+					}
+					return o2.getRank().compareTo(o1.getRank());
+				})
+				.collect(Collectors.toList());
+	}
+
+	@RequestMapping(value = "/ws/topRanked", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public Map<String, Long> topRanked() throws Exception {
+		return StreamSupport.stream(rankHistoryRepository.findAll().spliterator(), false)
+				.filter(rankHistory -> rankHistory.getRank() == 1)
+				.collect(Collectors.groupingBy(o ->  o.getUser().getName(), Collectors.counting()));
+
+	}
+
 }
 

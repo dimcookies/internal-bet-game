@@ -125,7 +125,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	public static void main(String[] args) throws NoSuchAlgorithmException {
 		MessageDigest md = MessageDigest.getInstance("MD5");
-		md.update("TEST".getBytes());
+		md.update("koukis".getBytes());
 		System.out.println(new String(Base64.getEncoder().encode(md.digest())));
 	}
 
