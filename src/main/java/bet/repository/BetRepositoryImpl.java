@@ -3,6 +3,7 @@
 package bet.repository;
 
 import bet.model.Bet;
+import bet.model.Odd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -19,10 +20,24 @@ public class BetRepositoryImpl implements BetRepositoryCustom {
 	@PersistenceContext
 	private EntityManager entityManager;
 
+	@Autowired
+	private OddRepository oddRepository;
+
 	public Map<String, Integer> listAllPoints() {
 		List<Bet> bets = entityManager.createQuery("from Bet").getResultList();
 		return bets.stream()
 				.collect(Collectors.groupingBy(o -> o.getUser().getName(), Collectors.summingInt(value -> { return value.getOverPoints() + value.getResultPoints(); })));
+	}
+
+
+	public Map<String, Double> listRiskIndex() {
+		List<Bet> bets = entityManager.createQuery("from Bet").getResultList();
+		return bets.stream()
+				.collect(Collectors.groupingBy(o -> o.getUser().getName(), Collectors.summingDouble(value -> {
+					Odd odd = oddRepository.findOneByGame(value.getGame());
+					return odd.getOddForScore(value.getScoreResult()) +
+							(value.getOverResult() != null? odd.getOddForOver(value.getOverResult()) : 0.0);
+				})));
 	}
 
 }

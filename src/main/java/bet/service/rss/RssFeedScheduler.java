@@ -1,4 +1,4 @@
-package bet.service.livefeed;
+package bet.service.rss;
 
 import bet.api.constants.GameStatus;
 import bet.api.dto.GameDto;
@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 @Profile("live")
 public class RssFeedScheduler {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(LiveScoreFeedScheduler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RssFeedScheduler.class);
 
 	@Value("${application.rss_feed}")
 	private String[] feeds;

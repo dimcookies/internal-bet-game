@@ -28,7 +28,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
-@Profile("live")
 public class HelperController {
 
 	@Autowired
@@ -194,5 +193,14 @@ public class HelperController {
 		return friendRepository.findByUser(user);
 	}
 
-
+	@RequestMapping(value = "/ws/riskIndex", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public List<Map<String, String>> riskIndex() throws Exception {
+		Map<String, Double> allPoints = betRepository.listRiskIndex();
+		return allPoints.entrySet().stream().sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue()))
+				.map(e -> new HashMap<String, String>() {{
+					put("username", e.getKey());
+					put("riskIndex", e.getValue().toString());
+				}}).collect(Collectors.toList());
+	}
 }
+

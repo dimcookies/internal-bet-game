@@ -86,21 +86,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.cors().and().csrf().disable().
 				authorizeRequests()
-				.antMatchers("/config/**").hasAuthority("ADMIN")// hasRole("ADMIN")
-				.antMatchers("/swagger-ui.html").hasAuthority("ADMIN")//.hasRole("ADMIN")
-				.anyRequest().fullyAuthenticated()
-
+					.antMatchers("/config/**").hasAuthority("ADMIN")// hasRole("ADMIN")
+					.antMatchers("/swagger-ui.html").hasAuthority("ADMIN")//.hasRole("ADMIN")
+					.anyRequest().fullyAuthenticated()
 				.and()
-				.formLogin()
-				.loginPage("/login")
-				.permitAll()
+					.formLogin()
+					.loginPage("/login")
+					.permitAll()
 				.and()
-				.logout()
-				.invalidateHttpSession(true)
-				.clearAuthentication(true)
-				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-				.logoutSuccessUrl("/login?logout")
-				.permitAll();
+					.logout()
+					.invalidateHttpSession(true)
+					.clearAuthentication(true)
+					.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+					.logoutSuccessUrl("/login?logout")
+					.permitAll();
 
 
 //		http.httpBasic();
