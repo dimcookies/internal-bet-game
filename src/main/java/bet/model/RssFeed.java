@@ -33,6 +33,9 @@ public class RssFeed implements Serializable {
 	@Column(name = "LINK")
 	private String link;
 
+	@Column(name = "IMAGE")
+	private String image;
+
 	@Column(name = "PUBLISH_DATE")
 	private Date publishDate;
 
@@ -40,11 +43,12 @@ public class RssFeed implements Serializable {
 		super();
 	}
 
-	public RssFeed(String title, String link, Date publishDate) {
+	public RssFeed(String title, String link, Date publishDate, String image) {
 
 		this.title = title;
 		this.link = link;
 		this.publishDate = publishDate;
+		this.image = image;
 
 	}
 

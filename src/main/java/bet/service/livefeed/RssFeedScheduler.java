@@ -10,6 +10,7 @@ import bet.repository.GameRepository;
 import bet.repository.OddRepository;
 import bet.repository.RssFeedRepository;
 import bet.service.utils.GameScheduler;
+import com.sun.syndication.feed.synd.SyndEnclosure;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.FeedException;
@@ -59,7 +60,8 @@ public class RssFeedScheduler {
 				SyndFeed feed = input.build(new XmlReader(feedUrl));
 				feed.getEntries().forEach (e -> {
 					SyndEntry entry = (SyndEntry) e;
-					rssFeedRepository.save(new RssFeed(entry.getTitle(), entry.getLink(),  entry.getPublishedDate()));
+					String imageUrl = entry.getEnclosures() != null && entry.getEnclosures().size() > 0 ? ((SyndEnclosure)entry.getEnclosures().get(0)).getUrl().replaceFirst("^//","http://") : "/images/emptyRss.jpg";
+					rssFeedRepository.save(new RssFeed(entry.getTitle(), entry.getLink(),  entry.getPublishedDate(), imageUrl));
 				});
 			} catch (Exception e) {
 				throw new RuntimeException(e);
