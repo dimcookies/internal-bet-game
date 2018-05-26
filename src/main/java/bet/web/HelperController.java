@@ -58,6 +58,9 @@ public class HelperController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+	@Autowired
+	private FriendRepository friendRepository;
+
 	@Value("${application.timezone}")
 	private String timezone;
 
@@ -165,5 +168,31 @@ public class HelperController {
         userService.update(userDto);
         return "OK";
     }
+
+
+	@RequestMapping(value = "/ws/updateFriends", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Friend> updateFriends(@RequestBody List<String> usernames, Principal principal) throws Exception {
+		User user = userRepository.findOneByName(principal.getName());
+		friendRepository.deleteByUser(user);
+
+		List<Friend> friends = usernames.stream().map(username -> {
+			User friend = userRepository.findOneByName(username);
+			if(friend == null) {
+				throw new RuntimeException();
+			}
+			return new Friend(user, friend);
+		}).collect(Collectors.toList());
+
+		return Lists.newArrayList(friendRepository.save(friends));
+
+
+	}
+
+	@RequestMapping(value = "/ws/listFriends", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Friend> listFriends(Principal principal) throws Exception {
+		User user = userRepository.findOneByName(principal.getName());
+		return friendRepository.findByUser(user);
+	}
+
 
 }
