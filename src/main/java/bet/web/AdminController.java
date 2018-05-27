@@ -1,10 +1,12 @@
 package bet.web;
 
+import bet.api.dto.GameDto;
 import bet.service.livefeed.LiveScoreFeedScheduler;
 import bet.service.mgmt.EncryptedBetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +24,12 @@ public class AdminController {
     @RequestMapping(value = "/liveupdate", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
     public String liveupdate() throws Exception {
         liveScoreFeedScheduler.getLiveScores(false);
+        return "OK";
+    }
+
+    @RequestMapping(value = "/manualScoreUpdate", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
+    public String manualScoreUpdate(@RequestBody GameDto gameDto) throws Exception {
+        liveScoreFeedScheduler.checkMatchChanged(gameDto);
         return "OK";
     }
 
