@@ -36,9 +36,6 @@ public class GamesInitializer {
 	@PostConstruct
 	@Transactional
 	public void initialize() {
-		if(userService.list().size() == 0) {
-			userService.create(new UserDto("koukis","koukis@upstreamsystems.com", "koukis", "ADMIN"));
-		}
 		if(!gameRepository.findAll().iterator().hasNext()) {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<List<GameDto>> typeReference = new TypeReference<List<GameDto>>() {};

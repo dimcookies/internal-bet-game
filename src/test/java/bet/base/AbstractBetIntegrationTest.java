@@ -1,9 +1,6 @@
 package bet.base;
 
-import bet.model.Bet;
-import bet.model.Game;
-import bet.model.Odd;
-import bet.model.User;
+import bet.model.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import net.sf.ehcache.CacheManager;
@@ -91,7 +88,8 @@ public abstract class AbstractBetIntegrationTest extends AbstractBetTest {
 	protected void deleteDataAndClearL2Cache() {
 		// Delete all data from Postgres
 		truncatePostgresTables(jdbcTemplate,
-				Game.class, Bet.class, Odd.class, User.class );
+				Game.class, Bet.class, Odd.class, User.class, Comment.class, EncryptedBet.class,
+				Friend.class, RankHistory.class, RssFeed.class, UserStreak.class);
 
 		CacheManager manager = CacheManager.getInstance();
 		for (String s : manager.getCacheNames()) {

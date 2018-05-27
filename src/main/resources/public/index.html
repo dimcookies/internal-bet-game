@@ -40,27 +40,27 @@
         var app = angular.module('myApp', []);
 
         app.controller('myCtrl', function($scope, $http, $timeout) {
-            $http.get("/ws/allRss").then(function (response) {
+            $http.get("/rss/list").then(function (response) {
                 $scope.allRss = response.data;
             });
 
-            $http.get("/ws/allowedMatchDays").then(function (response) {
+            $http.get("/bets/allowedMatchDays").then(function (response) {
                 $scope.allowedMatchDays = response.data;
             });
 
             (function tick() {
-                $http.get("/ws/lastupdate").then(function (response) {
+                $http.get("/livefeed/lastupdate").then(function (response) {
                     $scope.lastUpdate = response.data;
                     $timeout(tick, 60000);
                 });
             })();
 
-            $http.get("/ws/allPoints").then(function (response) {
+            $http.get("/bets/points").then(function (response) {
                 $scope.allPoints = response.data;
             });
 
             (function tick2() {
-                 $http.get("/ws/allComments?limit=1000").then(function (response) {
+                 $http.get("/comments/list?limit=1000").then(function (response) {
                             $scope.allComments = response.data;
                             $timeout(tick2, 60000);
                 });
@@ -74,7 +74,7 @@
             $scope.userVisible = false;
             $scope.editVisible = false;
             $scope.showPoints = function() {
-            $http.get("/ws/allPoints").then(function (response) {
+            $http.get("/bets/points").then(function (response) {
                 $scope.allPoints = response.data;
                 $scope.pointsVisible = true;
               $scope.commentsVisible = false;
@@ -86,7 +86,7 @@
 
             };
             $scope.showComments = function() {
-                $http.get("/ws/allComments?limit=1000").then(function (response) {
+                $http.get("/comments/list?limit=1000").then(function (response) {
                     $scope.allComments = response.data;
                     $scope.pointsVisible = false;
                   $scope.commentsVisible = true;
@@ -97,7 +97,7 @@
                 });
             };
             $scope.showMatches = function() {
-            $http.get("/ws/allGames").then(function (response) {
+            $http.get("/games/list").then(function (response) {
                 $scope.allMatches = response.data;
                 $scope.pointsVisible = false;
               $scope.commentsVisible = false;
@@ -109,9 +109,9 @@
 
             };
             $scope.showMatch = function(gameId) {
-              $http.get("/ws/allGames?matchId="+gameId).then(function (response) {
+              $http.get("/games/list?matchId="+gameId).then(function (response) {
                 $scope.selectedGame = response.data[0];
-                $http.get("/ws/allBets?gameId="+gameId).then(function (response) {
+                $http.get("/bets/list?gameId="+gameId).then(function (response) {
                     $scope.allBets = response.data;
                     $scope.selectedGameId = gameId;
                     $scope.pointsVisible = false;
@@ -124,7 +124,7 @@
                });
             };
             $scope.showUser = function(userName) {
-              $http.get("/ws/allBets?userName="+userName).then(function (response) {
+              $http.get("/bets/list?userName="+userName).then(function (response) {
                 $scope.selectedBets = response.data;
                 $scope.selectedUser = userName;
                 $scope.pointsVisible = false;
@@ -136,10 +136,10 @@
                });
             };
             $scope.showEdit = function() {
-              $http.get("/ws/allGames?matchDays="+$scope.allowedMatchDays).then(function (response) {
+              $http.get("/games/list?matchDays="+$scope.allowedMatchDays).then(function (response) {
                 $scope.selectedGames = response.data;
 
-                $http.get("/ws/listAllBets").then(function (response) {
+                $http.get("/bets/encrypted/list").then(function (response) {
                         savedBets = response.data;
                         console.log(savedBets);
 
@@ -158,20 +158,12 @@
 
                         for(var idx in savedBets) {
                         savedBet=savedBets[idx];
-                        //console.log(savedBet.gameId);
                             $scope.userBets[savedBet.gameId] = savedBet.scoreResult;
                             $scope.userOverBets[savedBet.gameId] = savedBet.overResult;
                         }
-                        //console.log($scope.userBets);
-                        //console.log($scope.userOverBets);
                 });
 
-                //for(var game in $scope.selectedGames) {
-                //    if (!$scope.userBets.hasOwnProperty(game.game.id)) {
-                //        $scope.userBets[game.game.id] = null;
-                //        $scope.userOverBets[game.game.id] = null;
-                //    }
-                //}
+
                });
             };
 
@@ -203,15 +195,15 @@
 
                 //console.log(ar);
                 var parameter = JSON.stringify(ar);
-                $http.post("/ws/createAllBets", parameter).then(function (response) {
+                $http.post("/bets/encrypted/add", parameter).then(function (response) {
                     $scope.editSuccess = true;
                     $scope.disableSubmit = true;
                 });
             };
 
             $scope.addComment = function() {
-                $http.post("/ws/addComment?comment="+$scope.new_comment).then(function (response) {
-                    $http.get("/ws/allComments?limit=1000").then(function (response) {
+                $http.post("/comments/add?comment="+$scope.new_comment).then(function (response) {
+                    $http.get("/comments/list?limit=1000").then(function (response) {
                         $scope.allComments = response.data;
                     });
                     $scope.new_comment = "";

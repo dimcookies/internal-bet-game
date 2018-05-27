@@ -22,19 +22,7 @@ import java.util.List;
 @Api(value = "Management-api")
 @RestController
 @RequestMapping("/config/encryptedbets")
-public class EncryptedBetController extends AbstractBetController<EncryptedBetDto, Integer, EncryptedBet> {
-
-	@Autowired
-	private EncryptedBetService encryptedBetService;
-
-	@Autowired
-	private UserRepository userRepository;
-
-	@RequestMapping(value = "/decryptandmove", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
-	public String decryptandmove() throws Exception {
-		encryptedBetService.decryptAndCopy();
-		return "Ok";
-	}
+public class EncryptedBetManagementController extends AbstractBetManagementController<EncryptedBetDto, Integer, EncryptedBet> {
 
 	@RequestMapping(path = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public EncryptedBetDto create(@RequestBody EncryptedBetDto model) {
@@ -46,18 +34,5 @@ public class EncryptedBetController extends AbstractBetController<EncryptedBetDt
 		throw new NotImplementedException();
 	}
 
-//	@RequestMapping(path = "/createWithUser", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-//	public EncryptedBetDto create2(@RequestBody EncryptedBetDto model, Principal principal) {
-//		User user = userRepository.findOneByName(principal.getName());
-//		model.setUserId(user.getId());
-//		return service.create(model);
-//	}
-//
-//	@RequestMapping(path = "/updateWithUser", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-//	public EncryptedBetDto update2(@RequestBody EncryptedBetDto model, Principal principal) {
-//		User user = userRepository.findOneByName(principal.getName());
-//		model.setUserId(user.getId());
-//		return service.update(model);
-//	}
 
 }

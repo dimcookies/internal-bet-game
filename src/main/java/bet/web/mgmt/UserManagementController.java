@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "Management-api")
 @RestController
 @RequestMapping("/config/users")
-public class UserController extends AbstractBetController<UserDto, Integer, User> {
+public class UserManagementController extends AbstractBetManagementController<UserDto, Integer, User> {
 	@RequestMapping(path = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public UserDto create(@RequestBody UserDto model) {
 		return service.create(model);

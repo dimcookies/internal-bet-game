@@ -1,32 +1,25 @@
 package bet.web;
 
-import bet.api.dto.EncryptedBetDto;
-import bet.api.dto.UserDto;
-import bet.model.*;
-import bet.repository.*;
+import bet.model.Odd;
+import bet.model.RssFeed;
+import bet.repository.OddRepository;
+import bet.repository.RssFeedRepository;
 import bet.service.livefeed.LiveScoreFeedScheduler;
-import bet.service.mgmt.EncryptedBetService;
-import bet.service.mgmt.UserService;
 import com.google.common.collect.Lists;
-import org.apache.tomcat.util.digester.ArrayStack;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.ServletContext;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.security.Principal;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @RestController
 public class HelperController {
@@ -35,74 +28,21 @@ public class HelperController {
 	private LiveScoreFeedScheduler liveScoreFeedScheduler;
 
 	@Autowired
-	private BetRepository betRepository;
-
-	@Autowired
 	private OddRepository oddRepository;
 
 	@Autowired
 	private RssFeedRepository rssFeedRepository;
 
-	@Autowired
-	private CommentRepository commentRepository;
-
-	@Autowired
-	private UserRepository userRepository;
-
-	@Autowired
-    private UserService userService;
-
-	@Autowired
-	private EncryptedBetService encryptedBetService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-	@Autowired
-	private FriendRepository friendRepository;
-
-	@Autowired
-	private RankHistoryRepository rankHistoryRepository;
-
 	@Value("${application.timezone}")
 	private String timezone;
 
-	@Value("${application.allowedMatchDays}")
-	private String allowedMatchDays;
-
-	@RequestMapping(value = "/ws/lastupdate", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
+	@RequestMapping(value = "/livefeed/lastupdate", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
 	public String liveFeedLastUpdate() throws Exception {
 		ZonedDateTime lastUpdate = liveScoreFeedScheduler.getLastUpdateDate();
 		return lastUpdate != null ? lastUpdate.withZoneSameInstant(ZoneId.of(timezone)).toString() : "N/A";
 	}
 
-	@RequestMapping(value = "/ws/participations", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
-	public String participations() throws Exception {
-		return ""+Lists.newArrayList(userRepository.findAll()).size();
-	}
-
-	@RequestMapping(value = "/ws/allowedMatchDays", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
-	public String allowedMatchDays() throws Exception {
-		return allowedMatchDays;
-	}
-
-	@RequestMapping(value = "/config/liveupdate", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-	public String liveupdate() throws Exception {
-		liveScoreFeedScheduler.getLiveScores(false);
-		return "OK";
-	}
-
-	@RequestMapping(value = "/ws/allPoints", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public List<Map<String, String>> allPoints() throws Exception {
-		Map<String, Integer> allPoints = betRepository.listAllPoints();
-		return allPoints.entrySet().stream().sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue()))
-				.map(e -> new HashMap<String, String>() {{
-					put("username", e.getKey());
-					put("points", e.getValue().toString());
-				}}).collect(Collectors.toList());
-	}
-
-	@RequestMapping(value = "/ws/allGames", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@RequestMapping(value = "/games/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public List<Odd> allGames(@RequestParam(value = "matchDays", required = false) List<Integer> matchDays,
 			@RequestParam(value = "matchId", required = false) Integer matchId) throws Exception {
 		return Lists.newArrayList(oddRepository.findAll()).stream()
@@ -111,124 +51,19 @@ public class HelperController {
 				.collect(Collectors.toList());
 	}
 
-	@RequestMapping(value = "/ws/allBets", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public List<Bet> allBets(@RequestParam(value = "userId", required = false) Integer userId,
-			@RequestParam(value = "userName", required = false) String userName,
-			@RequestParam(value = "gameId", required = false) Integer gameId) throws Exception {
-		return Lists.newArrayList(betRepository.findAll()).stream()
-				.filter(bet -> userId == null || bet.getUser().getId().equals(userId))
-				.filter(bet -> userName == null || bet.getUser().getName().equals(userName))
-				.filter(bet -> gameId == null || bet.getGame().getId().equals(gameId))
-				.collect(Collectors.toList());
-	}
-
-	@RequestMapping(value = "/ws/allRss", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public List<RssFeed> allBets(@RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit) throws Exception {
+	@RequestMapping(value = "/rss/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public List<RssFeed> allRss(@RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit) throws Exception {
 
 		return rssFeedRepository.findAllOrdered(new PageRequest(0, limit, new Sort(Sort.Direction.DESC, "publish_date")));
 	}
 
-	@RequestMapping(value = "/ws/allComments", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public List<Comment> allComments(@RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit) throws Exception {
-
-		return commentRepository.findAllOrdered(new PageRequest(0, limit, new Sort(Sort.Direction.DESC, "comment_date")));
-	}
-
-	@RequestMapping(value = "/ws/addComment", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public Comment addComments(@RequestParam(value = "comment", required = true) String comment, Principal principal) throws Exception {
-		if(comment == null || comment.length() == 0) {
-			return null;
-		} else if(comment.length() > 200) {
-			comment = comment.substring(0,200)+"...";
-		}
-		User user = userRepository.findOneByName(principal.getName());
-		Comment c = new Comment(comment, user, ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Europe/Athens")));
-		return commentRepository.save(c);
-	}
-
-	@RequestMapping(path = "/ws/createAllBets", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<EncryptedBetDto> createAllBets(@RequestBody List<EncryptedBetDto> bets, Principal principal) {
-		User user = userRepository.findOneByName(principal.getName());
-		return encryptedBetService.createAll(bets, user);
-	}
-
-	@RequestMapping(path = "/ws/listAllBets", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<EncryptedBetDto> createAllBets(Principal principal) {
-		User user = userRepository.findOneByName(principal.getName());
-		return encryptedBetService.list(user);
-	}
 
 
-    @RequestMapping(value = "/ws/changePassword", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-    public String changePassword(@RequestParam(value = "password", required = true) String password, Principal principal) throws Exception {
-	    if(password == null || password.length() == 0) {
-	        throw new RuntimeException();
-        }
-        User user = userRepository.findOneByName(principal.getName());
-        UserDto userDto = new UserDto();
-        userDto.fromEntity(user);
-        userDto.setPassword(password);
-        userService.update(userDto);
-        return "OK";
-    }
 
 
-	@RequestMapping(value = "/ws/updateFriends", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Friend> updateFriends(@RequestBody List<String> usernames, Principal principal) throws Exception {
-		User user = userRepository.findOneByName(principal.getName());
-		friendRepository.deleteByUser(user);
-
-		List<Friend> friends = usernames.stream().map(username -> {
-			User friend = userRepository.findOneByName(username);
-			if(friend == null) {
-				throw new RuntimeException();
-			}
-			return new Friend(user, friend);
-		}).collect(Collectors.toList());
-
-		return Lists.newArrayList(friendRepository.save(friends));
 
 
-	}
 
-	@RequestMapping(value = "/ws/listFriends", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Friend> listFriends(Principal principal) throws Exception {
-		User user = userRepository.findOneByName(principal.getName());
-		return friendRepository.findByUser(user);
-	}
-
-	@RequestMapping(value = "/ws/riskIndex", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public List<Map<String, String>> riskIndex() throws Exception {
-		Map<String, Double> allPoints = betRepository.listRiskIndex();
-		return allPoints.entrySet().stream().sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue()))
-				.map(e -> new HashMap<String, String>() {{
-					put("username", e.getKey());
-					put("riskIndex", e.getValue().toString());
-				}}).collect(Collectors.toList());
-	}
-
-	@RequestMapping(value = "/ws/rankHistory", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public List<RankHistory> rankHistory(@RequestParam(value = "userName", required = false) String userName) throws Exception {
-
-		return StreamSupport.stream(rankHistoryRepository.findAll().spliterator(), false)
-				.filter(rankHistory -> userName == null || rankHistory.getUser().getName().equals(userName))
-				.sorted((o1, o2) -> {
-					int cmp1 = o1.getRankDate().compareTo(o2.getRankDate());
-					if(cmp1 != 0) {
-						return  cmp1;
-					}
-					return o2.getRank().compareTo(o1.getRank());
-				})
-				.collect(Collectors.toList());
-	}
-
-	@RequestMapping(value = "/ws/topRanked", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public Map<String, Long> topRanked() throws Exception {
-		return StreamSupport.stream(rankHistoryRepository.findAll().spliterator(), false)
-				.filter(rankHistory -> rankHistory.getRank() == 1)
-				.collect(Collectors.groupingBy(o ->  o.getUser().getName(), Collectors.counting()));
-
-	}
 
 }
 

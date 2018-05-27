@@ -24,7 +24,7 @@ import java.util.Collection;
  * @param <E>
  *            Type of the entity to which the controller corresponds
  */
-public abstract class AbstractBetController<V extends ManagementDto<E, T>, T extends Serializable, E extends Serializable> {
+public abstract class AbstractBetManagementController<V extends ManagementDto<E, T>, T extends Serializable, E extends Serializable> {
 
 	@Autowired
 	protected ManagementService<E, T, V> service;

@@ -123,10 +123,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/css/**", "/js/**", "/images/**"/*"/resources/**","/public/**", "/ws/**"*/);
 	}
 
-	public static void main(String[] args) throws NoSuchAlgorithmException {
-		MessageDigest md = MessageDigest.getInstance("MD5");
-		md.update("koukis".getBytes());
-		System.out.println(new String(Base64.getEncoder().encode(md.digest())));
-	}
-
 }
