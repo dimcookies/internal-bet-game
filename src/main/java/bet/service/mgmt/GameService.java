@@ -22,11 +22,13 @@ public class GameService extends AbstractManagementService<Game, Integer, GameDt
 		}).collect(Collectors.toList());
 	}
 
+	//not allowed to create games
 	@Override
 	public GameDto create(GameDto dto) {
 		throw new NotImplementedException();
 	}
 
+	//not allowed to update games
 	@Override
 	public GameDto update(GameDto dto) {
 		throw new NotImplementedException();

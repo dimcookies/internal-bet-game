@@ -14,6 +14,9 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 
+/**
+ * The representation of the football game
+ */
 @Entity
 @Table(name = "GAME", schema = "BET")
 @DynamicInsert

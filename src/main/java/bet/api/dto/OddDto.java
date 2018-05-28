@@ -1,12 +1,11 @@
 package bet.api.dto;
 
-import bet.model.Game;
 import bet.model.Odd;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
-import java.time.ZonedDateTime;
-
+/**
+ * The representation of an odd
+ */
 @Data
 public class OddDto implements ManagementDto<Odd, Integer> {
 
@@ -16,14 +15,19 @@ public class OddDto implements ManagementDto<Odd, Integer> {
 
 	private int gameId;
 
+	/* Odds for 1 */
 	private float oddsHome;
 
+	/* Odds for 2 */
 	private float oddsAway;
 
+	/* Odds for X */
 	private float oddsTie;
 
+	/* Odds for over */
 	private float oddsOver;
 
+	/* Odds for under */
 	private float oddsUnder;
 
 	public OddDto() {

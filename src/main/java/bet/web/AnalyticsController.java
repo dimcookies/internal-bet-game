@@ -22,6 +22,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+/**
+ * Web services for reporting
+ */
 @RestController
 @RequestMapping("/analytics")
 public class AnalyticsController {
@@ -41,6 +44,11 @@ public class AnalyticsController {
     @Value("${application.timezone}")
     private String timezone;
 
+    /**
+     * Get a sorted list of username->risk index for each user
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/riskIndex", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Map<String, String>> riskIndex() throws Exception {
         Map<String, Double> allPoints = betRepository.listRiskIndex();
@@ -51,12 +59,19 @@ public class AnalyticsController {
                 }}).collect(Collectors.toList());
     }
 
+    /**
+     * Get the ranking history sorted by date
+     * @param userName
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/rankHistory", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<RankHistory> rankHistory(@RequestParam(value = "userName", required = false) String userName) throws Exception {
 
         return StreamSupport.stream(rankHistoryRepository.findAll().spliterator(), false)
                 .filter(rankHistory -> userName == null || rankHistory.getUser().getName().equals(userName))
                 .sorted((o1, o2) -> {
+                    //sort by date and then by rank
                     int cmp1 = o1.getRankDate().compareTo(o2.getRankDate());
                     if(cmp1 != 0) {
                         return  cmp1;
@@ -66,6 +81,11 @@ public class AnalyticsController {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Get a map username-> #times ranked as number one
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/topRanked", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Map<String, Long> topRanked() throws Exception {
         return StreamSupport.stream(rankHistoryRepository.findAll().spliterator(), false)
@@ -74,6 +94,11 @@ public class AnalyticsController {
 
     }
 
+    /**
+     * Get the user streak sorted by streak (desc)
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/userStreak", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<UserStreak> userStreak() throws Exception {
         return StreamSupport.stream(userStreakRepository.findAll().spliterator(), false)
@@ -83,6 +108,11 @@ public class AnalyticsController {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Get last run date for reporting
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/lastupdate", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
     public String liveFeedLastUpdate() throws Exception {
         ZonedDateTime lastUpdate = analyticsScheduler.getLastUpdateDate();

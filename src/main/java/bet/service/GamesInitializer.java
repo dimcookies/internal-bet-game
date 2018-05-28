@@ -17,6 +17,9 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Initialize database, add all matches and odds for them
+ */
 @Component
 public class GamesInitializer {
 
@@ -39,10 +42,13 @@ public class GamesInitializer {
 		if(!gameRepository.findAll().iterator().hasNext()) {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<List<GameDto>> typeReference = new TypeReference<List<GameDto>>() {};
+			//get games from file
 			InputStream inputStream = TypeReference.class.getResourceAsStream("/games.json");
 			try {
 				List<GameDto> games = mapper.readValue(inputStream, typeReference);
+				//save games
 				gameRepository.save(games.stream().map(gameDto -> gameDto.toEntity()).collect(Collectors.toList()));
+				//create an initial odd for this game (to be updated manually later)
 				games.forEach(gameDto -> {
 					Odd testOdd = new Odd(null, gameDto.getId(), 1, 1, 1, 1, 1);
 					oddRepository.save(testOdd);

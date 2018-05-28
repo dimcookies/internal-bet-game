@@ -11,6 +11,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The representation of an odd
+ */
 @Entity
 @Table(name = "ODD", schema = "BET")
 @DynamicInsert
@@ -33,18 +36,23 @@ public class Odd implements Serializable {
 	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "dev.entity-cache")
 	private Game game;
 
+	/* Odds for 1 */
 	@Column(name = "ODDS_HOME")
 	private float oddsHome;
 
+	/* Odds for 2 */
 	@Column(name = "ODDS_AWAY")
 	private float oddsAway;
 
+	/* Odds for X */
 	@Column(name = "ODDS_TIE")
 	private float oddsTie;
 
+	/* Odds for over */
 	@Column(name = "ODDS_OVER")
 	private float oddsOver;
 
+	/* Odds for under */
 	@Column(name = "ODDS_UNDER")
 	private float oddsUnder;
 

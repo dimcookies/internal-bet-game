@@ -12,6 +12,9 @@ import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
+/**
+ * Represent the position of a user in the rankings at a given day
+ */
 @Entity
 @Table(name = "RANK_HISTORY", schema = "BET")
 @DynamicInsert

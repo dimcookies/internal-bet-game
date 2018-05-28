@@ -1,15 +1,14 @@
 package bet.api.dto;
 
-import bet.api.constants.OverResult;
-import bet.api.constants.ScoreResult;
-import bet.model.Bet;
 import bet.model.EncryptedBet;
-import bet.model.Game;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import java.time.ZonedDateTime;
 
+/**
+ * Represents a user bet on a game which is stored encrypted
+ */
 @Data
 @JsonIgnoreProperties(value = { "competitionId", "odds" })
 public class EncryptedBetDto implements ManagementDto<EncryptedBet, Integer> {
@@ -22,10 +21,13 @@ public class EncryptedBetDto implements ManagementDto<EncryptedBet, Integer> {
 
 	private Integer userId;
 
+	/* The score bet */
 	private String scoreResult;
 
+	/* The under/over bet (only for playoffs, for group stage it is null) */
 	private String overResult;
 
+	/* Date this bet was placed */
 	private String betDate;
 
 	public EncryptedBetDto() {

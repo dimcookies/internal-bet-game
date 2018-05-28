@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * Representation of the score of a game
+ */
 @Data
 public class ResultDto implements Serializable {
 

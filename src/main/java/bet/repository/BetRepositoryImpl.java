@@ -26,6 +26,7 @@ public class BetRepositoryImpl implements BetRepositoryCustom {
 	public Map<String, Integer> listAllPoints() {
 		List<Bet> bets = entityManager.createQuery("from Bet").getResultList();
 		return bets.stream()
+				//sum bet points for each user
 				.collect(Collectors.groupingBy(o -> o.getUser().getName(), Collectors.summingInt(value -> { return value.getOverPoints() + value.getResultPoints(); })));
 	}
 
@@ -34,8 +35,10 @@ public class BetRepositoryImpl implements BetRepositoryCustom {
 		List<Bet> bets = entityManager.createQuery("from Bet").getResultList();
 		return bets.stream()
 				.collect(Collectors.groupingBy(o -> o.getUser().getName(), Collectors.summingDouble(value -> {
+					//get odds for this bet and sum them for each user
 					Odd odd = oddRepository.findOneByGame(value.getGame());
 					return odd.getOddForScore(value.getScoreResult()) +
+							//check if under/over exist
 							(value.getOverResult() != null? odd.getOddForOver(value.getOverResult()) : 0.0);
 				})));
 	}

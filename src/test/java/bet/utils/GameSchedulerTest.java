@@ -3,7 +3,7 @@ package bet.utils;
 import bet.base.AbstractBetIntegrationTest;
 import bet.repository.GameRepository;
 import bet.service.GamesInitializer;
-import bet.service.utils.GameScheduler;
+import bet.service.utils.GamesSchedule;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import java.time.ZonedDateTime;
 public class GameSchedulerTest extends AbstractBetIntegrationTest {
 
 	@Autowired
-	private GameScheduler gameScheduler;
+	private GamesSchedule gameScheduler;
 
 	@Autowired
 	private GameRepository gameRepository;
@@ -27,11 +27,6 @@ public class GameSchedulerTest extends AbstractBetIntegrationTest {
 		super.setUp();
 		gamesInitializer.initialize();
 	}
-//
-//	@After
-//	@Override
-//	public void tearDown() {
-//	}
 
 	@Test
 	public void testSchedule() {

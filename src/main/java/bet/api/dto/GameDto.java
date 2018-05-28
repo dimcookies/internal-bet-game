@@ -8,6 +8,9 @@ import lombok.Data;
 
 import java.time.ZonedDateTime;
 
+/**
+ * The representation of the football game
+ */
 @Data
 @JsonIgnoreProperties(value = { "competitionId", "odds" })
 public class GameDto implements ManagementDto<Game, Integer> {

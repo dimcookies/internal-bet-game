@@ -14,6 +14,9 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Implementation of live feed using football-api-org for scores
+ */
 @Component
 @Profile("live")
 public class FootballApiOrgLiveFeedImpl implements LiveFeed {

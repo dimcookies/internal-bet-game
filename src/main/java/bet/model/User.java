@@ -1,7 +1,5 @@
 package bet.model;
 
-import bet.api.constants.OverResult;
-import bet.api.constants.ScoreResult;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.Cache;
@@ -12,6 +10,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The app user
+ */
 @Entity
 @Table(name = "ALLOWED_USERS", schema = "BET")
 @DynamicInsert

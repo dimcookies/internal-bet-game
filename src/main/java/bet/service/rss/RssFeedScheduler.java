@@ -1,19 +1,10 @@
 package bet.service.rss;
 
-import bet.api.constants.GameStatus;
-import bet.api.dto.GameDto;
-import bet.model.Game;
-import bet.model.Odd;
 import bet.model.RssFeed;
-import bet.repository.BetRepository;
-import bet.repository.GameRepository;
-import bet.repository.OddRepository;
 import bet.repository.RssFeedRepository;
-import bet.service.utils.GameScheduler;
 import com.sun.syndication.feed.synd.SyndEnclosure;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
-import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
 import org.slf4j.Logger;
@@ -24,15 +15,13 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
+/**
+ * Get rss feeds from the selected sources and stores to databse
+ */
 @Component
 @Profile("live")
 public class RssFeedScheduler {
@@ -47,6 +36,7 @@ public class RssFeedScheduler {
 
 	@Scheduled(fixedRate = 3600000)
 	public void getRssFeed() {
+		//delete existing records
 		rssFeedRepository.deleteAll();
 		Arrays.stream(feeds).map(feed -> {
 			try {
@@ -60,6 +50,7 @@ public class RssFeedScheduler {
 				SyndFeed feed = input.build(new XmlReader(feedUrl));
 				feed.getEntries().forEach (e -> {
 					SyndEntry entry = (SyndEntry) e;
+					//get image if exist
 					String imageUrl = entry.getEnclosures() != null && entry.getEnclosures().size() > 0 ? ((SyndEnclosure)entry.getEnclosures().get(0)).getUrl().replaceFirst("^//","http://") : "/images/emptyRss.jpg";
 					rssFeedRepository.save(new RssFeed(entry.getTitle(), entry.getLink(),  entry.getPublishedDate(), imageUrl));
 				});

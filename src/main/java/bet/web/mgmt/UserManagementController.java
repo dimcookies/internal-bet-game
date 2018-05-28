@@ -1,8 +1,6 @@
 package bet.web.mgmt;
 
-import bet.api.dto.BetDto;
 import bet.api.dto.UserDto;
-import bet.model.Bet;
 import bet.model.User;
 import io.swagger.annotations.Api;
 import org.springframework.http.MediaType;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/config/users")
 public class UserManagementController extends AbstractBetManagementController<UserDto, Integer, User> {
+
 	@RequestMapping(path = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public UserDto create(@RequestBody UserDto model) {
 		return service.create(model);

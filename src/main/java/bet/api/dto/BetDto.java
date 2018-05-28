@@ -9,6 +9,9 @@ import lombok.Data;
 
 import java.time.ZonedDateTime;
 
+/**
+ * Represents a public available user bet on a game
+ */
 @Data
 @JsonIgnoreProperties(value = { "competitionId", "odds" })
 public class BetDto implements ManagementDto<Bet, Integer> {
@@ -21,14 +24,19 @@ public class BetDto implements ManagementDto<Bet, Integer> {
 
 	private Integer userId;
 
+	/* The score bet */
 	private ScoreResult scoreResult;
 
+	/* Points from correct score bet */
 	private int resultPoints;
 
+	/* The under/over bet (only for playoffs, for group stage it is null) */
 	private OverResult overResult;
 
+	/* Points from correct under/over bet */
 	private int overPoints;
 
+	/* Date this bet was placed */
 	private String betDate;
 
 	public BetDto() {

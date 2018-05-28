@@ -1,17 +1,18 @@
 package bet.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.io.Serializable;
-import java.time.ZonedDateTime;
-import java.util.Date;
 
+/**
+ * The current streak of a user (consecutive correct/incorrect guesses)
+ * Streak is positive for correct, negative for incorrect
+ */
 @Entity
 @Table(name = "USER_STREAK", schema = "BET")
 @DynamicInsert

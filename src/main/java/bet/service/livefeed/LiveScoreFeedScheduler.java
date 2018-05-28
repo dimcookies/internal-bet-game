@@ -7,7 +7,7 @@ import bet.model.Odd;
 import bet.repository.BetRepository;
 import bet.repository.GameRepository;
 import bet.repository.OddRepository;
-import bet.service.utils.GameScheduler;
+import bet.service.utils.GamesSchedule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +18,19 @@ import org.springframework.stereotype.Component;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+/**
+ * Periodically runs live feed and updates results and compute user bets
+ */
 @Component
 public class LiveScoreFeedScheduler {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(LiveScoreFeedScheduler.class);
 
+	//interval for live update
 	@Value("${application.live_feed.interval:10000}")
 	private final int interval = 10000;
 
+	//last update date of live feeed
 	private ZonedDateTime lastUpdateDate;
 
 	@Autowired
@@ -41,7 +46,7 @@ public class LiveScoreFeedScheduler {
 	private LiveFeed liveFeed;
 
 	@Autowired
-	private GameScheduler gameScheduler;
+	private GamesSchedule gameScheduler;
 
 	@Scheduled(fixedRate = interval)
 	public void getLiveScores() {
@@ -52,6 +57,7 @@ public class LiveScoreFeedScheduler {
 		LOGGER.trace("Check live scores");
 		ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
 
+		//If there are no matches now, do not try to update scores
 		if(checkForActiveMatches) {
 			if(!gameScheduler.hasActiveGame(now)) {
 				LOGGER.trace("No active games");
@@ -63,6 +69,11 @@ public class LiveScoreFeedScheduler {
 		this.lastUpdateDate = now;
 	}
 
+	/**
+	 * Checks if a game score has changed and updates results
+	 * for user bets
+	 * @param gameDto
+	 */
 	public void checkMatchChanged(GameDto gameDto) {
 		//if game already finished, do not check
 		Game dbGame = gameRepository.findOne(gameDto.getId());
@@ -107,8 +118,10 @@ public class LiveScoreFeedScheduler {
 	private int[] getPoints(Game game) {
 		Odd odd = oddRepository.findOneByGame(game);
 
+		//over points = betting factor * 0.5 * multiplier
 		int overPoints = (int) (odd.getOddForOver(game.getOverResult()) * 0.5 * odd.getMultiplier());
 
+		//score points = betting factor * multiplier
 		int scorePoints = (int) (odd.getOddForScore(game.getScoreResult()) * odd.getMultiplier());
 
 		return new int[] { scorePoints, overPoints };
@@ -116,5 +129,9 @@ public class LiveScoreFeedScheduler {
 
 	public ZonedDateTime getLastUpdateDate() {
 		return lastUpdateDate;
+	}
+
+	public void setLastUpdateDate(ZonedDateTime lastUpdateDate) {
+		this.lastUpdateDate = lastUpdateDate;
 	}
 }

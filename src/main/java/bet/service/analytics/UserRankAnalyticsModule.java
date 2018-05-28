@@ -17,6 +17,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * Compute the user rank of users by summing points
+ * from bets.
+ *
+ */
 @Component
 @Analytics
 public class UserRankAnalyticsModule implements AnalyticsModule {
@@ -35,8 +40,10 @@ public class UserRankAnalyticsModule implements AnalyticsModule {
     @Override
     public void run() {
         LOGGER.info("Run user rank module");
+        //get points for all users
         Map<String, Integer> allPoints = betRepository.listAllPoints();
         List<String> ranking = allPoints.entrySet().stream()
+                //sort by total points and then by username
                 .sorted((o1, o2) -> {
                     int cmp1 = o2.getValue().compareTo(o1.getValue());
                     if(cmp1 != 0) {
@@ -48,6 +55,7 @@ public class UserRankAnalyticsModule implements AnalyticsModule {
                 .collect(Collectors.toList());
         ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
 
+        //write rankings to database for current date
         IntStream.range(0, ranking.size()).forEach(idx -> {
             User user = userRepository.findOneByName(ranking.get(idx));
             rankHistoryRepository.save(new RankHistory(idx+1, user, now));

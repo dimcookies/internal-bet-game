@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Empty imlementation of live feed, returns an empty list
+ */
 @Component
 @Profile("dev")
 public class EmptyLiveFeedImpl implements LiveFeed {

@@ -1,15 +1,11 @@
 package bet.api.dto;
 
-import bet.api.constants.OverResult;
-import bet.api.constants.ScoreResult;
-import bet.model.Bet;
-import bet.model.Game;
 import bet.model.User;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
-import java.time.ZonedDateTime;
-
+/**
+ * The app user
+ */
 @Data
 public class UserDto implements ManagementDto<User, Integer> {
 

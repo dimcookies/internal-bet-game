@@ -12,6 +12,9 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 
+/**
+ * Represents a public available user bet on a game
+ */
 @Entity
 @Table(name = "BET", schema = "BET")
 @DynamicInsert
@@ -39,20 +42,25 @@ public class Bet implements Serializable {
 	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "dev.entity-cache")
 	private User user;
 
+	/* The score bet */
 	@Enumerated(EnumType.STRING)
 	@Column(name = "RESULT_BET")
 	private ScoreResult scoreResult;
 
+	/* Points from correct score bet */
 	@Column(name = "RESULT_POINTS")
 	private int resultPoints;
 
+	/* The under/over bet (only for playoffs, for group stage it is null) */
 	@Enumerated(EnumType.STRING)
 	@Column(name = "OVER_BET")
 	private OverResult overResult;
 
+	/* Points from correct under/over bet */
 	@Column(name = "OVER_POINTS")
 	private int overPoints;
 
+	/* Date this bet was placed */
 	@Column(name = "BET_DATE")
 	@Type(type = "java.time.ZonedDateTime")
 	private ZonedDateTime betDate;

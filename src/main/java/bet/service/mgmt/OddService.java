@@ -23,11 +23,13 @@ public class OddService extends AbstractManagementService<Odd, Integer, OddDto> 
 		}).collect(Collectors.toList());
 	}
 
+	//not allowed to create odds
 	@Override
 	public OddDto create(OddDto dto) {
 		throw new NotImplementedException();
 	}
 
+	//not allowed to update odds
 	@Override
 	public OddDto update(OddDto dto) {
 		throw new NotImplementedException();

@@ -1,6 +1,6 @@
 package bet;
 
-import bet.service.utils.EncryptUtils;
+import bet.service.utils.EncryptHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,18 +14,11 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-//	@Autowired
-//	private UserRepository userRepository;
-//
-	@Autowired
-	private EncryptUtils encryptUtils;
 
 	@Autowired
 	private DataSource dataSource;
@@ -36,6 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth)
 			throws Exception {
+		//get users from database table
 		auth.
 				jdbcAuthentication()
 				.usersByUsernameQuery("select name, password, 1 from ALLOWED_USERS where name=?")
@@ -43,21 +37,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.dataSource(dataSource)
 				.passwordEncoder(passwordEncoder);
 
-		//FIXME TODO REMOVE
-//		auth.inMemoryAuthentication()
-//				.withUser("koukis").password("koukis").roles("ADMIN").authorities("ADMIN");
-
-//		userRepository.findAll().forEach(user -> {
-//			try {
-//				auth.inMemoryAuthentication()
-//						.withUser(user.getName()).password(encryptUtils.decrypt(user.getPassword(), user.getName())).roles("USER");
-//			} catch (Exception e) {
-//				throw new RuntimeException(e);
-//			}
-//		});
-
 	}
 
+	/**
+	 * Use md5 for password hashing and base64 for representation
+	 * @return
+	 */
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new PasswordEncoder() {
@@ -81,13 +66,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		};
 	}
 
+	/**
+	 * Configured protected resources
+	 * @param http
+	 * @throws Exception
+	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
 		http.cors().and().csrf().disable().
 				authorizeRequests()
+				//restrict configuration web services to admin user
 					.antMatchers("/config/**").hasAuthority("ADMIN")// hasRole("ADMIN")
+				//restrict swagger to admin user
 					.antMatchers("/swagger-ui.html").hasAuthority("ADMIN")//.hasRole("ADMIN")
+				//all other resouces for authenticated users
 					.anyRequest().fullyAuthenticated()
 				.and()
 					.formLogin()
@@ -101,22 +94,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					.logoutSuccessUrl("/login?logout")
 					.permitAll();
 
-
-//		http.httpBasic();
-
-
-		//http.authorizeRequests().anyRequest().fullyAuthenticated();
-//		http.authorizeRequests().antMatchers("/*").hasRole("USER");
-//		http.authorizeRequests().antMatchers("/ws/**").hasRole("USER");
-//		http.authorizeRequests().antMatchers("/resources/**").hasRole("USER");
-//		http.authorizeRequests().antMatchers("/public/**").hasRole("USER");
-//		http.authorizeRequests()
-//		http.authorizeRequests().antMatchers("/swagger-ui.html").hasRole("ADMIN");
-
-//		http.csrf().disable();
-
 	}
 
+	/**
+	 * Set public available paths with no authorization
+	 * @param web
+	 * @throws Exception
+	 */
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring()

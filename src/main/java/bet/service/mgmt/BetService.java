@@ -25,11 +25,13 @@ public class BetService extends AbstractManagementService<Bet, Integer, BetDto> 
 		}).collect(Collectors.toList());
 	}
 
+	//Not allowed to create bets, bets are copied from encrypted bets
 	@Override
 	public BetDto create(BetDto dto) {
 		throw new NotImplementedException();
 	}
 
+	//Not allowed to update bets, bets are copied from encrypted bets
 	@Override
 	public BetDto update(BetDto dto) {
 		throw new NotImplementedException();

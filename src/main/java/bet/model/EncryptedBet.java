@@ -1,10 +1,8 @@
 package bet.model;
 
-import bet.api.constants.OverResult;
-import bet.api.constants.ScoreResult;
 import lombok.Data;
-import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -12,6 +10,9 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 
+/**
+ * Represents a user bet on a game which is stored encrypted
+ */
 @Entity
 @Table(name = "ENCRYPTED_BET", schema = "BET")
 @DynamicInsert
@@ -39,12 +40,15 @@ public class EncryptedBet implements Serializable {
 	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "dev.entity-cache")
 	private User user;
 
+	/* The score bet */
 	@Column(name = "RESULT_BET")
 	private String scoreResult;
 
+	/* The under/over bet (only for playoffs, for group stage it is null) */
 	@Column(name = "OVER_BET")
 	private String overResult;
 
+	/* Date this bet was placed */
 	@Column(name = "BET_DATE")
 	@Type(type = "java.time.ZonedDateTime")
 	private ZonedDateTime betDate;

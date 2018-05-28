@@ -2,22 +2,20 @@ package bet.service.mgmt;
 
 import bet.api.constants.OverResult;
 import bet.api.constants.ScoreResult;
-import bet.api.dto.BetDto;
 import bet.api.dto.EncryptedBetDto;
-import bet.api.dto.GameDto;
-import bet.api.dto.OddDto;
-import bet.model.*;
+import bet.model.Bet;
+import bet.model.EncryptedBet;
+import bet.model.Game;
+import bet.model.User;
 import bet.repository.BetRepository;
 import bet.repository.EncryptedBetRepository;
 import bet.repository.GameRepository;
-import bet.repository.UserRepository;
 import bet.service.email.EmailSender;
-import bet.service.utils.EncryptUtils;
+import bet.service.utils.EncryptHelper;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.transaction.Transactional;
 import java.time.ZoneId;
@@ -33,7 +31,7 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 	private String[] allowedMatchDays;
 
 	@Autowired
-	private EncryptUtils encryptUtils;
+	private EncryptHelper encryptHelper;
 
 	@Autowired
 	private BetRepository betRepository;
@@ -63,34 +61,48 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 		return super.create(dto);
 	}
 
+	/**
+	 * Encrypt a bet
+	 * @param dto
+	 */
 	private void encryptBets(EncryptedBetDto dto) {
 		String salt = getSalt(dto);
 		try {
 			if(dto.getOverResult() != null) {
-				dto.setOverResult(encryptUtils.encrypt(dto.getOverResult(), salt));
+				dto.setOverResult(encryptHelper.encrypt(dto.getOverResult(), salt));
 			}
-			dto.setScoreResult(encryptUtils.encrypt(dto.getScoreResult(), salt));
+			dto.setScoreResult(encryptHelper.encrypt(dto.getScoreResult(), salt));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
+	/**
+	 * Decrypt a bet
+	 * @param dto
+	 */
 	private void decryptBets(EncryptedBetDto dto) {
 		String salt = getSalt(dto);
 		try {
 			if(dto.getOverResult() != null) {
-				dto.setOverResult(encryptUtils.decrypt(dto.getOverResult(), salt));
+				dto.setOverResult(encryptHelper.decrypt(dto.getOverResult(), salt));
 			}
-			dto.setScoreResult(encryptUtils.decrypt(dto.getScoreResult(), salt));
+			dto.setScoreResult(encryptHelper.decrypt(dto.getScoreResult(), salt));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
+	/**
+	 * Return the salf for the encryption
+	 * @param dto
+	 * @return
+	 */
 	private String getSalt(EncryptedBetDto dto) {
 		String userId = dto.getUserId().toString();
 		String gameId = dto.getGameId().toString();
 
+		//10 first characters of userId and 10 first characters of gameId
 		return userId.substring(0,Math.min(10, userId.length())) + gameId.substring(0,Math.min(10, gameId.length()));
 	}
 
@@ -100,24 +112,43 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 		return super.create(dto);
 	}
 
+	/**
+	 * Decrypt encrypted bets, copy them to public available bets and delete encrypted
+	 */
 	public void decryptAndCopy() {
 		list().forEach(dto -> {
+			//create a public available bet from encrypted bet values
 			Bet bet = new Bet(null, dto.getGameId(), dto.getUserId(), ScoreResult.valueOf(dto.getScoreResult()),
 					0, dto.getOverResult() != null ? OverResult.valueOf(dto.getOverResult()) : null, 0, ZonedDateTime.parse(dto.getBetDate()));
 			betRepository.save(bet);
+			//delete encrypted bets
 			repository.delete(dto.getId());
 		});
 	}
 
+	/**
+	 * Get encrypted bets for a user
+	 *
+	 * @param user
+	 * @return
+	 */
 	public List<EncryptedBetDto> list(User user) {
 		return list().stream().filter(encryptedBetDto -> encryptedBetDto.getUserId()
 				.equals(user.getId())).collect(Collectors.toList());
 	}
 
+	/**
+	 * Update a list of encrypted bets (delete existing before saving current)
+	 * @param bets
+	 * @param user
+	 * @return
+	 */
 	@Transactional
 	public List<EncryptedBetDto> createAll(List<EncryptedBetDto> bets, User user) {
+		//the configured days that are allowed to get bets for
 		List<Integer> allowedDays = Arrays.asList(allowedMatchDays).stream().map(Integer::parseInt).collect(Collectors.toList());
 
+		//check if a provided bet is for a game outside allowed days
 		bets.forEach(encryptedBetDto -> {
 			Game game = gameRepository.findOne(encryptedBetDto.getGameId());
 			if(allowedDays.indexOf(game.getMatchDay()) == -1) {
@@ -125,20 +156,31 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 			}
 		});
 
+		//delete current bets
 		encryptedBetRepository.deleteByUser(user);
-		String body = String.format("<html><body><table border=1>%s</table></body></html>", getEmailBody(bets));
-		emailSender.sendEmail(user.getEmail(), "WC2018 Bet", body);
+
 		ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
 		List<EncryptedBetDto> result = bets.stream().map(encryptedBetDto -> {
 			encryptedBetDto.setId(null);
+			//set user of bet to current user
 			encryptedBetDto.setUserId(user.getId());
+			//set bet date to now
 			encryptedBetDto.setBetDate(now.toString());
 			return encryptedBetDto;
-		}).map(encryptedBetDto -> create(encryptedBetDto)).collect(Collectors.toList());
+		}).map(encryptedBetDto -> create(encryptedBetDto)).collect(Collectors.toList()); //save bet and return list
+
+		//Send an email to user with saved bets
+		String body = String.format("<html><body><table border=1>%s</table></body></html>", getEmailBody(bets));
+		emailSender.sendEmail(user.getEmail(), "WC2018 Bet", body);
 
 		return result;
 	}
 
+	/**
+	 * Format bets to an html table
+	 * @param bets
+	 * @return
+	 */
 	private String getEmailBody(List<EncryptedBetDto> bets) {
 		return bets.stream().map(bet -> {
 			Game game = gameRepository.findOne(bet.getGameId());

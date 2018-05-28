@@ -1,13 +1,11 @@
 package bet.service.utils;
 
-import bet.repository.GameRepository;
-import com.google.common.collect.Lists;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.ZonedDateTime;
-
+/**
+ * Generate a random password with 8 characters from digits and letters
+ */
 @Component
 public class PasswordGenerator {
 	public String generatePassword() {

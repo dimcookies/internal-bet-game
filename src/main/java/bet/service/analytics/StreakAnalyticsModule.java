@@ -15,6 +15,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
+/**
+ * Compute the current streak of each user.
+ * Streak is positive for consecutive correct guesses in bets, negative for incorrect.
+ * The order to check for streak is game dates
+ */
 @Component
 @Analytics
 public class StreakAnalyticsModule implements AnalyticsModule {
@@ -33,26 +38,34 @@ public class StreakAnalyticsModule implements AnalyticsModule {
     @Override
     public void run() {
         LOGGER.info("Run streak module");
+        //delete current values
         userStreakRepository.deleteAll();
+        //for all users
         StreamSupport.stream(userRepository.findAll().spliterator(),false).forEach(user -> {
+            //get all bets
             List<Bet> userBets = betRepository.findByUser(user);
+            //sort by game date
             userBets.sort(Comparator.comparing(o -> o.getGame().getGameDate()));
             int streak = 0;
-            boolean prevWon = false;
+            boolean isPrevCorrect = false;
+
             for(Bet bet: userBets) {
+                //compute streak only for finished games
                 if(bet.getGame().getStatus().equals(GameStatus.FINISHED)) {
-                    boolean won = bet.getResultPoints() > 0;
-                    if(won != prevWon) {
+                    boolean isCurrentCorrect = bet.getResultPoints() > 0;
+                    //in case of status change set streak to zero
+                    if(isCurrentCorrect != isPrevCorrect) {
                         streak =0;
-                        prevWon = !prevWon;
+                        isPrevCorrect = !isPrevCorrect;
                     }
-                    if(won) {
+                    if(isCurrentCorrect) { //correct, positive streak
                         streak++;
-                    } else {
+                    } else { //incorrect, negative streak
                         streak--;
                     }
                 }
             }
+            //save updated value
             userStreakRepository.save(new UserStreak(streak, user));
         });
     }

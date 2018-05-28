@@ -25,7 +25,6 @@ import javax.persistence.Table;
 /**
  * Superclass of all the integration tests of the module
  * 
- * @author n.kotzalas
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest

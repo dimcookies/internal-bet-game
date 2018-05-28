@@ -10,6 +10,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * An offline cache of rss feeds
+ */
 @Entity
 @Table(name = "RSS_FEED", schema = "BET")
 @DynamicInsert

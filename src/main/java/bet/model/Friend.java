@@ -1,17 +1,17 @@
 package bet.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.io.Serializable;
-import java.time.ZonedDateTime;
-import java.util.Date;
 
+/**
+ * Represent connections between app users as favourites
+ */
 @Entity
 @Table(name = "FRIEND", schema = "BET")
 @DynamicInsert

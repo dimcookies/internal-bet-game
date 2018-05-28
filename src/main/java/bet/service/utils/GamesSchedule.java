@@ -7,17 +7,23 @@ import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;
 
+/**
+ * Helper methods for games schedule
+ */
 @Component
-public class GameScheduler {
+public class GamesSchedule {
 
 	@Autowired
 	private GameRepository gameRepository;
 
+	/**
+	 * Checks if there is a currently active game.
+	 * Assume that a gave is active 4 hours after it has started
+	 * @param date
+	 * @return
+	 */
 	public boolean hasActiveGame(ZonedDateTime date) {
 		return Lists.newArrayList(gameRepository.findAll()).stream()
-				.filter(game ->  {
-					return game.getGameDate().plusHours(4).isAfter(date) && game.getGameDate().isBefore(date);
-				})
-				.count() > 0;
+				.anyMatch(game -> game.getGameDate().plusHours(4).isAfter(date) && game.getGameDate().isBefore(date));
 	}
 }

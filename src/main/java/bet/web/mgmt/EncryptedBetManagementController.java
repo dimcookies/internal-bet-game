@@ -24,11 +24,13 @@ import java.util.List;
 @RequestMapping("/config/encryptedbets")
 public class EncryptedBetManagementController extends AbstractBetManagementController<EncryptedBetDto, Integer, EncryptedBet> {
 
+	//do not allow creation of bets, they are copied from encrypted
 	@RequestMapping(path = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public EncryptedBetDto create(@RequestBody EncryptedBetDto model) {
 		throw new NotImplementedException();
 	}
 
+	//do not allow update of bets, they are copied from encrypted
 	@RequestMapping(path = "/update", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public EncryptedBetDto update(@RequestBody EncryptedBetDto model) {
 		throw new NotImplementedException();

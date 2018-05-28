@@ -12,6 +12,9 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Map;
 
+/**
+ * A scheduler for reporting odules.
+ */
 @Component
 public class AnalyticsScheduler {
 
@@ -20,6 +23,7 @@ public class AnalyticsScheduler {
 	@Autowired
 	private ApplicationContext context;
 
+	/* Date analytics was run */
 	private ZonedDateTime lastUpdateDate;
 
 	//@Scheduled(cron = "*/10 * * * * *")
@@ -27,6 +31,7 @@ public class AnalyticsScheduler {
 	public void runAnalytics() {
 
 		LOGGER.info("Analytics run");
+		//get all reporting modules and run
 		Map<String,Object> customPageActions = context.getBeansWithAnnotation(Analytics.class);
 		customPageActions.forEach((s, o) -> ((AnalyticsModule)o).run());
 
