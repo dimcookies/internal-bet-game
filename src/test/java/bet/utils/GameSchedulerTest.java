@@ -1,8 +1,10 @@
 package bet.utils;
 
+import bet.api.constants.GameStatus;
 import bet.base.AbstractBetIntegrationTest;
 import bet.repository.GameRepository;
 import bet.service.GamesInitializer;
+import bet.service.livefeed.FifaComLiveFeedImpl;
 import bet.service.utils.GamesSchedule;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,17 +32,27 @@ public class GameSchedulerTest extends AbstractBetIntegrationTest {
 
 	@Test
 	public void testSchedule() {
+
+		gameRepository.findAll().forEach(game -> {
+			game.setStatus(GameStatus.IN_PLAY);
+			gameRepository.save(game);
+		});
+
 		assertTrue(gameRepository.findAll().iterator().hasNext());
-		ZonedDateTime c1 = ZonedDateTime.parse("2018-06-16T09:00:00Z[UTC]");
+		ZonedDateTime c1 = ZonedDateTime.parse("2018-06-14T14:00:00Z[UTC]");
 
 		assertFalse(gameScheduler.hasActiveGame(c1));
-		assertFalse(gameScheduler.hasActiveGame(c1.plusMinutes(30)));
 		assertTrue(gameScheduler.hasActiveGame(c1.plusMinutes(61)));
-		assertTrue(gameScheduler.hasActiveGame(c1.plusHours(5)));
 
-		ZonedDateTime c2 = ZonedDateTime.parse("2018-06-16T23:00:00Z[UTC]");
-		assertTrue(gameScheduler.hasActiveGame(c2.minusMinutes(1)));
-		assertFalse(gameScheduler.hasActiveGame(c2.plusMinutes(1)));
+
+		gameRepository.findAll().forEach(game -> {
+			game.setStatus(GameStatus.FINISHED);
+			gameRepository.save(game);
+		});
+
+		assertFalse(gameScheduler.hasActiveGame(c1.plusMinutes(61)));
+
+
 
 	}
 

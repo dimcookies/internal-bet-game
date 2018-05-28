@@ -18,7 +18,7 @@ import java.util.List;
  * Implementation of live feed using football-api-org for scores
  */
 @Component
-@Profile("live")
+@Profile("lifefeed-footballapiorg")
 public class FootballApiOrgLiveFeedImpl implements LiveFeed {
 
 	@Value("${application.live_feed.footballapiorg.url}")
@@ -30,7 +30,8 @@ public class FootballApiOrgLiveFeedImpl implements LiveFeed {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	@Override public List<GameDto> getLiveFeed() {
+	@Override
+	public List<GameDto> getLiveFeed() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("X-Auth-Toke", token);
 

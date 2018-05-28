@@ -47,11 +47,15 @@ application:
     encryptKey: 1234567890qwertyuiopasdf
     allowedMatchDays: 1,2,3
     live_feed:
-      interval: 20000
+      interval: 300000
       footballapiorg:
         url: http://localhost:8000/games.json
 #       url: http://api.football-data.org/v1/competitions/467/fixtures
         token: X
+      fifacom:
+              url: http://localhost:8000/live.json
+              competition: 2018 FIFA World Cup
+      #       url: http://data.fifa.com/livescores/live/matches
     database-schema: bet
     email:
       username: X

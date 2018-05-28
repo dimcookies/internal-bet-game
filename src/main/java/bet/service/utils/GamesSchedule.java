@@ -1,11 +1,15 @@
 package bet.service.utils;
 
+import bet.api.constants.GameStatus;
+import bet.model.Game;
 import bet.repository.GameRepository;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Helper methods for games schedule
@@ -18,12 +22,17 @@ public class GamesSchedule {
 
 	/**
 	 * Checks if there is a currently active game.
-	 * Assume that a gave is active 4 hours after it has started
+	 * Start date has passed and status is TIMED or IN_PLAY
 	 * @param date
 	 * @return
 	 */
 	public boolean hasActiveGame(ZonedDateTime date) {
+		return getActiveGames(date).size() > 0;
+	}
+
+	public List<Game> getActiveGames(ZonedDateTime date) {
 		return Lists.newArrayList(gameRepository.findAll()).stream()
-				.anyMatch(game -> game.getGameDate().plusHours(4).isAfter(date) && game.getGameDate().isBefore(date));
+				.filter(game -> game.getGameDate().isBefore(date) && (game.getStatus().equals(GameStatus.TIMED) || game.getStatus().equals(GameStatus.IN_PLAY)))
+				.collect(Collectors.toList());
 	}
 }

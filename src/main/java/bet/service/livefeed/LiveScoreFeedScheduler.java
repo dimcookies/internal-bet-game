@@ -27,8 +27,8 @@ public class LiveScoreFeedScheduler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LiveScoreFeedScheduler.class);
 
 	//interval for live update
-	@Value("${application.live_feed.interval:10000}")
-	private final int interval = 10000;
+	@Value("${application.live_feed.interval:300000}")
+	private final int interval = 300000;
 
 	//last update date of live feeed
 	private ZonedDateTime lastUpdateDate;
