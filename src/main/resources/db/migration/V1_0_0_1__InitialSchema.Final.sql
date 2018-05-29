@@ -47,7 +47,7 @@ ALTER TABLE ALLOWED_USERS ADD CONSTRAINT ALLOWED_USERS_U02 UNIQUE ( EMAIL );
 
 INSERT INTO bet.allowed_users(
             id, name, email, password, role)
-    VALUES (nextval('bet.allowed_users_id_seq'), 'koukis', 'koukis@upstreamsystems.com', 'rG2Gp860hjYuxFf+XIwvHw==', 'ADMIN');
+    VALUES (nextval('bet.allowed_users_id_seq'), 'XXX', 'XXX@XXX.com', 'rG2Gp860hjYuxFf+XIwvHw==', 'ADMIN');
 
 
 CREATE TABLE BET
