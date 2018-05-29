@@ -24,10 +24,7 @@ import static org.mockito.Mockito.verify;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.IntStream;
 
 public class AnalyticsSchedulerTest extends AbstractBetIntegrationTest {
@@ -61,6 +58,9 @@ public class AnalyticsSchedulerTest extends AbstractBetIntegrationTest {
 
     @Autowired
     private UserStreakRepository userStreakRepository;
+
+    @Autowired
+    private UserStreakHistoryRepository userStreakHistoryRepository;
 
     @Before
     public void setUp() {
@@ -122,13 +122,14 @@ public class AnalyticsSchedulerTest extends AbstractBetIntegrationTest {
         betRepository.save(new Bet(null, games.get(2).getId(), userId1, ScoreResult.HOME_1, 300, OverResult.OVER, 400, now));
         streakAnalyticsModule.run();
         validateStreak(userId1, 3);
+        validateStreakHistory(userId1, 3, 0);
         betRepository.deleteAll();
         betRepository.save(new Bet(null, games.get(0).getId(), userId1, ScoreResult.HOME_1, 100, OverResult.OVER, 200, now));
         betRepository.save(new Bet(null, games.get(1).getId(), userId1, ScoreResult.HOME_1, 300, OverResult.OVER, 400, now));
         betRepository.save(new Bet(null, games.get(2).getId(), userId1, ScoreResult.HOME_1, 0, OverResult.OVER, 0, now));
         streakAnalyticsModule.run();
         validateStreak(userId1, -1);
-
+        validateStreakHistory(userId1, 3, -1);
         betRepository.deleteAll();
         betRepository.save(new Bet(null, games.get(0).getId(), userId1, ScoreResult.HOME_1, 100, OverResult.OVER, 200, now));
         betRepository.save(new Bet(null, games.get(1).getId(), userId1, ScoreResult.HOME_1, 300, OverResult.OVER, 400, now));
@@ -136,7 +137,7 @@ public class AnalyticsSchedulerTest extends AbstractBetIntegrationTest {
         betRepository.save(new Bet(null, games.get(3).getId(), userId1, ScoreResult.HOME_1, 0, OverResult.OVER, 0, now));
         streakAnalyticsModule.run();
         validateStreak(userId1, -2);
-
+        validateStreakHistory(userId1, 3, -2);
         betRepository.deleteAll();
         betRepository.save(new Bet(null, games.get(0).getId(), userId1, ScoreResult.HOME_1, 100, OverResult.OVER, 200, now));
         betRepository.save(new Bet(null, games.get(1).getId(), userId1, ScoreResult.HOME_1, 300, OverResult.OVER, 400, now));
@@ -144,6 +145,7 @@ public class AnalyticsSchedulerTest extends AbstractBetIntegrationTest {
         betRepository.save(new Bet(null, games.get(3).getId(), userId1, ScoreResult.HOME_1, 100, OverResult.OVER, 200, now));
         streakAnalyticsModule.run();
         validateStreak(userId1, 1);
+        validateStreakHistory(userId1, 3, -2);
 
         betRepository.deleteAll();
         betRepository.save(new Bet(null, games.get(0).getId(), userId1, ScoreResult.HOME_1, 100, OverResult.OVER, 200, now));
@@ -153,6 +155,7 @@ public class AnalyticsSchedulerTest extends AbstractBetIntegrationTest {
         betRepository.save(new Bet(null, games.get(4).getId(), userId1, ScoreResult.HOME_1, 100, OverResult.OVER, 200, now));
         streakAnalyticsModule.run();
         validateStreak(userId1, 2);
+        validateStreakHistory(userId1, 3, -2);
 
     }
 
@@ -160,6 +163,16 @@ public class AnalyticsSchedulerTest extends AbstractBetIntegrationTest {
         List<UserStreak> streaks = Lists.newArrayList(userStreakRepository.findAll());
 
         assertEquals(correctStreak, (long)streaks.stream().filter(userStreak -> userStreak.getUser().getId().equals(userId)).map(UserStreak::getStreak).findFirst().get());
+
+    }
+
+    private void validateStreakHistory(int userId, int correctMaxStreak, int correctMinStreak) {
+        List<UserStreakHistory> streaks = Lists.newArrayList(userStreakHistoryRepository.findAll());
+
+        Optional<UserStreakHistory> history = streaks.stream().filter(userStreak -> userStreak.getUser().getId().equals(userId)).findFirst();
+        assertTrue(history.isPresent());
+        assertEquals(correctMaxStreak, (int)history.get().getMaxStreak());
+        assertEquals(correctMinStreak, (int)history.get().getMinStreak());
 
     }
 

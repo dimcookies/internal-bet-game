@@ -2,9 +2,12 @@ package bet.service.analytics;
 
 import bet.api.constants.GameStatus;
 import bet.model.Bet;
+import bet.model.User;
 import bet.model.UserStreak;
+import bet.model.UserStreakHistory;
 import bet.repository.BetRepository;
 import bet.repository.UserRepository;
+import bet.repository.UserStreakHistoryRepository;
 import bet.repository.UserStreakRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +37,9 @@ public class StreakAnalyticsModule implements AnalyticsModule {
 
     @Autowired
     private UserStreakRepository userStreakRepository;
+
+    @Autowired
+    private UserStreakHistoryRepository userStreakHistoryRepository;
 
     @Override
     public void run() {
@@ -67,6 +73,34 @@ public class StreakAnalyticsModule implements AnalyticsModule {
             }
             //save updated value
             userStreakRepository.save(new UserStreak(streak, user));
+
+            updateMinMaxStreak(streak, user);
         });
+    }
+
+    /**
+     * Update history for min and max streaks of the user. If no
+     * history exists, a new one is created
+     * @param streak
+     * @param user
+     */
+    private void updateMinMaxStreak(int streak, User user) {
+        UserStreakHistory history = userStreakHistoryRepository.findOneByUser(user);
+        if(history == null) {
+            history = new UserStreakHistory(0, 0, user);
+        }
+
+        //positive streak
+        if(streak > 0) {
+            if(streak > history.getMaxStreak()) {
+                history.setMaxStreak(streak);
+            }
+        } else { //negative streak
+            if(streak < history.getMinStreak()) {
+                history.setMinStreak(streak);
+            }
+        }
+
+        userStreakHistoryRepository.save(history);
     }
 }

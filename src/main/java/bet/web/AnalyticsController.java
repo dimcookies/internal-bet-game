@@ -2,8 +2,10 @@ package bet.web;
 
 import bet.model.RankHistory;
 import bet.model.UserStreak;
+import bet.model.UserStreakHistory;
 import bet.repository.BetRepository;
 import bet.repository.RankHistoryRepository;
+import bet.repository.UserStreakHistoryRepository;
 import bet.repository.UserStreakRepository;
 import bet.service.analytics.Analytics;
 import bet.service.analytics.AnalyticsScheduler;
@@ -37,6 +39,9 @@ public class AnalyticsController {
 
     @Autowired
     private UserStreakRepository userStreakRepository;
+
+    @Autowired
+    private UserStreakHistoryRepository userStreakHistoryRepository;
 
     @Autowired
     private AnalyticsScheduler analyticsScheduler;
@@ -107,6 +112,25 @@ public class AnalyticsController {
                 })
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Get the user streak history  sorted by streak (desc)
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/userStreakHistory", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public List<UserStreakHistory> userStreakHistory(@RequestParam(value = "sortByMax", required = false, defaultValue = "true") boolean sortByMax) throws Exception {
+        return StreamSupport.stream(userStreakHistoryRepository.findAll().spliterator(), false)
+                .sorted((o1, o2) -> {
+                    if(sortByMax) {
+                        return o2.getMaxStreak().compareTo(o1.getMaxStreak());
+                    } else {
+                        return o1.getMinStreak().compareTo(o1.getMinStreak());
+                    }
+                })
+                .collect(Collectors.toList());
+    }
+
 
     /**
      * Get last run date for reporting
