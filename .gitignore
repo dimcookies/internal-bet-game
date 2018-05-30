@@ -22,3 +22,7 @@
 hs_err_pid*
 .idea/
 target/
+
+
+# frontEnd
+src/main/resources/worldcup2018/node_modules

@@ -1,489 +1,236 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Upstream WC 2018</title>
+<html ng-app="espackApp" ng-controller="LayoutController as appVm" ng-strict-di lang="en">
+  <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>World Cup Challenge- Start Bootstrap Template</title>
+    <!-- Bootstrap core CSS-->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom fonts for this template-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+        <!-- <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
 
-    <style>
-    /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
-    .row.content {height: 1500px}
-
-    /* Set gray background color and 100% height */
-    .sidenav {
-      background-color: #f1f1f1;
-      height: 100%;
-    }
-
-    /* Set black background color, white text and some padding */
-    footer {
-      background-color: #555;
-      color: white;
-      padding: 15px;
-    }
-
-    /* On small screens, set height to 'auto' for sidenav and grid */
-    @media screen and (max-width: 767px) {
-      .sidenav {
-        height: auto;
-        padding: 15px;
-      }
-      .row.content {height: auto;}
-    }
-  </style>
-
-    <script>
-        var app = angular.module('myApp', []);
-
-        app.controller('myCtrl', function($scope, $http, $timeout) {
-            $http.get("/rss/list").then(function (response) {
-                $scope.allRss = response.data;
-            });
-
-            $http.get("/bets/allowedMatchDays").then(function (response) {
-                $scope.allowedMatchDays = response.data;
-            });
-
-            (function tick() {
-                $http.get("/livefeed/lastupdate").then(function (response) {
-                    $scope.lastUpdate = response.data;
-                    $timeout(tick, 60000);
-                });
-            })();
-
-            $http.get("/bets/points").then(function (response) {
-                $scope.allPoints = response.data;
-            });
-
-            (function tick2() {
-                 $http.get("/comments/list?limit=1000").then(function (response) {
-                            $scope.allComments = response.data;
-                            $timeout(tick2, 60000);
-                });
-            })();
-
-            $scope.new_comment = "";
-            $scope.pointsVisible = true;
-            $scope.commentsVisible = false;
-            $scope.matchesVisible = false;
-            $scope.matchVisible = false;
-            $scope.userVisible = false;
-            $scope.editVisible = false;
-            $scope.showPoints = function() {
-            $http.get("/bets/points").then(function (response) {
-                $scope.allPoints = response.data;
-                $scope.pointsVisible = true;
-              $scope.commentsVisible = false;
-              $scope.matchesVisible = false;
-              $scope.matchVisible = false;
-              $scope.userVisible = false;
-              $scope.editVisible = false;
-            });
-
-            };
-            $scope.showComments = function() {
-                $http.get("/comments/list?limit=1000").then(function (response) {
-                    $scope.allComments = response.data;
-                    $scope.pointsVisible = false;
-                  $scope.commentsVisible = true;
-                  $scope.matchesVisible = false;
-                  $scope.matchVisible = false;
-                  $scope.userVisible = false;
-                  $scope.editVisible = false;
-                });
-            };
-            $scope.showMatches = function() {
-            $http.get("/games/list").then(function (response) {
-                $scope.allMatches = response.data;
-                $scope.pointsVisible = false;
-              $scope.commentsVisible = false;
-              $scope.matchesVisible = true;
-              $scope.matchVisible = false;
-              $scope.userVisible = false;
-              $scope.editVisible = false;
-            });
-
-            };
-            $scope.showMatch = function(gameId) {
-              $http.get("/games/list?matchId="+gameId).then(function (response) {
-                $scope.selectedGame = response.data[0];
-                $http.get("/bets/list?gameId="+gameId).then(function (response) {
-                    $scope.allBets = response.data;
-                    $scope.selectedGameId = gameId;
-                    $scope.pointsVisible = false;
-                    $scope.commentsVisible = false;
-                    $scope.matchesVisible = false;
-                    $scope.matchVisible = true;
-                    $scope.userVisible = false;
-                    $scope.editVisible = false;
-                });
-               });
-            };
-            $scope.showUser = function(userName) {
-              $http.get("/bets/list?userName="+userName).then(function (response) {
-                $scope.selectedBets = response.data;
-                $scope.selectedUser = userName;
-                $scope.pointsVisible = false;
-                $scope.commentsVisible = false;
-                $scope.matchesVisible = false;
-                $scope.matchVisible = false;
-                $scope.userVisible = true;
-                $scope.editVisible = false;
-               });
-            };
-            $scope.showEdit = function() {
-              $http.get("/games/list?matchDays="+$scope.allowedMatchDays).then(function (response) {
-                $scope.selectedGames = response.data;
-
-                $http.get("/bets/encrypted/list").then(function (response) {
-                        savedBets = response.data;
-                        console.log(savedBets);
-
-                        $scope.pointsVisible = false;
-                        $scope.commentsVisible = false;
-                        $scope.matchesVisible = false;
-                        $scope.matchVisible = false;
-                        $scope.userVisible = false;
-                        $scope.editVisible = true;
-                        $scope.userBets={};
-                        $scope.userOverBets={};
-                        $scope.editError = false;
-                        $scope.editSuccess = false;
-                        $scope.disableSubmit = false;
-
-
-                        for(var idx in savedBets) {
-                        savedBet=savedBets[idx];
-                            $scope.userBets[savedBet.gameId] = savedBet.scoreResult;
-                            $scope.userOverBets[savedBet.gameId] = savedBet.overResult;
-                        }
-                });
-
-
-               });
-            };
-
-            $scope.saveBets = function() {
-                $scope.disableSubmit = true;
-                isPlayoffStage = $scope.allowedMatchDays.split(',') < 3;
-                console.log(isPlayoffStage);
-                $scope.editError = false;
-                $scope.editSuccess = false;
-                for (var i = 0; i < $scope.selectedGames.length; i++) {
-                    game=$scope.selectedGames[i];
-                    if($scope.userBets[game.game.id] == null) {
-                      $scope.editError = true;
-                      return;
-                    }
-
-                    if(isPlayoffStage && $scope.userOverBets[game.game.id] == null) {
-                      $scope.editError = true;
-                      return;
-                    }
-                }
-
-                ar = [];
-                for(var key in $scope.userBets) {
-                  var value = $scope.userBets[key];
-                  dct = { "gameId": key, "overResult": $scope.userOverBets[key], "scoreResult": $scope.userBets[key] }
-                  ar.push(dct);
-                }
-
-                //console.log(ar);
-                var parameter = JSON.stringify(ar);
-                $http.post("/bets/encrypted/add", parameter).then(function (response) {
-                    $scope.editSuccess = true;
-                    $scope.disableSubmit = true;
-                });
-            };
-
-            $scope.addComment = function() {
-                $http.post("/comments/add?comment="+$scope.new_comment).then(function (response) {
-                    $http.get("/comments/list?limit=1000").then(function (response) {
-                        $scope.allComments = response.data;
-                    });
-                    $scope.new_comment = "";
-                });
-            };
-            $scope.mySplit = function(string, nb) {
-                var array = string.split('_');
-                return array[nb];
-            }
-        });
-    </script>
-</head>
-<body>
-
-<div class="container-fluid" ng-app="myApp" ng-controller="myCtrl">
-    <div class="row content">
-        <div class="col-sm-3 sidenav">
-            <h4>Navigation</h4>
-            <ul class="nav nav-pills nav-stacked">
-                <li><a href="#" ng-click="showPoints()">Points</a></li>
-                <li><a href="#" ng-click="showMatches()">Games</a></li>
-                <li><a href="#" ng-click="showComments()">Comments</a></li>
-                <li><a href="#" ng-click="showEdit()">Edit</a></li>
-                <li><a href="/logout">Logout</a></li>
+    <!-- Page level plugin CSS-->
+    <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin.css" rel="stylesheet">
+  <link href="/css/app.css" rel="stylesheet"></head>
+  <body class="fixed-nav sticky-footer bg-dark" id="page-top">
+    <toaster-container toaster-options="{'close-button': true}"></toaster-container>
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+      <a class="navbar-brand" ui-sref-active="active" ui-sref="home">World Cup Challenge</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Leaderboard" ui-sref-active="active">
+            <a class="nav-link" ui-sref="leaderboard">
+              <i class="fa fa-fw fa-trophy"></i>
+              <span class="nav-link-text">Leaderboard</span>
+            </a>
+          </li>
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Matches" ui-sref-active="active">
+            <a class="nav-link" ui-sref="matches">
+              <i class="fa fa-fw fa-futbol"></i>
+              <span class="nav-link-text">Matches</span>
+            </a>
+          </li>
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="My Bets" ui-sref-active="active">
+            <a class="nav-link" ui-sref="bets">
+              <i class="fa fa-fw fa-pencil-alt"></i>
+              <span class="nav-link-text">My Bets</span>
+            </a>
+          </li>
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Chat" ui-sref-active="active">
+            <a class="nav-link" ui-sref="chat">
+              <i class="fa fa-fw fa-comments"></i>
+              <span class="nav-link-text">Chat</span>
+            </a>
+          </li>
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Analytics" ui-sref-active="active">
+            <a class="nav-link" ui-sref="analytics">
+              <i class="fa fa-fw fa-chart-line"></i>
+              <span class="nav-link-text">Analytics</span>
+            </a>
+          </li>          
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Example Pages">
+            <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseExamplePages" data-parent="#exampleAccordion">
+              <i class="fa fa-fw fa-file"></i>
+              <span class="nav-link-text">Other Pages</span>
+            </a>
+            <ul class="sidenav-second-level collapse" id="collapseExamplePages">
+              <li>
+                <a href="login.html" target="_blank">Login Page</a>
+              </li>
+              <li>
+                <a href="register.html" target="_blank">Registration Page</a>
+              </li>
+              <li>
+                <a href="forgot-password.html" target="_blank">Forgot Password Page</a>
+              </li>
+              <li>
+                <a href="navbar.html" target="_blank">Navbar</a>
+              </li>
+              <li>
+                <a href="cards.html" target="_blank">Cards</a>
+              </li>
+              <li>
+                <a href="charts.html" target="_blank">Charts</a>
+              </li>
+              <li>
+                <a href="tables.html" target="_blank">Tables</a>
+              </li>
             </ul>
-            <h4>Comments</h4>
-            <ul class="nav nav-pills nav-stacked">
-                <li ng-repeat="comment in allComments | limitTo:10">
-                    <a><b>{{ comment.user.name }}:</b> {{ comment.comment }} ({{ comment.commentDate }}) </a>
-                </li>
-            </ul><br>
-            <div class="input-group">
-                <input ng-model="new_comment" type="text" class="form-control" placeholder="Comment" maxlength="200">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" ng-click="addComment()">
-                         <span class="glyphicon glyphicon-send"></span>
-                    </button>
-                </span>
+          </li>
+        </ul>
+        <ul class="navbar-nav sidenav-toggler">
+          <li class="nav-item">
+            <a class="nav-link text-center" id="sidenavToggler">
+              <i class="fa fa-fw fa-angle-left"></i>
+            </a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-fw fa-envelope"></i>
+              <span class="d-lg-none">Comments
+                <span class="badge badge-pill badge-primary">12 New</span>
+              </span>
+              <span class="indicator text-primary d-none d-lg-block">
+                <i class="fa fa-fw fa-circle"></i>
+              </span>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="messagesDropdown">
+              <h6 class="dropdown-header">New Comments:</h6>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="javascript:void(0)">
+                <strong>David Miller</strong>
+                <span class="small float-right text-muted">11:21 AM</span>
+                <div class="dropdown-message small">Hey there! This new version of SB Admin is pretty awesome! These messages clip off when they reach the end of the box so they don't overflow over to the sides!</div>
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="javascript:void(0)">
+                <strong>Jane Smith</strong>
+                <span class="small float-right text-muted">11:21 AM</span>
+                <div class="dropdown-message small">I was wondering if you could meet for an appointment at 3:00 instead of 4:00. Thanks!</div>
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="javascript:void(0)">
+                <strong>John Doe</strong>
+                <span class="small float-right text-muted">11:21 AM</span>
+                <div class="dropdown-message small">I've sent the final files over to you for review. When you're able to sign off of them let me know and we can discuss distribution.</div>
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item small" href="javascript:void(0)">View all messages</a>
             </div>
-            <br/>
-            <h4>News</h4>
-            <ul class="nav nav-pills nav-stacked">
-                <li ng-repeat="rss in allRss">
-                    <a target="_blank" href="{{ rss.link }}">{{ rss.title }}</a>
-                </li>
-            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle mr-lg-2" id="alertsDropdown" href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-fw fa-bell"></i>
+              <span class="d-lg-none">Latest News
+                <span class="badge badge-pill badge-warning">6 New</span>
+              </span>
+              <span class="indicator text-warning d-none d-lg-block">
+                <i class="fa fa-fw fa-circle"></i>
+              </span>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="alertsDropdown">
+              <h6 class="dropdown-header">Latest News:</h6>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="javascript:void(0)">
+                <span class="text-success">
+                  <strong>
+                  <i class="fa fa-long-arrow-up fa-fw"></i>Status Update</strong>
+                </span>
+                <span class="small float-right text-muted">11:21 AM</span>
+                <div class="dropdown-message small">This is an automated server response message. All systems are online.</div>
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="javascript:void(0)">
+                <span class="text-danger">
+                  <strong>
+                  <i class="fa fa-long-arrow-down fa-fw"></i>Status Update</strong>
+                </span>
+                <span class="small float-right text-muted">11:21 AM</span>
+                <div class="dropdown-message small">This is an automated server response message. All systems are online.</div>
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="javascript:void(0)">
+                <span class="text-success">
+                  <strong>
+                  <i class="fa fa-long-arrow-up fa-fw"></i>Status Update</strong>
+                </span>
+                <span class="small float-right text-muted">11:21 AM</span>
+                <div class="dropdown-message small">This is an automated server response message. All systems are online.</div>
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item small" href="javascript:void(0)">View all alerts</a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
+            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="content-wrapper">
+      <div class="container-fluid">
+        <!-- <div class="container body-content"> -->
+          <div ui-view="main"></div>
+        <!-- </div> -->
+      </div>
+      <!-- /.container-fluid-->
+      <!-- /.content-wrapper-->
+      <footer class="sticky-footer">
+        <div class="container">
+          <div class="text-center">
+            <small>Copyright © World Cup Challenge 2018</small>
+          </div>
         </div>
-
-        <div class="col-sm-9" ng-show="pointsVisible">
-            <h4><small>Point leaders</small></h4>
-            <h4><small>Last Update: {{ lastUpdate }}</small></h4>
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Points</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="entry in allPoints">
-                    <th scope="row">{{ $index+1 }}</th>
-                    <td><a href="#" ng-click="showUser(entry.username)">{{entry.username}}</a></td>
-                    <td>{{ entry.points }}</td>
-                </tr>
-                </tbody>
-            </table>
+      </footer>
+      <!-- Scroll to Top Button-->
+      <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fa fa-angle-up"></i>
+      </a>
+      <!-- Logout Modal-->
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+              <a class="btn btn-primary" href="login.html">Logout</a>
+            </div>
+          </div>
         </div>
-
-        <div class="col-sm-9" ng-show="commentsVisible">
-            <h4><small>Comments</small></h4>
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Comment</th>
-                    <th scope="col">Date</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="comment in allComments">
-                    <td>{{ comment.user.name }}</td>
-                    <td>{{ comment.comment }}</td>
-                    <td>{{ comment.commentDate }}</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="col-sm-9" ng-show="matchesVisible">
-            <h4><small>Games</small></h4>
-            <h4><small>Last Update: {{ lastUpdate }}</small></h4>
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th scope="col">Date</th>
-                    <th scope="col">Home</th>
-                    <th scope="col">Away</th>
-                    <th scope="col">Goals Home</th>
-                    <th scope="col">Goals Away</th>
-                    <th scope="col">Status</th>
-                    <th scope="col" colspan="5" style="text-align:center">Odds</th>
-                </tr>
-                <tr>
-                    <th scope="col" colspan="6"></th>
-                    <th scope="col">1</th>
-                    <th scope="col">X</th>
-                    <th scope="col">2</th>
-                    <th scope="col">Under</th>
-                    <th scope="col">Over</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="game in allMatches" class="{{ game.game.status == 'FINISHED' ? 'success' : game.game.status == 'SCHEDULED' || game.game.status == 'CANCELED' || game.game.status == 'POSTPONED' ? 'danger' : game.game.status == 'IN_PLAY' ? 'info' : '' }}">
-                    <td><a href="#" ng-click="showMatch(game.game.id)">{{ game.game.gameDate }}<a/></td>
-                    <td>{{ game.game.homeName }}</td>
-                    <td>{{ game.game.awayName }}</td>
-                    <td>{{ game.game.goalsHome }}</td>
-                    <td>{{ game.game.goalsAway }}</td>
-                    <td>{{ game.game.status }}</td>
-                    <td>{{ game.oddsHome }}</td>
-                    <td>{{ game.oddsTie }}</td>
-                    <td>{{ game.oddsAway }}</td>
-                    <td>{{ game.oddsUnder }}</td>
-                    <td>{{ game.oddsOver }}</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="col-sm-9" ng-show="matchVisible">
-            <h4><small>Game {{ selectedGame.game.homeName }} - {{ selectedGame.game.awayName }} = {{ selectedGame.game.goalsHome }} - {{ selectedGame.game.goalsAway }}</small></h4>
-            <h4><small>{{ selectedGame.game.gameDate }}  {{ selectedGame.game.status }}</small></h4>
-            <h4><small>Odds: 1={{ selectedGame.oddsHome }} X={{ selectedGame.oddsTie }} 2={{ selectedGame.oddsUnder }}  </small></h4>
-            <h4><small>Odds: Under={{ selectedGame.oddsUnder }} Over={{ selectedGame.oddsOver }} </small></h4>
-            <h4><small>Last Update: {{ lastUpdate }}</small></h4>
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th scope="col">User</th>
-                    <th scope="col" style="text-align:center" colspan="2">Score</th>
-                    <th scope="col" style="text-align:center" colspan="2">Over</th>
-                </tr>
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col">Bet</th>
-                    <th scope="col">Points</th>
-                    <th scope="col">Bet</th>
-                    <th scope="col">Points</th>
-
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="bet in allBets | filter : bet: bet.game.id=selectedGameId | orderBy:'user.name'" class="{{ bet.resultPoints > 0 ? 'success' : 'danger' }}">
-                    <td><a href="#" ng-click="showUser(bet.user.name)">{{ bet.user.name }}</a></td>
-                    <td>{{ bet.scoreResult }}</td>
-                    <td>{{ bet.resultPoints }}</td>
-                    <td>{{ bet.overResult }}</td>
-                    <td>{{ bet.overPoints }}</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="col-sm-9" ng-show="userVisible">
-            <h4><small>User {{ selectedUser }}</small></h4>
-            <h4><small>Last Update: {{ lastUpdate }}</small></h4>
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th scope="col">Date</th>
-                    <th scope="col">Home</th>
-                    <th scope="col">Away</th>
-                    <th scope="col">Goals Home</th>
-                    <th scope="col">Goals Away</th>
-                    <th scope="col">Status</th>
-                    <th scope="col" style="text-align:center" colspan="2">Score</th>
-                    <th scope="col" style="text-align:center" colspan="2">Over</th>
-                </tr>
-                <tr>
-                    <th scope="col" colspan="6"></th>
-                    <th scope="col">Bet</th>
-                    <th scope="col">Points</th>
-                    <th scope="col">Bet</th>
-                    <th scope="col">Points</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="bet in selectedBets | orderBy:'game.gameDate'" class="{{ bet.resultPoints > 0 ? 'success' : 'danger' }}">
-                    <td><a href="#" ng-click="showMatch(bet.game.id)">{{ bet.game.gameDate }}<a/></td>
-                    <td>{{ bet.game.homeName }}</td>
-                    <td>{{ bet.game.awayName }}</td>
-                    <td>{{ bet.game.goalsHome }}</td>
-                    <td>{{ bet.game.goalsAway }}</td>
-                    <td>{{ bet.game.status }}</td>
-                    <td>{{ bet.scoreResult }}</td>
-                    <td>{{ bet.resultPoints }}</td>
-                    <td>{{ bet.overResult }}</td>
-                    <td>{{ bet.overPoints }}</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="col-sm-9" ng-show="editVisible">
-            <h4><small>Games</small></h4>
-            <h4><small>Last Update: {{ lastUpdate }}</small></h4>
-            <form name="editform">
-                <table class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th scope="col">Date</th>
-                        <th scope="col">Home</th>
-                        <th scope="col">Away</th>
-                        <th scope="col">Goals Home</th>
-                        <th scope="col">Goals Away</th>
-                        <th scope="col">Status</th>
-                        <th scope="col" colspan="7" style="text-align:center">Odds</th>
-                    </tr>
-                    <tr>
-                        <th scope="col" colspan="6"></th>
-                        <th scope="col">1</th>
-                        <th scope="col">X</th>
-                        <th scope="col">2</th>
-                        <th scope="col">Bet</th>
-                        <th scope="col">Under</th>
-                        <th scope="col">Over</th>
-                        <th scope="col">Bet</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="game in selectedGames">
-                        <td>{{ game.game.gameDate }}</td>
-                        <td>{{ game.game.homeName }}</td>
-                        <td>{{ game.game.awayName }}</td>
-                        <td>{{ game.game.goalsHome }}</td>
-                        <td>{{ game.game.goalsAway }}</td>
-                        <td>{{ game.game.status }}</td>
-                        <td>{{ game.oddsHome }}</td>
-                        <td>{{ game.oddsTie }}</td>
-                        <td>{{ game.oddsAway }}</td>
-                        <td >
-                            <select ng-model="userBets[game.game.id]" required  style="{{ userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}">
-                                <option value=""></option>
-                                <option value="HOME_1">HOME_1</option>
-                                <option value="DRAW_X">DRAW_X</option>
-                                <option value="AWAY_2">AWAY_2</option>
-                            </select>
-                        </td>
-                        <td>{{ game.oddsUnder }}</td>
-                        <td>{{ game.oddsOver }}</td>
-                        <td>
-                            <select ng-show="game.game.matchDay > 3" ng-model="userOverBets[game.game.id]" style="{{ userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}" required>
-                                <option value=""></option>
-                                <option value="UNDER">UNDER</option>
-                                <option value="OVER">OVER</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="13">
-                            <button type="button" ng-disabled="enableSubmit" class="btn btn-success" ng-click="saveBets()">Submit Bets</button><br/>
-                            <br/>
-                            <div ng-show="editError" style="color:red">Missing fields</div>
-                            <div ng-show="editSuccess" style="color:green">Bets saved successfully</div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </form>
-        </div>
-
-
-
+      </div>
     </div>
-</div>
-
-<footer class="container-fluid">
-    <p>Upstream WC2018</p>
-</footer>
-
-</body>
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Page level plugin JavaScript-->
+    <script src="vendor/chart.js/Chart.min.js"></script>
+    <script src="vendor/datatables/jquery.dataTables.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin.min.js"></script>
+    <!-- Custom scripts for this page-->
+    <script src="js/sb-admin-datatables.min.js"></script>
+    <script src="js/sb-admin-charts.min.js"></script>
+  <script type="text/javascript" src="/app.0a73d048f81a62d4bedf.js"></script></body>
 </html>
