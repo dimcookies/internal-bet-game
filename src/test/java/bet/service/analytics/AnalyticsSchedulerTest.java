@@ -86,8 +86,8 @@ public class AnalyticsSchedulerTest extends AbstractBetIntegrationTest {
 
         List<RankHistory> ranking = Lists.newArrayList(rankHistoryRepository.findAll());
         assertEquals(2, ranking.size());
-        assertTrue(ranking.stream().anyMatch(rankHistory -> rankHistory.getUser().getId() == userId2 && rankHistory.getRank() == 1));
-        assertTrue(ranking.stream().anyMatch(rankHistory -> rankHistory.getUser().getId() == userId1 && rankHistory.getRank() == 2));
+        assertTrue(ranking.stream().anyMatch(rankHistory -> rankHistory.getUser().getId() == userId2 && rankHistory.getRank() == 1 && rankHistory.getPoints() == 2600));
+        assertTrue(ranking.stream().anyMatch(rankHistory -> rankHistory.getUser().getId() == userId1 && rankHistory.getRank() == 2 && rankHistory.getPoints() == 1000));
 
         userRankAnalyticsModule.run();
         ranking = Lists.newArrayList(rankHistoryRepository.findAll());
@@ -98,8 +98,8 @@ public class AnalyticsSchedulerTest extends AbstractBetIntegrationTest {
         userRankAnalyticsModule.run();
         ranking = Lists.newArrayList(rankHistoryRepository.findAll());
         assertEquals(2, ranking.size());
-        assertTrue(ranking.stream().anyMatch(rankHistory -> rankHistory.getUser().getId() == userId1 && rankHistory.getRank() == 1));
-        assertTrue(ranking.stream().anyMatch(rankHistory -> rankHistory.getUser().getId() == userId2 && rankHistory.getRank() == 2));
+        assertTrue(ranking.stream().anyMatch(rankHistory -> rankHistory.getUser().getId() == userId1 && rankHistory.getRank() == 1 && rankHistory.getPoints() == 4000));
+        assertTrue(ranking.stream().anyMatch(rankHistory -> rankHistory.getUser().getId() == userId2 && rankHistory.getRank() == 2 && rankHistory.getPoints() == 2600));
     }
 
 
