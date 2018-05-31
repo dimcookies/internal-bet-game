@@ -42,7 +42,7 @@ public class UserRankAnalyticsModule implements AnalyticsModule {
         LOGGER.info("Run user rank module");
         //get points for all users
         Map<String, Integer> allPoints = betRepository.listAllPoints();
-        List<String> ranking = allPoints.entrySet().stream()
+        List<Map.Entry<String, Integer>> ranking = allPoints.entrySet().stream()
                 //sort by total points and then by username
                 .sorted((o1, o2) -> {
                     int cmp1 = o2.getValue().compareTo(o1.getValue());
@@ -51,14 +51,15 @@ public class UserRankAnalyticsModule implements AnalyticsModule {
                     }
                     return o1.getKey().compareTo(o2.getKey());
                 })
-                .map(entry -> entry.getKey())
+                //.map(entry -> entry.getKey())
                 .collect(Collectors.toList());
         ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
 
         //write rankings to database for current date
         IntStream.range(0, ranking.size()).forEach(idx -> {
-            User user = userRepository.findOneByName(ranking.get(idx));
-            rankHistoryRepository.save(new RankHistory(idx+1, user, now));
+            Map.Entry<String, Integer> entry = ranking.get(idx);
+            User user = userRepository.findOneByUsername(entry.getKey());
+            rankHistoryRepository.save(new RankHistory(idx+1, user, entry.getValue(),now));
         });
     }
 }

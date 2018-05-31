@@ -13,6 +13,8 @@ public class UserDto implements ManagementDto<User, Integer> {
 
 	private int id;
 
+	private String username;
+
 	private String name;
 
 	private String email;
@@ -24,8 +26,9 @@ public class UserDto implements ManagementDto<User, Integer> {
 	public UserDto() {
 	}
 
-	public UserDto(String name, String email, String password, String role) {
+	public UserDto(String name, String email, String password, String role, String username) {
 		this.name = name;
+		this.username = username;
 		this.email = email;
 		this.password = password;
 		this.role = role;
@@ -36,6 +39,7 @@ public class UserDto implements ManagementDto<User, Integer> {
 		if (entity != null) {
 			setId(entity.getId());
 			setName(entity.getName());
+			setUsername(entity.getUsername());
 			setEmail(entity.getEmail());
 			setPassword(entity.getPassword());
 			setRole(entity.getRole());
@@ -44,7 +48,7 @@ public class UserDto implements ManagementDto<User, Integer> {
 
 	@Override
 	public User toEntity() {
-		return new User(this.id, this.name, this.email, this.password, this.role);
+		return new User(this.id, this.name, this.email, this.password, this.role, this.username);
 	}
 
 }
