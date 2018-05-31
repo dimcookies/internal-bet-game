@@ -1,2 +1,0 @@
-angular.module("templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("messages/list.html","<h3>AngularJS + ES6 boile444rplate application using Webpack</h3>\n\n<message-list messages=\"vm.messages\" header=\"\'Messages\'\"></message-list>");
-$templateCache.put("components/message-list/message-list.directive.html","<h2>{{::vm.header}}</h2>\n<ul>\n\n    <li ng-repeat=\"message in vm.messages track by $index\">\n        {{::message.text}}\n    </li>\n</ul>\n");}]);

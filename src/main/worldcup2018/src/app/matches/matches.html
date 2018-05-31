@@ -25,8 +25,8 @@
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="game in allMatches" class="{{ game.game.status == 'FINISHED' ? 'success' : game.game.status == 'SCHEDULED' || game.game.status == 'CANCELED' || game.game.status == 'POSTPONED' ? 'danger' : game.game.status == 'IN_PLAY' ? 'info' : '' }}">
-            <td><a href="#" ng-click="showMatch(game.game.id)">{{ game.game.gameDate }}<a/></td>
+        <tr ng-repeat="game in vm.allMatches" class="{{ game.game.status == 'FINISHED' ? 'success' : game.game.status == 'SCHEDULED' || game.game.status == 'CANCELED' || game.game.status == 'POSTPONED' ? 'danger' : game.game.status == 'IN_PLAY' ? 'info' : '' }}">
+            <td><a ui-sref="match({gameId: game.game.id})">{{ game.game.gameDate }}<a/></td>
             <td>{{ game.game.homeName }}</td>
             <td>{{ game.game.awayName }}</td>
             <td>{{ game.game.goalsHome }}</td>
@@ -40,35 +40,3 @@
         </tr>
     </tbody>
 </table>
-<div class="col-sm-9" ng-show="matchVisible">
-    <h4><small>Game {{ selectedGame.game.homeName }} - {{ selectedGame.game.awayName }} = {{ selectedGame.game.goalsHome }} - {{ selectedGame.game.goalsAway }}</small></h4>
-    <h4><small>{{ selectedGame.game.gameDate }}  {{ selectedGame.game.status }}</small></h4>
-    <h4><small>Odds: 1={{ selectedGame.oddsHome }} X={{ selectedGame.oddsTie }} 2={{ selectedGame.oddsUnder }}  </small></h4>
-    <h4><small>Odds: Under={{ selectedGame.oddsUnder }} Over={{ selectedGame.oddsOver }} </small></h4>
-    <h4><small>Last Update: {{ lastUpdate }}</small></h4>
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th scope="col">User</th>
-                <th scope="col" style="text-align:center" colspan="2">Score</th>
-                <th scope="col" style="text-align:center" colspan="2">Over</th>
-            </tr>
-            <tr>
-                <th scope="col"></th>
-                <th scope="col">Bet</th>
-                <th scope="col">Points</th>
-                <th scope="col">Bet</th>
-                <th scope="col">Points</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="bet in allBets | filter : bet: bet.game.id=selectedGameId | orderBy:'user.name'" class="{{ bet.resultPoints > 0 ? 'success' : 'danger' }}">
-                <td><a href="#" ng-click="showUser(bet.user.name)">{{ bet.user.name }}</a></td>
-                <td>{{ bet.scoreResult }}</td>
-                <td>{{ bet.resultPoints }}</td>
-                <td>{{ bet.overResult }}</td>
-                <td>{{ bet.overPoints }}</td>
-            </tr>
-        </tbody>
-    </table>
-</div>

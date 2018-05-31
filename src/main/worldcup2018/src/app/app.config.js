@@ -4,7 +4,8 @@ export default  function config($stateProvider, $urlRouterProvider, $locationPro
     $locationProvider.hashPrefix('!');
     $urlRouterProvider.otherwise('/');
 
-    $httpProvider.interceptors.push(seoInterceptor);
+//    $httpProvider.interceptors.push(seoInterceptor);
 }
+
 
 config.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider'];

@@ -1,0 +1,32 @@
+﻿<div class="col-sm-9">
+    <h4><small>Game {{ vm.selectedGame.game.homeName }} - {{ vm.selectedGame.game.awayName }} = {{ vm.selectedGame.game.goalsHome }} - {{ vm.selectedGame.game.goalsAway }}</small></h4>
+    <h4><small>{{ vm.selectedGame.game.gameDate }}  {{ vm.selectedGame.game.status }}</small></h4>
+    <h4><small>Odds: 1={{ vm.selectedGame.oddsHome }} X={{ vm.selectedGame.oddsTie }} 2={{ vm.selectedGame.oddsUnder }}  </small></h4>
+    <h4><small>Odds: Under={{ vm.selectedGame.oddsUnder }} Over={{ vm.selectedGame.oddsOver }} </small></h4>
+    <h4><small>Last Update: {{ vm.lastUpdate }}</small></h4>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">User</th>
+            <th scope="col" style="text-align:center" colspan="2">Score</th>
+            <th scope="col" style="text-align:center" colspan="2">Over</th>
+        </tr>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">Bet</th>
+            <th scope="col">Points</th>
+            <th scope="col">Bet</th>
+            <th scope="col">Points</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="bet in vm.allBets | filter : bet: bet.game.id=vm.selectedGameId | orderBy:'user.name'" class="{{ bet.resultPoints > 0 ? 'success' : 'danger' }}">
+            <td><a href="#" ng-click="showUser(bet.user.name)">{{ bet.user.name }}</a></td>
+            <td>{{ bet.scoreResult }}</td>
+            <td>{{ bet.resultPoints }}</td>
+            <td>{{ bet.overResult }}</td>
+            <td>{{ bet.overPoints }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

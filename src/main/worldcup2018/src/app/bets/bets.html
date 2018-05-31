@@ -39,7 +39,7 @@
                 <td>{{ game.oddsTie }}</td>
                 <td>{{ game.oddsAway }}</td>
                 <td >
-                    <select ng-model="vm.userBets[game.game.id]" required  style="{{ userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}">
+                    <select ng-model="vm.userBets[game.game.id]" required  style="{{ vm.userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}">
                         <option value=""></option>
                         <option value="HOME_1">HOME_1</option>
                         <option value="DRAW_X">DRAW_X</option>
@@ -49,7 +49,7 @@
                 <td>{{ game.oddsUnder }}</td>
                 <td>{{ game.oddsOver }}</td>
                 <td>
-                    <select ng-show="game.game.matchDay > 3" ng-model="userOverBets[game.game.id]" style="{{ userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}" required>
+                    <select ng-show="game.game.matchDay > 3" ng-model="vm.userOverBets[game.game.id]" style="{{ userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}" required>
                         <option value=""></option>
                         <option value="UNDER">UNDER</option>
                         <option value="OVER">OVER</option>
@@ -58,10 +58,10 @@
             </tr>
             <tr>
                 <td colspan="13">
-                    <button type="button" ng-disabled="enableSubmit" class="btn btn-success" ng-click="saveBets()">Submit Bets</button><br/>
+                    <button type="button" ng-disabled="vm.enableSubmit" class="btn btn-success" ng-click="vm.saveBets()">Submit Bets</button><br/>
                     <br/>
-                    <div ng-show="editError" style="color:red">Missing fields</div>
-                    <div ng-show="editSuccess" style="color:green">Bets saved successfully</div>
+                    <div ng-show="vm.editError" style="color:red">Missing fields</div>
+                    <div ng-show="vm.editSuccess" style="color:green">Bets saved successfully</div>
                 </td>
             </tr>
         </tbody>
