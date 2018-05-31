@@ -6,9 +6,11 @@ import bet.model.User;
 import bet.repository.FriendRepository;
 import bet.repository.UserRepository;
 import bet.service.mgmt.UserService;
+import bet.service.utils.EncryptHelper;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -32,6 +34,9 @@ public class UserController {
 
     @Autowired
     private FriendRepository friendRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     /**
      * Update currently logged in user user friends
@@ -76,15 +81,18 @@ public class UserController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/changePassword", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-    public String changePassword(@RequestParam(value = "password", required = true) String password, Principal principal) throws Exception {
-        if(password == null || password.length() == 0) {
-            throw new RuntimeException();
-        }
+    @RequestMapping(value = "/modify", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
+    public String changePassword(@RequestParam(value = "password", required = false) String password,
+            @RequestParam(value = "optOut", required = false) Boolean optOut, Principal principal) throws Exception {
         User user = userRepository.findOneByUsername(principal.getName());
         UserDto userDto = new UserDto();
         userDto.fromEntity(user);
-        userDto.setPassword(password);
+        if(optOut != null) {
+            userDto.setOptOut(optOut);
+        }
+        if(password != null) {
+            userDto.setPassword(passwordEncoder.encode(password));
+        }
         userService.update(userDto);
         return "OK";
     }

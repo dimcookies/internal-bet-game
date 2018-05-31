@@ -49,6 +49,9 @@ public class User implements Serializable {
 	@Column(name = "ROLE")
 	private String role;
 
+	@Column(name = "OPT_OUT")
+	private Boolean optOut;
+
 	public User() {
 		super();
 	}
@@ -57,13 +60,14 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
-	public User(Integer id, String name, String email, String password, String role, String username) {
+	public User(Integer id, String name, String email, String password, String role, String username, Boolean outOut) {
 		this.id = id;
 		this.name = name;
 		this.username = username;
 		this.email = email;
 		this.password = password;
 		this.role = role;
+		this.optOut = outOut;
 	}
 
 }
