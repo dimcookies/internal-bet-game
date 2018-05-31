@@ -109,4 +109,22 @@ public class BetsController {
         return allowedMatchDays;
     }
 
+    /**
+     * Get grouped bets counts for a particular game
+     * @param gameId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/gameStats", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Map<String, Long> allBets(@RequestParam(value = "gameId") Integer gameId) throws Exception {
+        List<Bet> bets =  Lists.newArrayList(betRepository.findAll()).stream()
+                //filter by game
+                .filter(bet -> gameId == null || bet.getGame().getId().equals(gameId))
+                .collect(Collectors.toList());
+        Map<String, Long> stats = bets.stream().collect(Collectors.groupingBy(o -> o.getScoreResult().toString(), Collectors.counting()));
+        stats.putAll(bets.stream().filter(bet -> bet.getOverResult() != null).collect(Collectors.groupingBy(o -> o.getOverResult().toString(), Collectors.counting())));
+
+        return stats;
+    }
+
 }
