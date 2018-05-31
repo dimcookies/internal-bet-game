@@ -1,0 +1,21 @@
+﻿<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a>Chat</a>
+    </li>
+</ol>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Comment</th>
+            <th scope="col">Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="comment in allComments">
+            <td>{{ comment.user.name }}</td>
+            <td>{{ comment.comment }}</td>
+            <td>{{ comment.commentDate }}</td>
+        </tr>
+    </tbody>
+</table>

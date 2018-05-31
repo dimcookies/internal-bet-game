@@ -1,0 +1,69 @@
+﻿<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a>My Bets</a>
+    </li>
+</ol>
+<h4><small>Last Update: {{ lastUpdate }}</small></h4>
+<form name="editform">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Home</th>
+                <th scope="col">Away</th>
+                <th scope="col">Goals Home</th>
+                <th scope="col">Goals Away</th>
+                <th scope="col">Status</th>
+                <th scope="col" colspan="7" style="text-align:center">Odds</th>
+            </tr>
+            <tr>
+                <th scope="col" colspan="6"></th>
+                <th scope="col">1</th>
+                <th scope="col">X</th>
+                <th scope="col">2</th>
+                <th scope="col">Bet</th>
+                <th scope="col">Under</th>
+                <th scope="col">Over</th>
+                <th scope="col">Bet</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="game in vm.selectedGames">
+                <td>{{ game.game.gameDate }}</td>
+                <td>{{ game.game.homeName }}</td>
+                <td>{{ game.game.awayName }}</td>
+                <td>{{ game.game.goalsHome }}</td>
+                <td>{{ game.game.goalsAway }}</td>
+                <td>{{ game.game.status }}</td>
+                <td>{{ game.oddsHome }}</td>
+                <td>{{ game.oddsTie }}</td>
+                <td>{{ game.oddsAway }}</td>
+                <td >
+                    <select ng-model="vm.userBets[game.game.id]" required  style="{{ userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}">
+                        <option value=""></option>
+                        <option value="HOME_1">HOME_1</option>
+                        <option value="DRAW_X">DRAW_X</option>
+                        <option value="AWAY_2">AWAY_2</option>
+                    </select>
+                </td>
+                <td>{{ game.oddsUnder }}</td>
+                <td>{{ game.oddsOver }}</td>
+                <td>
+                    <select ng-show="game.game.matchDay > 3" ng-model="userOverBets[game.game.id]" style="{{ userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}" required>
+                        <option value=""></option>
+                        <option value="UNDER">UNDER</option>
+                        <option value="OVER">OVER</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="13">
+                    <button type="button" ng-disabled="enableSubmit" class="btn btn-success" ng-click="saveBets()">Submit Bets</button><br/>
+                    <br/>
+                    <div ng-show="editError" style="color:red">Missing fields</div>
+                    <div ng-show="editSuccess" style="color:green">Bets saved successfully</div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
