@@ -3,17 +3,11 @@ package bet.service.analytics;
 import bet.api.constants.GameStatus;
 import bet.api.constants.OverResult;
 import bet.api.constants.ScoreResult;
-import bet.api.dto.EncryptedBetDto;
-import bet.api.dto.GameDto;
 import bet.base.AbstractBetIntegrationTest;
 import bet.model.*;
 import bet.repository.*;
 import bet.service.GamesInitializer;
-import bet.service.analytics.AnalyticsScheduler;
-import bet.service.analytics.StreakAnalyticsModule;
-import bet.service.analytics.UserRankAnalyticsModule;
 import bet.service.livefeed.LiveScoreFeedScheduler;
-import bet.service.mgmt.EncryptedBetService;
 import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +19,6 @@ import static org.mockito.Mockito.verify;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
-import java.util.stream.IntStream;
 
 public class AnalyticsSchedulerTest extends AbstractBetIntegrationTest {
 
@@ -66,15 +59,15 @@ public class AnalyticsSchedulerTest extends AbstractBetIntegrationTest {
     public void setUp() {
         super.setUp();
         gamesInitializer.initialize();
-        userRepository.save(new User(null, "user1", "user1", "", ""));
-        userRepository.save(new User(null, "user2", "user2", "", ""));
+        userRepository.save(new User(null, "user1", "user1", "", "", "user1", false));
+        userRepository.save(new User(null, "user2", "user2", "", "", "user2", false));
     }
 
     @Test
     public void testSaveRank() {
         List<Game> games = Lists.newArrayList(gameRepository.findAll());
-        int userId1 = userRepository.findOneByName("user1").getId();
-        int userId2 = userRepository.findOneByName("user2").getId();
+        int userId1 = userRepository.findOneByUsername("user1").getId();
+        int userId2 = userRepository.findOneByUsername("user2").getId();
         ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
 
         betRepository.save(new Bet(null, games.get(0).getId(), userId1, ScoreResult.HOME_1, 100, OverResult.OVER, 200, now));
@@ -86,8 +79,8 @@ public class AnalyticsSchedulerTest extends AbstractBetIntegrationTest {
 
         List<RankHistory> ranking = Lists.newArrayList(rankHistoryRepository.findAll());
         assertEquals(2, ranking.size());
-        assertTrue(ranking.stream().anyMatch(rankHistory -> rankHistory.getUser().getId() == userId2 && rankHistory.getRank() == 1));
-        assertTrue(ranking.stream().anyMatch(rankHistory -> rankHistory.getUser().getId() == userId1 && rankHistory.getRank() == 2));
+        assertTrue(ranking.stream().anyMatch(rankHistory -> rankHistory.getUser().getId() == userId2 && rankHistory.getRank() == 1 && rankHistory.getPoints() == 2600));
+        assertTrue(ranking.stream().anyMatch(rankHistory -> rankHistory.getUser().getId() == userId1 && rankHistory.getRank() == 2 && rankHistory.getPoints() == 1000));
 
         userRankAnalyticsModule.run();
         ranking = Lists.newArrayList(rankHistoryRepository.findAll());
@@ -98,8 +91,8 @@ public class AnalyticsSchedulerTest extends AbstractBetIntegrationTest {
         userRankAnalyticsModule.run();
         ranking = Lists.newArrayList(rankHistoryRepository.findAll());
         assertEquals(2, ranking.size());
-        assertTrue(ranking.stream().anyMatch(rankHistory -> rankHistory.getUser().getId() == userId1 && rankHistory.getRank() == 1));
-        assertTrue(ranking.stream().anyMatch(rankHistory -> rankHistory.getUser().getId() == userId2 && rankHistory.getRank() == 2));
+        assertTrue(ranking.stream().anyMatch(rankHistory -> rankHistory.getUser().getId() == userId1 && rankHistory.getRank() == 1 && rankHistory.getPoints() == 4000));
+        assertTrue(ranking.stream().anyMatch(rankHistory -> rankHistory.getUser().getId() == userId2 && rankHistory.getRank() == 2 && rankHistory.getPoints() == 2600));
     }
 
 
@@ -114,7 +107,7 @@ public class AnalyticsSchedulerTest extends AbstractBetIntegrationTest {
         List<Game> games = Lists.newArrayList(gameRepository.findAll());
         games.sort(Comparator.comparing(Game::getGameDate));
 
-        int userId1 = userRepository.findOneByName("user1").getId();
+        int userId1 = userRepository.findOneByUsername("user1").getId();
         ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
 
         betRepository.save(new Bet(null, games.get(0).getId(), userId1, ScoreResult.HOME_1, 100, OverResult.OVER, 200, now));

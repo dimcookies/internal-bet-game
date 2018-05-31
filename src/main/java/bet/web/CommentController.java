@@ -8,10 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletContext;
 import java.security.Principal;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -56,7 +54,7 @@ public class CommentController {
         } /*else if(comment.length() > 200) {
             comment = comment.substring(0,200)+"...";
         }*/
-        User user = userRepository.findOneByName(principal.getName());
+        User user = userRepository.findOneByUsername(principal.getName());
         Comment c = new Comment(comment, user, ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Europe/Athens")));
         return commentRepository.save(c);
     }

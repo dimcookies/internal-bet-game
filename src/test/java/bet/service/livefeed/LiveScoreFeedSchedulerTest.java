@@ -1,9 +1,7 @@
 package bet.service.livefeed;
 
-import bet.api.constants.GameStatus;
 import bet.api.constants.OverResult;
 import bet.api.constants.ScoreResult;
-import bet.api.dto.EncryptedBetDto;
 import bet.api.dto.GameDto;
 import bet.base.AbstractBetIntegrationTest;
 import bet.model.Bet;
@@ -15,9 +13,6 @@ import bet.repository.GameRepository;
 import bet.repository.OddRepository;
 import bet.repository.UserRepository;
 import bet.service.GamesInitializer;
-import bet.service.livefeed.LiveScoreFeedScheduler;
-import bet.service.mgmt.EncryptedBetService;
-import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +22,7 @@ import static org.mockito.Mockito.verify;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class LiveScoreFeedSchedulerTest extends AbstractBetIntegrationTest {
 
@@ -55,12 +48,12 @@ public class LiveScoreFeedSchedulerTest extends AbstractBetIntegrationTest {
     public void setUp() {
         super.setUp();
         gamesInitializer.initialize();
-        userRepository.save(new User(null, "user1", "user1", "", ""));
+        userRepository.save(new User(null, "user1", "user1", "", "", "user1", false));
     }
 
     @Test
     public void testLiveUpdate() {
-        int userId1 =  userRepository.findOneByName("user1").getId();
+        int userId1 =  userRepository.findOneByUsername("user1").getId();
         ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
         List<Game> groupGames = gameRepository.findByMatchDay(1);
         GameDto groupGame = new GameDto();

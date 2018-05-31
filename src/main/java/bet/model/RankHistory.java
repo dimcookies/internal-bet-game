@@ -35,6 +35,9 @@ public class RankHistory implements Serializable {
 	@Column(name = "rank")
 	private Integer rank;
 
+	@Column(name = "points")
+	private Integer points;
+
 	@OneToOne
 	@JoinColumn(name = "USER_ID", referencedColumnName = "ID", nullable = false)
 	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "dev.entity-cache")
@@ -49,8 +52,9 @@ public class RankHistory implements Serializable {
 		super();
 	}
 
-	public RankHistory(Integer rank, User user, ZonedDateTime rankDate) {
+	public RankHistory(Integer rank, User user, Integer points, ZonedDateTime rankDate) {
 		this.rank = rank;
+		this.points = points;
 		this.user = user;
 		this.rankDate = rankDate;
 	}

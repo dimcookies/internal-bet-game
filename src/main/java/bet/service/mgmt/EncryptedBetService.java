@@ -152,7 +152,7 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 		bets.forEach(encryptedBetDto -> {
 			Game game = gameRepository.findOne(encryptedBetDto.getGameId());
 			if(allowedDays.indexOf(game.getMatchDay()) == -1) {
-				throw new RuntimeException("User " + user.getName() + " tried to create not allowed game:" + game + " Whole request:" + bets + " Allowed days:" + allowedDays);
+				throw new RuntimeException("User " + user.getUsername() + " tried to create not allowed game:" + game + " Whole request:" + bets + " Allowed days:" + allowedDays);
 			}
 		});
 
