@@ -59,8 +59,8 @@ public class AnalyticsSchedulerTest extends AbstractBetIntegrationTest {
     public void setUp() {
         super.setUp();
         gamesInitializer.initialize();
-        userRepository.save(new User(null, "user1", "user1", "", "", "user1"));
-        userRepository.save(new User(null, "user2", "user2", "", "", "user2"));
+        userRepository.save(new User(null, "user1", "user1", "", "", "user1", false));
+        userRepository.save(new User(null, "user2", "user2", "", "", "user2", false));
     }
 
     @Test

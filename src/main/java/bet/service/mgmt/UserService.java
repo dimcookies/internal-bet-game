@@ -81,24 +81,4 @@ public class UserService extends AbstractManagementService<User, Integer, UserDt
 		emailSender.sendEmail(dto.getEmail(), "Upstream WC2018 account", body);
 	}
 
-	@Override
-	public UserDto update(UserDto dto) {
-		String password = dto.getPassword();
-		if(password != null) {
-			//update password
-			dto.setPassword(hashPassword(dto.getName(), password));
-		}
-        if(dto.getName() != null) {
-            try {
-                dto.setName(encryptHelper.encrypt(dto.getName(), RANDOM_SALT));
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-		dto.setRole("USER");
-		dto = super.create(dto);
-		sendPasswordEmail(dto, password);
-		return dto;
-	}
-
 }

@@ -23,15 +23,18 @@ public class UserDto implements ManagementDto<User, Integer> {
 
 	private String role;
 
+	private Boolean optOut;
+
 	public UserDto() {
 	}
 
-	public UserDto(String name, String email, String password, String role, String username) {
+	public UserDto(String name, String email, String password, String role, String username, Boolean optOut) {
 		this.name = name;
 		this.username = username;
 		this.email = email;
 		this.password = password;
 		this.role = role;
+		this.optOut = optOut;
 	}
 
 	@Override
@@ -43,12 +46,13 @@ public class UserDto implements ManagementDto<User, Integer> {
 			setEmail(entity.getEmail());
 			setPassword(entity.getPassword());
 			setRole(entity.getRole());
+			setOptOut(entity.getOptOut());
 		}
 	}
 
 	@Override
 	public User toEntity() {
-		return new User(this.id, this.name, this.email, this.password, this.role, this.username);
+		return new User(this.id, this.name, this.email, this.password, this.role, this.username, this.optOut);
 	}
 
 }
