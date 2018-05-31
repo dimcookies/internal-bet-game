@@ -16,12 +16,16 @@ import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import javax.transaction.Transactional;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,6 +48,10 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 
 	@Autowired
 	private GameRepository gameRepository;
+
+	@Autowired
+	private SpringTemplateEngine templateEngine;
+
 
 	@Override
 	public List<EncryptedBetDto> list() {
@@ -156,6 +164,10 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 			}
 		});
 
+		Context context = new Context();
+		context.setVariable("bets", getMailBets(bets));
+		String html = templateEngine.process("email-bet", context);
+
 		//delete current bets
 		encryptedBetRepository.deleteByUser(user);
 
@@ -170,8 +182,9 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 		}).map(encryptedBetDto -> create(encryptedBetDto)).collect(Collectors.toList()); //save bet and return list
 
 		//Send an email to user with saved bets
-		String body = String.format("<html><body><table border=1>%s</table></body></html>", getEmailBody(bets));
-		emailSender.sendEmail(user.getEmail(), "WC2018 Bet", body);
+
+
+		emailSender.sendEmail(user.getEmail(), "WC2018 Bet", html);
 
 		return result;
 	}
@@ -181,11 +194,13 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 	 * @param bets
 	 * @return
 	 */
-	private String getEmailBody(List<EncryptedBetDto> bets) {
+	private List<Map<String,Object>> getMailBets(List<EncryptedBetDto> bets) {
 		return bets.stream().map(bet -> {
 			Game game = gameRepository.findOne(bet.getGameId());
-			return String.format("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>",game.getHomeName(), game.getAwayName(),
-					bet.getScoreResult(), bet.getOverResult());
-		}).collect(Collectors.joining());
+			return new HashMap<String, Object>() {{
+				put("game", game);
+				put("bet", bet);
+			}};
+		}).collect(Collectors.toList());
 	}
 }
