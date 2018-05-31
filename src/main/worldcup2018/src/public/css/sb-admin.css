@@ -478,9 +478,13 @@ footer.sticky-footer {
 }
 
 .login-bg {
-    background-image: url("https://abpoland.com/wp-content/uploads/2018/02/wc-russia-2018.png");
+    background-image: url("../img/world-cup_world-cup-russia-2018-wallpaper.jpg");
     height: 100%; 
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+}
+.dropdown-menu {
+    right: -100px;
+    left: unset;
 }

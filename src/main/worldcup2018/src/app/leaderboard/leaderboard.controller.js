@@ -1,19 +1,19 @@
 ﻿export default class LeaderboardController {
-    constructor($scope, $http, logger, messageService) {
+    constructor($scope, $http, logger) {
         this.$http = $http;
         this.messages = [];
-        this.messageService = messageService;
         this.logger = logger;
 
         this.activate();
     }
 
     activate() {
+    var self =this;
         this.$http.get("/bets/points").then(function(response) {
-            this.allPoints = response.data;
+            self.allPoints = response.data;
         });
 
     }
 }
 
-LeaderboardController.$inject = ['$scope', '$http', 'logger', 'messageService'];
+LeaderboardController.$inject = ['$scope', '$http', 'logger'];
