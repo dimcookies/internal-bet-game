@@ -478,7 +478,7 @@ footer.sticky-footer {
 }
 
 .login-bg {
-    background-image: url("https://abpoland.com/wp-content/uploads/2018/02/wc-russia-2018.png");
+    background-image: url("/img/wc-russia-2018.png");
     height: 100%; 
     background-position: center;
     background-repeat: no-repeat;
