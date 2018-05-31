@@ -33,6 +33,7 @@ public class User implements Serializable {
 	@Column(name = "USERNAME")
 	private String username;
 
+	@JsonIgnore
 	@Column(name = "NAME")
 	private String name;
 
