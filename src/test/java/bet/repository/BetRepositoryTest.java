@@ -39,15 +39,15 @@ public class BetRepositoryTest extends AbstractBetIntegrationTest {
     public void setUp() {
         super.setUp();
         gamesInitializer.initialize();
-        userRepository.save(new User(null, "user1", "user1", "", ""));
-        userRepository.save(new User(null, "user2", "user2", "", ""));
+        userRepository.save(new User(null, "user1", "user1", "", "", "user1"));
+        userRepository.save(new User(null, "user2", "user2", "", "", "user2"));
     }
 
     @Test
     public void testListAllPoints() {
         List<Game> games = Lists.newArrayList(gameRepository.findAll());
-        int userId1 = userRepository.findOneByName("user1").getId();
-        int userId2 = userRepository.findOneByName("user2").getId();
+        int userId1 = userRepository.findOneByUsername("user1").getId();
+        int userId2 = userRepository.findOneByUsername("user2").getId();
         ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
 
         betRepository.save(new Bet(null, games.get(0).getId(), userId1, ScoreResult.HOME_1, 100, OverResult.OVER, 200, now));
@@ -66,8 +66,8 @@ public class BetRepositoryTest extends AbstractBetIntegrationTest {
         List<Game> games = Lists.newArrayList(gameRepository.findAll());
         Odd odd1 = updateOdd(games.get(1).getId(), 1.2f, 3.4f, 2.2f, 5.5f, 4.5f);
         Odd odd2 = updateOdd(games.get(2).getId(), 2.2f, 4.4f, 3.2f, 6.5f, 5.5f);
-        int userId1 = userRepository.findOneByName("user1").getId();
-        int userId2 = userRepository.findOneByName("user2").getId();
+        int userId1 = userRepository.findOneByUsername("user1").getId();
+        int userId2 = userRepository.findOneByUsername("user2").getId();
         ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
 
         betRepository.save(new Bet(null, games.get(1).getId(), userId1, ScoreResult.HOME_1, 0, OverResult.OVER, 0, now));

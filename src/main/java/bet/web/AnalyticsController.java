@@ -74,7 +74,7 @@ public class AnalyticsController {
     public List<RankHistory> rankHistory(@RequestParam(value = "userName", required = false) String userName) throws Exception {
 
         return StreamSupport.stream(rankHistoryRepository.findAll().spliterator(), false)
-                .filter(rankHistory -> userName == null || rankHistory.getUser().getName().equals(userName))
+                .filter(rankHistory -> userName == null || rankHistory.getUser().getUsername().equals(userName))
                 .sorted((o1, o2) -> {
                     //sort by date and then by rank
                     int cmp1 = o1.getRankDate().compareTo(o2.getRankDate());
@@ -95,7 +95,7 @@ public class AnalyticsController {
     public Map<String, Long> topRanked() throws Exception {
         return StreamSupport.stream(rankHistoryRepository.findAll().spliterator(), false)
                 .filter(rankHistory -> rankHistory.getRank() == 1)
-                .collect(Collectors.groupingBy(o ->  o.getUser().getName(), Collectors.counting()));
+                .collect(Collectors.groupingBy(o ->  o.getUser().getUsername(), Collectors.counting()));
 
     }
 

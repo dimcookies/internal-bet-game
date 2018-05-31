@@ -33,9 +33,6 @@ public class GamesInitializer {
 	@Autowired
 	private OddRepository oddRepository;
 
-	@Autowired
-	private UserService userService;
-
 	@PostConstruct
 	@Transactional
 	public void initialize() {

@@ -29,7 +29,7 @@ public class AESEncryptHelper implements EncryptHelper {
 		byte[] keyBytes = getKey(salt);
 		SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");
 		//pad text to 16 characters
-		byte[] input = String.format("%16s", text).getBytes();
+		byte[] input = String.format("%128s", text).getBytes();
 
 		// encryption pass
 		byte[] cipherText = new byte[input.length];
@@ -48,9 +48,9 @@ public class AESEncryptHelper implements EncryptHelper {
 		//decrypt from base64
 		byte[] decodedBytes = Base64.getDecoder().decode(encrypted.getBytes());
 		//decryption pass
-		byte[] plainText = new byte[16];
+		byte[] plainText = new byte[128];
 		cipher.init(Cipher.DECRYPT_MODE, key);
-		int ptLength = cipher.update(decodedBytes, 0, 16, plainText, 0);
+		int ptLength = cipher.update(decodedBytes, 0, 128, plainText, 0);
 		ptLength += cipher.doFinal(plainText, ptLength);
 		return new String(plainText).trim();
 	}

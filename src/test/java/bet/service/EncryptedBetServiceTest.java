@@ -53,8 +53,8 @@ public class EncryptedBetServiceTest extends AbstractBetIntegrationTest {
     public void setUp() {
         super.setUp();
         gamesInitializer.initialize();
-        userRepository.save(new User(null, "user1", "user1", "", ""));
-        userRepository.save(new User(null, "user2", "user2", "", ""));
+        userRepository.save(new User(null, "user1", "user1", "", "", "user1"));
+        userRepository.save(new User(null, "user2", "user2", "", "", "user2"));
     }
 
     @Test

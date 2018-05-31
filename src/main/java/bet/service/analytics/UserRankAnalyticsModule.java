@@ -58,7 +58,7 @@ public class UserRankAnalyticsModule implements AnalyticsModule {
         //write rankings to database for current date
         IntStream.range(0, ranking.size()).forEach(idx -> {
             Map.Entry<String, Integer> entry = ranking.get(idx);
-            User user = userRepository.findOneByName(entry.getKey());
+            User user = userRepository.findOneByUsername(entry.getKey());
             rankHistoryRepository.save(new RankHistory(idx+1, user, entry.getValue(),now));
         });
     }

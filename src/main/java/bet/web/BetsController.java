@@ -10,10 +10,8 @@ import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletContext;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +45,7 @@ public class BetsController {
      */
     @RequestMapping(path = "/encrypted/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<EncryptedBetDto> create(@RequestBody List<EncryptedBetDto> bets, Principal principal) {
-        User user = userRepository.findOneByName(principal.getName());
+        User user = userRepository.findOneByUsername(principal.getName());
         return encryptedBetService.createAll(bets, user);
     }
 
@@ -58,7 +56,7 @@ public class BetsController {
      */
     @RequestMapping(path = "/encrypted/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<EncryptedBetDto> createAllBets(Principal principal) {
-        User user = userRepository.findOneByName(principal.getName());
+        User user = userRepository.findOneByUsername(principal.getName());
         return encryptedBetService.list(user);
     }
 
@@ -78,7 +76,7 @@ public class BetsController {
                 //filter by userId
                 .filter(bet -> userId == null || bet.getUser().getId().equals(userId))
                 //filter by userName
-                .filter(bet -> userName == null || bet.getUser().getName().equals(userName))
+                .filter(bet -> userName == null || bet.getUser().getUsername().equals(userName))
                 //filter by game
                 .filter(bet -> gameId == null || bet.getGame().getId().equals(gameId))
                 .collect(Collectors.toList());

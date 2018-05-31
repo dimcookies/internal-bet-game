@@ -3,19 +3,24 @@ package bet.service.mgmt;
 import bet.api.dto.UserDto;
 import bet.model.User;
 import bet.service.email.EmailSender;
+import bet.service.utils.AESEncryptHelper;
+import bet.service.utils.EncryptHelper;
 import bet.service.utils.PasswordGenerator;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.NoSuchPaddingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService extends AbstractManagementService<User, Integer, UserDto> {
 
-	@Autowired
+    private static final String RANDOM_SALT = "NM_SALT";
+    @Autowired
 	private PasswordGenerator passwordGenerator;
 
 	@Autowired
@@ -24,12 +29,20 @@ public class UserService extends AbstractManagementService<User, Integer, UserDt
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	@Autowired
+    private EncryptHelper encryptHelper;
+
 	@Override
 	public List<UserDto> list() {
 		return Lists.newArrayList(repository.findAll()).stream().map(entity -> {
 			UserDto dto = new UserDto();
 			dto.fromEntity(entity);
-			return dto;
+            try {
+                dto.setName(encryptHelper.decrypt(dto.getName(), RANDOM_SALT));
+            } catch (Exception e) {
+                throw new RuntimeException();
+            }
+            return dto;
 		}).collect(Collectors.toList());
 	}
 
@@ -39,6 +52,13 @@ public class UserService extends AbstractManagementService<User, Integer, UserDt
 		String password = passwordGenerator.generatePassword();
 		//hash provided password
 		dto.setPassword(hashPassword(dto.getName(), password));
+		if(dto.getName() != null) {
+            try {
+                dto.setName(encryptHelper.encrypt(dto.getName(), RANDOM_SALT));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
 		//all users are created with role USER
 		dto.setRole("USER");
 		dto = super.create(dto);
@@ -64,13 +84,21 @@ public class UserService extends AbstractManagementService<User, Integer, UserDt
 	@Override
 	public UserDto update(UserDto dto) {
 		String password = dto.getPassword();
-		//update password
-		dto.setPassword(hashPassword(dto.getName(), password));
+		if(password != null) {
+			//update password
+			dto.setPassword(hashPassword(dto.getName(), password));
+		}
+        if(dto.getName() != null) {
+            try {
+                dto.setName(encryptHelper.encrypt(dto.getName(), RANDOM_SALT));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
 		dto.setRole("USER");
 		dto = super.create(dto);
 		sendPasswordEmail(dto, password);
 		return dto;
 	}
-
 
 }
