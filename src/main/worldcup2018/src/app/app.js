@@ -16,6 +16,7 @@ import matchModule from './match';
 import matchesModule from './matches';
 import betsModule from './bets';
 import chatModule from './chat';
+import analyticsModule from './analytics';
 
 import componentsModule from './components';
 
@@ -24,7 +25,7 @@ import servicesModule from './common/services';
 
 angular.module('espackApp', [
 		uirouter,
-		commonModule, componentsModule, filtersModule, servicesModule, homeModule, leaderboardModule, matchModule, matchesModule, betsModule, chatModule
+		commonModule, componentsModule, filtersModule, servicesModule, homeModule, leaderboardModule, matchModule, matchesModule, analyticsModule, betsModule, chatModule
 	])
 	.config(config)
 	.controller('LayoutController', LayoutController);

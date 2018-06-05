@@ -1,10 +1,4 @@
-﻿<ol class="breadcrumb">
-    <li class="breadcrumb-item">
-        <a>Leaderboard</a>
-    </li>
-</ol>
-<h4><small>Last Update: {{ lastUpdate }}</small></h4>
-<table class="table table-hover">
+﻿<table class="table table-hover">
     <thead>
         <tr>
             <th scope="col">#</th>
@@ -15,7 +9,7 @@
     <tbody>
         <tr ng-repeat="entry in vm.allPoints">
             <th scope="row">{{ $index+1 }}</th>
-            <td><a href="#" ng-click="showUser(entry.username)">{{entry.username}}</a></td>
+            <td><a ui-sref="user({userName: entry.username})">{{entry.username}}</a></td>
             <td>{{ entry.points }}</td>
         </tr>
     </tbody>

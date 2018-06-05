@@ -1,21 +1,24 @@
-﻿<ol class="breadcrumb">
-    <li class="breadcrumb-item">
-        <a>Chat</a>
-    </li>
-</ol>
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Comment</th>
-            <th scope="col">Date</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr ng-repeat="comment in allComments">
-            <td>{{ comment.user.name }}</td>
-            <td>{{ comment.comment }}</td>
-            <td>{{ comment.commentDate }}</td>
-        </tr>
-    </tbody>
-</table>
+﻿<div class="input-group">
+  <input ng-model="vm.new_comment" type="text" class="form-control" placeholder="Comment" maxlength="200">
+  <span class="input-group-btn">
+    <button class="btn btn-default" type="button" ng-click="vm.addComment()">
+    <span class="glyphicon glyphicon-send">Send</span>
+    </button>
+  </span>
+</div>
+<br>
+<div class="card mb-3">
+  <div class="card-header">
+  <i class="fa fa-bell-o"></i> WC2018 Chat </div>
+  <div class="list-group list-group-flush small">
+    <div  ng-repeat="comment in vm.allComments" class="list-group-item list-group-item-action">
+      <div class="media">
+        <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
+        <div class="media-body">
+          <strong>{{ comment.user.username }} :</strong> {{comment.comment}}
+          <div class="text-muted smaller">{{ comment.commentDate}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,9 +1,8 @@
-﻿<ol class="breadcrumb">
+﻿<!-- <ol class="breadcrumb">
     <li class="breadcrumb-item">
         <a>My Bets</a>
     </li>
-</ol>
-<h4><small>Last Update: {{ lastUpdate }}</small></h4>
+</ol> -->
 <form name="editform">
     <table class="table table-hover">
         <thead>
@@ -29,7 +28,7 @@
         </thead>
         <tbody>
             <tr ng-repeat="game in vm.selectedGames">
-                <td>{{ game.game.gameDate }}</td>
+                <td>{{ game.game.gameDate | date : 'medium'}}</td>
                 <td>{{ game.game.homeName }}</td>
                 <td>{{ game.game.awayName }}</td>
                 <td>{{ game.game.goalsHome }}</td>
@@ -39,7 +38,7 @@
                 <td>{{ game.oddsTie }}</td>
                 <td>{{ game.oddsAway }}</td>
                 <td >
-                    <select ng-model="vm.userBets[game.game.id]" required  style="{{ vm.userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}">
+                    <select ng-model="vm.userBets[game.game.id]" required class="betSelect" style="{{ vm.userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}">
                         <option value=""></option>
                         <option value="HOME_1">HOME_1</option>
                         <option value="DRAW_X">DRAW_X</option>

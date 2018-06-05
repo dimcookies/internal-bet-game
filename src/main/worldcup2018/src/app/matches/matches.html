@@ -1,10 +1,4 @@
-﻿<ol class="breadcrumb">
-    <li class="breadcrumb-item">
-        <a>Matches</a>
-    </li>
-</ol>
-<h4><small>Last Update: {{ lastUpdate }}</small></h4>
-<table class="table table-hover">
+﻿<table class="table table-hover">
     <thead>
         <tr>
             <th scope="col">Date</th>
@@ -26,7 +20,7 @@
     </thead>
     <tbody>
         <tr ng-repeat="game in vm.allMatches" class="{{ game.game.status == 'FINISHED' ? 'success' : game.game.status == 'SCHEDULED' || game.game.status == 'CANCELED' || game.game.status == 'POSTPONED' ? 'danger' : game.game.status == 'IN_PLAY' ? 'info' : '' }}">
-            <td><a ui-sref="match({gameId: game.game.id})">{{ game.game.gameDate }}<a/></td>
+            <td><a ui-sref="match({gameId: game.game.id})">{{ game.game.gameDate | date : 'medium'}}<a/></td>
             <td>{{ game.game.homeName }}</td>
             <td>{{ game.game.awayName }}</td>
             <td>{{ game.game.goalsHome }}</td>
