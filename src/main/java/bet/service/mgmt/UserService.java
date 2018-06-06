@@ -3,8 +3,7 @@ package bet.service.mgmt;
 import bet.api.dto.UserDto;
 import bet.model.User;
 import bet.service.email.EmailSender;
-import bet.service.utils.AESEncryptHelper;
-import bet.service.utils.EncryptHelper;
+import bet.service.encrypt.EncryptHelper;
 import bet.service.utils.PasswordGenerator;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +12,6 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
-import javax.crypto.NoSuchPaddingException;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.stream.Collectors;
 

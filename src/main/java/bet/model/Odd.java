@@ -33,7 +33,7 @@ public class Odd implements Serializable {
 
 	@OneToOne
 	@JoinColumn(name = "GAME_ID", referencedColumnName = "ID", nullable = false)
-	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "dev.entity-cache")
+	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "bet.entity-cache")
 	private Game game;
 
 	/* Odds for 1 */

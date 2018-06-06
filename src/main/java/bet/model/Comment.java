@@ -6,11 +6,12 @@ import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
-import java.util.Date;
+import java.util.*;
 
 @Entity
 @Table(name = "COMMENTS", schema = "BET")
@@ -34,13 +35,13 @@ public class Comment implements Serializable {
 
 	@OneToOne
 	@JoinColumn(name = "USER_ID", referencedColumnName = "ID", nullable = false)
-	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "dev.entity-cache")
+	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "bet.entity-cache")
 	private User user;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
-	@Column(name = "COMMENT_DATE")
-	@Type(type = "java.time.ZonedDateTime")
-	private ZonedDateTime commentDate;
+	@OneToMany(mappedBy = "comment", targetEntity = CommentLike.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "bet.collection-cache")
+	private List<CommentLike> commentLikes = new ArrayList<>();
+
 
 	public Comment() {
 		super();
@@ -49,7 +50,6 @@ public class Comment implements Serializable {
 	public Comment(String comment, User user, ZonedDateTime commentDate) {
 		this.comment = comment;
 		this.user = user;
-		this.commentDate = commentDate;
 	}
 
 }

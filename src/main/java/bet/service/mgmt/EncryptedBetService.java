@@ -11,7 +11,7 @@ import bet.repository.BetRepository;
 import bet.repository.EncryptedBetRepository;
 import bet.repository.GameRepository;
 import bet.service.email.EmailSender;
-import bet.service.utils.EncryptHelper;
+import bet.service.encrypt.EncryptHelper;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,6 +1,7 @@
 package bet.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
@@ -12,16 +13,13 @@ import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
-/**
- * Represent the position of a user in the rankings at a given day
- */
 @Entity
-@Table(name = "RANK_HISTORY", schema = "BET")
+@Table(name = "COMMENT_LIKE", schema = "BET")
 @DynamicInsert
 @DynamicUpdate
 @Data
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "bet.stats.entity-cache")
-public class RankHistory implements Serializable {
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "bet.entity-cache")
+public class CommentLike implements Serializable {
 
 	private static final long serialVersionUID = -5924099885411409739L;
 
@@ -32,31 +30,25 @@ public class RankHistory implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(name = "rank")
-	private Integer rank;
-
-	@Column(name = "points")
-	private Integer points;
-
 	@OneToOne
 	@JoinColumn(name = "USER_ID", referencedColumnName = "ID", nullable = false)
 	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "bet.entity-cache")
 	private User user;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
-	@Column(name = "RANK_DATE")
-	@Type(type = "java.time.ZonedDateTime")
-	private ZonedDateTime rankDate;
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "COMMENT_ID", referencedColumnName = "ID", nullable = false)
+	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "bet.entity-cache")
+	private Comment comment;
 
-	public RankHistory() {
+
+	public CommentLike() {
 		super();
 	}
 
-	public RankHistory(Integer rank, User user, Integer points, ZonedDateTime rankDate) {
-		this.rank = rank;
-		this.points = points;
+	public CommentLike(Comment comment, User user) {
+		this.comment = comment;
 		this.user = user;
-		this.rankDate = rankDate;
 	}
 
 }

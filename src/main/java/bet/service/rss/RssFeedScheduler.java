@@ -38,6 +38,7 @@ public class RssFeedScheduler {
 	public void getRssFeed() {
 		//delete existing records
 		rssFeedRepository.deleteAll();
+
 		Arrays.stream(feeds).map(feed -> {
 			try {
 				return new URL(feed);

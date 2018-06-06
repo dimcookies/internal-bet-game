@@ -4,6 +4,7 @@ import bet.model.Comment;
 import bet.model.User;
 import bet.repository.CommentRepository;
 import bet.repository.UserRepository;
+import bet.service.model.CommentsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -27,6 +28,9 @@ public class CommentController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CommentsService commentsService;
 
     /**
      * Get all comments sirted by comment date
@@ -57,6 +61,22 @@ public class CommentController {
         User user = userRepository.findOneByUsername(principal.getName());
         Comment c = new Comment(comment, user, ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Europe/Athens")));
         return commentRepository.save(c);
+    }
+
+    /**
+     * Add a new comment for the currently logged in user
+     * @param principal
+     * @return
+             * @throws Exception
+     */
+    @RequestMapping(value = "/toogleLike", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Boolean toogleLike(@RequestParam(value = "commentId", required = true) Integer commentId, Principal principal) throws Exception {
+        User user = userRepository.findOneByUsername(principal.getName());
+        Comment comment = commentRepository.findOne(commentId);
+        if(comment == null) {
+            throw new RuntimeException();
+        }
+        return commentsService.toogleLike(comment, user);
     }
 
 
