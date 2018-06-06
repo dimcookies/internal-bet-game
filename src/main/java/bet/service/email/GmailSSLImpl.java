@@ -46,8 +46,6 @@ public class GmailSSLImpl implements EmailSender {
 			message.setRecipients(Message.RecipientType.CC,
 					InternetAddress.parse(username));
 			message.setSubject(subject);
-//			message.setText("Dear Mail Crawler," +
-//					"\n\n No spam to my email, please!");
 			message.setContent(body, "text/html; charset=utf-8");
 
 			Transport.send(message);

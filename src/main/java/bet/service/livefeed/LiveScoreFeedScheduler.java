@@ -30,7 +30,7 @@ public class LiveScoreFeedScheduler {
 	@Value("${application.live_feed.interval:300000}")
 	private final int interval = 300000;
 
-	//last update date of live feeed
+	//last update date of live feed
 	private ZonedDateTime lastUpdateDate;
 
 	@Autowired

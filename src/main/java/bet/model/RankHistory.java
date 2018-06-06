@@ -20,7 +20,7 @@ import java.util.Date;
 @DynamicInsert
 @DynamicUpdate
 @Data
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "bet.entity-cache")
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "bet.stats.entity-cache")
 public class RankHistory implements Serializable {
 
 	private static final long serialVersionUID = -5924099885411409739L;

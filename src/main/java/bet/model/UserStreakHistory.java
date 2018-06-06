@@ -17,7 +17,7 @@ import java.io.Serializable;
 @DynamicInsert
 @DynamicUpdate
 @Data
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "bet.entity-cache")
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "bet.stats.entity-cache")
 public class UserStreakHistory implements Serializable {
 
 	private static final long serialVersionUID = -5924099885411409739L;
