@@ -22,13 +22,16 @@
   "dependencies": {
     "angular": "1.5.9",
     "angular-animate": "1.4.8",
+    "angular-chart.js": "^1.1.1",
+    "angular-data-table": "^0.7.1",
     "angular-datatables": "^6.0.0",
     "angular-ui-bootstrap": "^2.5.6",
     "angular-ui-router": "0.2.18",
     "angularjs-toaster": "0.4.15",
     "bootstrap": "3.3.7",
-    "jquery": "2.2.4",
-    "lodash": "4.13.1"
+    "jquery": "^2.2.4",
+    "lodash": "4.13.1",
+    "ng-table": "^3.0.1"
   },
   "devDependencies": {
     "ajv": "^6.4.0",

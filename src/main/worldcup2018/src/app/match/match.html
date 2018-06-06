@@ -20,7 +20,7 @@
         </thead>
         <tbody>
         <tr ng-repeat="bet in vm.allBets | filter : bet: bet.game.id=vm.selectedGameId | orderBy:'user.name'" class="{{ bet.resultPoints > 0 ? 'success' : 'danger' }}">
-            <td><a href="#" ng-click="showUser(bet.user.name)">{{ bet.user.name }}</a></td>
+            <td><a ui-sref="user({userName: bet.user.username})">{{ bet.user.username }}</a></td>
             <td>{{ bet.scoreResult }}</td>
             <td>{{ bet.resultPoints }}</td>
             <td>{{ bet.overResult }}</td>

@@ -40,9 +40,9 @@
                 <td >
                     <select ng-model="vm.userBets[game.game.id]" required class="betSelect" style="{{ vm.userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}">
                         <option value=""></option>
-                        <option value="HOME_1">HOME_1</option>
-                        <option value="DRAW_X">DRAW_X</option>
-                        <option value="AWAY_2">AWAY_2</option>
+                        <option value="HOME_1">1</option>
+                        <option value="DRAW_X">X</option>
+                        <option value="AWAY_2">2</option>
                     </select>
                 </td>
                 <td>{{ game.oddsUnder }}</td>

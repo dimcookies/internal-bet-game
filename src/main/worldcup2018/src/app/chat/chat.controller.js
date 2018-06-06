@@ -1,5 +1,5 @@
 ﻿export default class ChatController {
-    constructor($scope, $http, $timeout, logger) {
+    constructor($rootScope, $scope, $http, $timeout, logger) {
         this.$rootScope = $rootScope;        
         this.$http = $http;
         this.$timeout = $timeout;

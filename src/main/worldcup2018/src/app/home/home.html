@@ -31,36 +31,15 @@
       <i class="fa fa-table"></i> Top 3 Players</div>
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-            <thead>
-              <tr>
-                <th>Position</th>
-                <th>Name</th>
-                <th>Points</th>
-                <th>Prize</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><b>1st</b></td>
-                <td>Tiger Nixon</td>
-                <td>61</td>
-                <td>$320,800</td>
-              </tr>
-              <tr>
-                <td><b>2nd</b></td>
-                <td>Garrett Winters</td>
-                <td>63</td>
-                <td>$170,750</td>
-              </tr>
-              <tr>
-                <td><b>3d</b></td>
-                <td>Ashton Cox</td>
-                <td>66</td>
-                <td>$86,000</td>
-              </tr>
-            </tbody>
-          </table>
+
+<table ng-table="vm.tableParams" class="table table-condensed table-bordered table-striped" show-filter="true">
+    <tr ng-repeat="user in $data">
+        <td title="'Name'" filter="{ name: 'text'}">
+            {{user.name}}</td>
+        <td title="'Age'" filter="{ age: 'number'}">
+            {{user.age}}</td>
+    </tr>
+</table>
         </div>
       </div>
     </div>
