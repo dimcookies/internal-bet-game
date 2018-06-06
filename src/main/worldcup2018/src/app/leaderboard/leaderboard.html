@@ -1,16 +1,14 @@
-﻿<table class="table table-hover">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Points</th>
+﻿<div class="table-responsive">
+    <table ng-table="vm.tableParams" class="table table-condensed table-bordered table-striped" show-filter="true">
+        <tr ng-repeat="entry in $data">
+            <td class="text-center" title="'#'">{{$index+1}}</td>
+            <td class="text-center" title="'User'" filter="{ username: 'text'}" sortable="'username'">{{entry.username}}</a></td>
+            <td class="text-center" title="'Points'" filter="{ points: 'number'}" sortable="'points'">{{ entry.points }}</td>
+            <td class="text-center" title="'Action'">
+                <a ui-sref="user({userName: entry.username})">
+                    <button type="button" class="btn btn-secondary">View Bets</button>
+                </a>
+            </td>
         </tr>
-    </thead>
-    <tbody>
-        <tr ng-repeat="entry in vm.allPoints">
-            <th scope="row">{{ $index+1 }}</th>
-            <td><a ui-sref="user({userName: entry.username})">{{entry.username}}</a></td>
-            <td>{{ entry.points }}</td>
-        </tr>
-    </tbody>
-</table>
+    </table>
+</div>

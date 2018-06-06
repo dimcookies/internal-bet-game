@@ -1,10 +1,4 @@
-﻿<!-- Breadcrumbs-->
-<!-- <ol class="breadcrumb">
-  <li class="breadcrumb-item">
-    <a >Home</a>
-  </li>
-</ol> -->
-<div class="row">
+﻿<div class="row">
   <div class="col-lg-8">
     <!-- Card Columns Example Social Feed-->
     <div class="mb-0 mt-4">
@@ -12,7 +6,7 @@
     <hr class="mt-2">
     <div class="card-columns">
       <div class="card mb-3" ng-repeat="rss in vm.allRss">
-        <a href="#">
+        <a target="_blank" href="{{ rss.link }}">
           <img class="img-thumbnail" ng-src="{{ rss.image }}" alt="">
         </a>
         <div class="card-body">
