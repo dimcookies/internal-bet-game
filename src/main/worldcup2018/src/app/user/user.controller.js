@@ -1,5 +1,5 @@
 ﻿export default class UserController {
-    constructor($scope, $http, logger) {
+    constructor($scope, $stateParams, $http, logger) {
         this.$http = $http;
         this.logger = logger;
         this.userName = $stateParams.userName; //getting userName
@@ -15,4 +15,4 @@
     }
 }
 
-UserController.$inject = ['$scope', '$http', 'logger'];
+UserController.$inject = ['$scope', '$stateParams', '$http', 'logger'];

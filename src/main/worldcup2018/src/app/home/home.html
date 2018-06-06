@@ -1,73 +1,12 @@
-﻿<!-- Breadcrumbs-->
-<!-- <ol class="breadcrumb">
-  <li class="breadcrumb-item">
-    <a >Home</a>
-  </li>
-</ol> -->
-<div class="row">
+﻿<div class="row">
   <div class="col-lg-8">
-    <!-- Top Players-->
-    <div class="card mb-3">
-      <div class="card-header">
-      <i class="fa fa-table"></i> Top Players</div>
-      <div class="card-body">
-        <div class="table-responsive">
-          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Position</th>
-                <th>Office</th>
-                <th>Age</th>
-                <th>Start date</th>
-                <th>Salary</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Tiger Nixon</td>
-                <td>System Architect</td>
-                <td>Edinburgh</td>
-                <td>61</td>
-                <td>2011/04/25</td>
-                <td>$320,800</td>
-              </tr>
-              <tr>
-                <td>Garrett Winters</td>
-                <td>Accountant</td>
-                <td>Tokyo</td>
-                <td>63</td>
-                <td>2011/07/25</td>
-                <td>$170,750</td>
-              </tr>
-              <tr>
-                <td>Ashton Cox</td>
-                <td>Junior Technical Author</td>
-                <td>San Francisco</td>
-                <td>66</td>
-                <td>2009/01/12</td>
-                <td>$86,000</td>
-              </tr>
-              <tr>
-                <td>Cedric Kelly</td>
-                <td>Senior Javascript Developer</td>
-                <td>Edinburgh</td>
-                <td>22</td>
-                <td>2012/03/29</td>
-                <td>$433,060</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
     <!-- Card Columns Example Social Feed-->
     <div class="mb-0 mt-4">
     <i class="fa fa-newspaper-o"></i> News Feed</div>
     <hr class="mt-2">
     <div class="card-columns">
       <div class="card mb-3" ng-repeat="rss in vm.allRss">
-        <a href="#">
+        <a target="_blank" href="{{ rss.link }}">
           <img class="img-thumbnail" ng-src="{{ rss.image }}" alt="">
         </a>
         <div class="card-body">
@@ -80,61 +19,37 @@
     <!-- /Card Columns-->
   </div>
   <div class="col-lg-4">
-    <!-- Example Pie Chart Card-->
+    <!-- Top Players-->
     <div class="card mb-3">
       <div class="card-header">
-      <i class="fa fa-pie-chart"></i> Prize</div>
+      <i class="fa fa-table"></i> Top 10 Players</div>
       <div class="card-body">
-        TOTAL PRIZE
+        <div class="table-responsive">
+          <table ng-table="vm.tableParams" class="table table-condensed table-bordered table-striped" show-filter="true">
+            <tr ng-repeat="user in $data">
+              <td title="'Position'">{{$index+1}}</td>
+              <td title="'Name'">{{user.name}}</td>
+              <td title="'Points'">{{user.points}}</td>
+              <td title="'Prize'">{{user.prize}}</td>
+            </tr>
+          </table>
+        </div>
       </div>
     </div>
     <!-- Example Notifications Card-->
     <div class="card mb-3">
       <div class="card-header">
-      <i class="fa fa-bell-o"></i> Feed Example</div>
+      <i class="fa fa-bell-o"></i> Latest Comments</div>
       <div class="list-group list-group-flush small">
-        <a class="list-group-item list-group-item-action" href="#">
+        <div  ng-repeat="comment in vm.allComments" class="list-group-item list-group-item-action">
           <div class="media">
-            <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
             <div class="media-body">
-              <strong>David Miller</strong>posted a new article to
-              <strong>David Miller Website</strong>.
-              <div class="text-muted smaller">Today at 5:43 PM - 5m ago</div>
+              <strong>{{ comment.user.username }} :</strong> {{comment.comment}}
+              <div class="text-muted smaller">{{ comment.commentDate}}</div>
             </div>
           </div>
-        </a>
-        <a class="list-group-item list-group-item-action" href="#">
-          <div class="media">
-            <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
-            <div class="media-body">
-              <strong>Samantha King</strong>sent you a new message!
-              <div class="text-muted smaller">Today at 4:37 PM - 1hr ago</div>
-            </div>
-          </div>
-        </a>
-        <a class="list-group-item list-group-item-action" href="#">
-          <div class="media">
-            <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
-            <div class="media-body">
-              <strong>Jeffery Wellings</strong>added a new photo to the album
-              <strong>Beach</strong>.
-              <div class="text-muted smaller">Today at 4:31 PM - 1hr ago</div>
-            </div>
-          </div>
-        </a>
-        <a class="list-group-item list-group-item-action" href="#">
-          <div class="media">
-            <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
-            <div class="media-body">
-              <i class="fa fa-code-fork"></i>
-              <strong>Monica Dennis</strong>forked the
-              <strong>startbootstrap-sb-admin</strong>repository on
-              <strong>GitHub</strong>.
-              <div class="text-muted smaller">Today at 3:54 PM - 2hrs ago</div>
-            </div>
-          </div>
-        </a>
-        <a class="list-group-item list-group-item-action" href="#">View all activity...</a>
+        </div>
+        <a class="list-group-item list-group-item-action" ui-sref="chat">View all activity...</a>
       </div>
     </div>
   </div>

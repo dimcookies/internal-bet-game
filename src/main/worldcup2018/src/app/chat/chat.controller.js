@@ -1,5 +1,6 @@
 ﻿export default class ChatController {
-    constructor($scope, $http, $timeout, logger) {
+    constructor($rootScope, $scope, $http, $timeout, logger) {
+        this.$rootScope = $rootScope;        
         this.$http = $http;
         this.$timeout = $timeout;
         this.messages = [];
@@ -15,16 +16,22 @@
             self.new_comment = "";
         });
     };
-    activate() {
-        // @TODO check polling
+    fetchComments() {
         var self = this;
-        (function tick2() {
-            self.$http.get("/comments/list?limit=1000").then(function(response) {
-                self.allComments = response.data;
-                self.$timeout(tick2, 60000);
-            });
-        })();
+        self.$http.get("/comments/list?limit=1000").then(function(response) {
+            self.allComments = response.data;
+        });
+    }
+    activate() {
+        var self = this;
+        self.fetchComments();
+        self.mytimeout = self.$timeout(function() {
+            self.activate();
+        }, 5000);
+        this.$rootScope.$on('$locationChangeStart', function() {
+            self.$timeout.cancel(self.mytimeout);
+        });
     }
 }
 
-ChatController.$inject = ['$scope', '$http', '$timeout', 'logger'];
+ChatController.$inject = ['$rootScope', '$scope', '$http', '$timeout', 'logger'];

@@ -21,7 +21,7 @@
     </thead>
     <tbody>
         <tr ng-repeat="bet in vm.selectedBets | orderBy:'game.gameDate'" class="{{ bet.resultPoints > 0 ? 'success' : 'danger' }}">
-            <td><a href="#" ng-click="showMatch(bet.game.id)">{{ bet.game.gameDate }}<a/></td>
+            <td><a ui-sref="match({gameId: game.game.id})">{{ bet.game.gameDate }}<a/></td>
             <td>{{ bet.game.homeName }}</td>
             <td>{{ bet.game.awayName }}</td>
             <td>{{ bet.game.goalsHome }}</td>
