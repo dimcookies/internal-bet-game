@@ -28,18 +28,17 @@
     <!-- Top Players-->
     <div class="card mb-3">
       <div class="card-header">
-      <i class="fa fa-table"></i> Top 3 Players</div>
+      <i class="fa fa-table"></i> Top 10 Players</div>
       <div class="card-body">
         <div class="table-responsive">
-
-<table ng-table="vm.tableParams" class="table table-condensed table-bordered table-striped" show-filter="true">
-    <tr ng-repeat="user in $data">
-        <td title="'Name'" filter="{ name: 'text'}">
-            {{user.name}}</td>
-        <td title="'Age'" filter="{ age: 'number'}">
-            {{user.age}}</td>
-    </tr>
-</table>
+          <table ng-table="vm.tableParams" class="table table-condensed table-bordered table-striped" show-filter="true">
+            <tr ng-repeat="user in $data">
+              <td title="'Position'">{{$index+1}}</td>
+              <td title="'Name'">{{user.name}}</td>
+              <td title="'Points'">{{user.points}}</td>
+              <td title="'Prize'">{{user.prize}}</td>
+            </tr>
+          </table>
         </div>
       </div>
     </div>
