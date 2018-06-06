@@ -6,7 +6,6 @@ import bet.model.User;
 import bet.repository.FriendRepository;
 import bet.repository.UserRepository;
 import bet.service.mgmt.UserService;
-import bet.service.utils.EncryptHelper;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -17,7 +16,6 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 /**
  * Web services related to users

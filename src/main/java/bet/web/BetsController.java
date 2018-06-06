@@ -83,6 +83,7 @@ public class BetsController {
                 .collect(Collectors.toList());
     }
 
+
     /**
      * Get points for users sorted by points
      * @return
@@ -90,24 +91,6 @@ public class BetsController {
      */
     @RequestMapping(value = "/points", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Map<String, String>> allPoints() throws Exception {
-        Map<String, Integer> allPoints = betRepository.listAllPoints();
-        return allPoints.entrySet().stream()
-                //sort by points desc
-                .sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue()))
-                .map(e -> new HashMap<String, String>() {{
-                    put("username", e.getKey());
-                    put("points", e.getValue().toString());
-                }}).collect(Collectors.toList());
-    }
-
-
-    /**
-     * Get points for users sorted by points
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping(value = "/pointsEnhanced", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<Map<String, String>> allPointsEnhanced() throws Exception {
         Map<String, Double> riskIndex = betRepository.listRiskIndex();
         Map<String, Long> allBets =
                 StreamSupport.stream(betRepository.findAll().spliterator(), false)

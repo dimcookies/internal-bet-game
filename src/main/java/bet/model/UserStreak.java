@@ -35,7 +35,7 @@ public class UserStreak implements Serializable {
 
 	@OneToOne
 	@JoinColumn(name = "USER_ID", referencedColumnName = "ID", nullable = false)
-	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "dev.entity-cache")
+	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "bet.entity-cache")
 	private User user;
 
 	public UserStreak() {

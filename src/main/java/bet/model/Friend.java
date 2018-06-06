@@ -31,12 +31,12 @@ public class Friend implements Serializable {
 
 	@OneToOne
 	@JoinColumn(name = "USER_ID", referencedColumnName = "ID", nullable = false)
-	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "dev.entity-cache")
+	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "bet.entity-cache")
 	private User user;
 
 	@OneToOne
 	@JoinColumn(name = "FRIEND_ID", referencedColumnName = "ID", nullable = false)
-	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "dev.entity-cache")
+	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "bet.entity-cache")
 	private User friend;
 
 	public Friend() {
