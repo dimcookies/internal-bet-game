@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Represents a public available user bet on a game
@@ -65,6 +67,9 @@ public class Bet implements Serializable {
 	@Type(type = "java.time.ZonedDateTime")
 	private ZonedDateTime betDate;
 
+	@Transient
+	private Map<String, String> args = new HashMap<>();
+
 	public Bet() {
 		super();
 	}
@@ -79,5 +84,9 @@ public class Bet implements Serializable {
 		this.overResult = overResult;
 		this.overPoints = overPoints;
 		this.betDate = betDate;
+	}
+
+	public void addArgs(String key, String value) {
+		args.put(key, value);
 	}
 }

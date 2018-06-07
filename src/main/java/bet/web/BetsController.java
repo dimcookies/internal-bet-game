@@ -1,11 +1,14 @@
 package bet.web;
 
 import bet.api.dto.EncryptedBetDto;
+import bet.api.dto.UserDto;
 import bet.model.Bet;
 import bet.model.User;
 import bet.repository.BetRepository;
+import bet.repository.FriendRepository;
 import bet.repository.UserRepository;
 import bet.service.mgmt.EncryptedBetService;
+import bet.service.mgmt.UserService;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,6 +40,12 @@ public class BetsController {
 
     @Value("${application.allowedMatchDays}")
     private String allowedMatchDays;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private FriendRepository friendRepository;
 
     /**
      * Add/update encrypted bets to currently logged in user
@@ -72,7 +81,13 @@ public class BetsController {
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Bet> allBets(@RequestParam(value = "userId", required = false) Integer userId,
                              @RequestParam(value = "userName", required = false) String userName,
-                             @RequestParam(value = "gameId", required = false) Integer gameId) throws Exception {
+                             @RequestParam(value = "gameId", required = false) Integer gameId,
+                            Principal principal) throws Exception {
+        String currentUsername = principal.getName();
+        List<String> friends = StreamSupport.stream(friendRepository.findAll().spliterator(), false)
+                .map(friend -> friend.getUser().getUsername() + "_" + friend.getFriend().getUsername()).collect(Collectors.toList());
+        Map<String, String> names = userService.list().stream()
+                .collect(Collectors.toMap(UserDto::getUsername, UserDto::getName));
         return Lists.newArrayList(betRepository.findAll()).stream()
                 //filter by userId
                 .filter(bet -> userId == null || bet.getUser().getId().equals(userId))
@@ -80,6 +95,11 @@ public class BetsController {
                 .filter(bet -> userName == null || bet.getUser().getUsername().equals(userName))
                 //filter by game
                 .filter(bet -> gameId == null || bet.getGame().getId().equals(gameId))
+                .map(bet -> {
+                    bet.addArgs("name", names.getOrDefault(bet.getUser().getUsername(), ""));
+                    bet.addArgs("isFriend", ""+ friends.contains(currentUsername + "_" +  bet.getUser().getUsername()));
+                    return bet;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -91,6 +111,8 @@ public class BetsController {
      */
     @RequestMapping(value = "/points", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Map<String, String>> allPoints() throws Exception {
+        Map<String, String> names = userService.list().stream()
+                .collect(Collectors.toMap(UserDto::getUsername, UserDto::getName));
         Map<String, Double> riskIndex = betRepository.listRiskIndex();
         Map<String, Long> allBets =
                 StreamSupport.stream(betRepository.findAll().spliterator(), false)
@@ -105,6 +127,7 @@ public class BetsController {
                     put("points", e.getValue().toString());
                     put("riskIndex", riskIndex.getOrDefault(e.getKey(), 0.0).toString());
                     put("correctResults", allBets.getOrDefault(e.getKey(), 0L).toString());
+                    put("name", names.getOrDefault(e.getKey(), ""));
                 }}).collect(Collectors.toList());
     }
 
