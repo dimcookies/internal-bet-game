@@ -14,6 +14,8 @@
                 count: response.data.length // hides pager
             }, {
                 dataset: response.data,
+                total:1,
+                counts: [] // hides page sizes                   
             });
         });
     }

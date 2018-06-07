@@ -23,7 +23,7 @@
     <toaster-container toaster-options="{'close-button': true}"></toaster-container>
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-      <a class="navbar-brand" ui-sref-active="active" ui-sref="home">World Cup Challenge</a>
+      <a class="navbar-brand" ui-sref-active="active" ui-sref="home">World Cup Challenge 2018</a>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
       </button>
@@ -54,9 +54,9 @@
             </a>
           </li>
           <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Analytics" ui-sref-active="active">
-            <a class="nav-link" ui-sref="analytics">
+            <a class="nav-link">
               <i class="fa fa-fw fa-chart-line"></i>
-              <span class="nav-link-text">Analytics</span>
+              <span class="nav-link-text">Analytics <small>(comming soon)</small></span>
             </a>
           </li>          
         </ul>
@@ -68,83 +68,6 @@
           </li>
         </ul>
         <ul class="navbar-nav ml-auto">
-<!--           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="fa fa-fw fa-envelope"></i>
-              <span class="d-lg-none">Comments
-                <span class="badge badge-pill badge-primary">12 New</span>
-              </span>
-              <span class="indicator text-primary d-none d-lg-block">
-                <i class="fa fa-fw fa-circle"></i>
-              </span>
-            </a>
-            <div class="dropdown-menu" aria-labelledby="messagesDropdown">
-              <h6 class="dropdown-header">New Comments:</h6>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="javascript:void(0)">
-                <strong>David Miller</strong>
-                <span class="small float-right text-muted">11:21 AM</span>
-                <div class="dropdown-message small">Hey there! This new version of SB Admin is pretty awesome! These messages clip off when they reach the end of the box so they don't overflow over to the sides!</div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="javascript:void(0)">
-                <strong>Jane Smith</strong>
-                <span class="small float-right text-muted">11:21 AM</span>
-                <div class="dropdown-message small">I was wondering if you could meet for an appointment at 3:00 instead of 4:00. Thanks!</div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="javascript:void(0)">
-                <strong>John Doe</strong>
-                <span class="small float-right text-muted">11:21 AM</span>
-                <div class="dropdown-message small">I've sent the final files over to you for review. When you're able to sign off of them let me know and we can discuss distribution.</div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item small" href="javascript:void(0)">View all messages</a>
-            </div>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle mr-lg-2" id="alertsDropdown" href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="fa fa-fw fa-bell"></i>
-              <span class="d-lg-none">Latest News
-                <span class="badge badge-pill badge-warning">6 New</span>
-              </span>
-              <span class="indicator text-warning d-none d-lg-block">
-                <i class="fa fa-fw fa-circle"></i>
-              </span>
-            </a>
-            <div class="dropdown-menu" aria-labelledby="alertsDropdown">
-              <h6 class="dropdown-header">Latest News:</h6>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="javascript:void(0)">
-                <span class="text-success">
-                  <strong>
-                  <i class="fa fa-long-arrow-up fa-fw"></i>Status Update</strong>
-                </span>
-                <span class="small float-right text-muted">11:21 AM</span>
-                <div class="dropdown-message small">This is an automated server response message. All systems are online.</div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="javascript:void(0)">
-                <span class="text-danger">
-                  <strong>
-                  <i class="fa fa-long-arrow-down fa-fw"></i>Status Update</strong>
-                </span>
-                <span class="small float-right text-muted">11:21 AM</span>
-                <div class="dropdown-message small">This is an automated server response message. All systems are online.</div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="javascript:void(0)">
-                <span class="text-success">
-                  <strong>
-                  <i class="fa fa-long-arrow-up fa-fw"></i>Status Update</strong>
-                </span>
-                <span class="small float-right text-muted">11:21 AM</span>
-                <div class="dropdown-message small">This is an automated server response message. All systems are online.</div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item small" href="javascript:void(0)">View all alerts</a>
-            </div>
-          </li> -->
           <li class="nav-item">
             <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
             <i class="fa fa-fw fa-sign-out"></i>Logout</a>
@@ -154,9 +77,7 @@
     </nav>
     <div class="content-wrapper">
       <div class="container-fluid">
-        <!-- <div class="container body-content"> -->
           <div ui-view="main"></div>
-        <!-- </div> -->
       </div>
       <!-- /.container-fluid-->
       <!-- /.content-wrapper-->

@@ -1,31 +1,48 @@
-﻿<div class="col-sm-9">
-    <h4><small>Game {{ vm.selectedGame.game.homeName }} - {{ vm.selectedGame.game.awayName }} = {{ vm.selectedGame.game.goalsHome }} - {{ vm.selectedGame.game.goalsAway }}</small></h4>
-    <h4><small>{{ vm.selectedGame.game.gameDate }}  {{ vm.selectedGame.game.status }}</small></h4>
-    <h4><small>Odds: 1={{ vm.selectedGame.oddsHome }} X={{ vm.selectedGame.oddsTie }} 2={{ vm.selectedGame.oddsUnder }}  </small></h4>
-    <h4><small>Odds: Under={{ vm.selectedGame.oddsUnder }} Over={{ vm.selectedGame.oddsOver }} </small></h4>
-    <table class="table table-hover">
-        <thead>
-        <tr>
-            <th scope="col">User</th>
-            <th scope="col" style="text-align:center" colspan="2">Score</th>
-            <th scope="col" style="text-align:center" colspan="2">Over</th>
+﻿<div class="row">
+    <div class="col-3">
+        <div class="card text-white bg-primary o-hidden h-100">
+            <div class="card-body">
+                <div class="mr-5">{{ vm.selectedGame.game.gameDate | date : 'MMM d, h:mm a'}}</div>
+                <div class="mr-5">{{ vm.selectedGame.game.homeName }} - {{ vm.selectedGame.game.awayName }}</div>
+                <div class="mr-5">{{ vm.selectedGame.game.goalsHome }} - {{ vm.selectedGame.game.goalsAway }}</div>
+                <div class="mr-5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                <div class="mr-5">Status: {{ vm.selectedGame.game.status }} </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="card text-white bg-danger o-hidden h-100">
+            <div class="card-body">
+                <div class="mr-5">Home: &nbsp;&nbsp;&nbsp;&nbsp; {{ vm.selectedGame.oddsHome }}</div>
+                <div class="mr-5">Draw: &nbsp;&nbsp;&nbsp;&nbsp; {{ vm.selectedGame.oddsTie }}</div>
+                <div class="mr-5">Away: &nbsp;&nbsp;&nbsp;&nbsp; {{ vm.selectedGame.oddsUnder }}</div>
+                <div class="mr-5">Over: &nbsp;&nbsp;&nbsp;&nbsp; {{ vm.selectedGame.oddsOver }}</div>
+                <div class="mr-5">Under: &nbsp;&nbsp;&nbsp;&nbsp; {{ vm.selectedGame.oddsUnder }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-3">
+        <canvas id="polar-area" class="chart chart-polar-area"
+        chart-data="vm.data" chart-labels="vm.labels" chart-options="vm.options">
+        </canvas>
+    </div>
+</div>
+<br>
+<div class="table-responsive">
+    <table ng-table="vm.tableParams" class="table table-condensed table-striped" show-filter="true">
+        <tr ng-repeat="entry in $data">
+            <td class="text-center" title="'User'" sortable="'username'">{{entry.user.username}}</a></td>
+            <td class="text-center" title="'3WayBet'" sortable="'scoreResult'">{{ entry.scoreResult }}</td>
+            <td class="text-center" title="'3WayBet Points'" sortable="'resultPoints'" ng-class="{'table-success'
+            : entry.resultPoints > 0 }">{{ entry.resultPoints }}</td>
+            <td class="text-center" title="'OverUnderBet'" sortable="'overResult'">{{ entry.overResult }}</td>
+            <td class="text-center" title="'OverUnderBet Points'" sortable="'overPoints'" ng-class="{'table-success'
+            : entry.overPoints > 0 }">{{ entry.overPoints }}</td>
+<!--             <td class="text-center" title="'Action'">
+                <a ui-sref="user({userName: entry.user.username})">
+                    <button type="button" class="btn btn-secondary">View User</button>
+                </a>
+            </td> -->
         </tr>
-        <tr>
-            <th scope="col"></th>
-            <th scope="col">Bet</th>
-            <th scope="col">Points</th>
-            <th scope="col">Bet</th>
-            <th scope="col">Points</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="bet in vm.allBets | filter : bet: bet.game.id=vm.selectedGameId | orderBy:'user.name'" class="{{ bet.resultPoints > 0 ? 'success' : 'danger' }}">
-            <td><a ui-sref="user({userName: bet.user.username})">{{ bet.user.username }}</a></td>
-            <td>{{ bet.scoreResult }}</td>
-            <td>{{ bet.resultPoints }}</td>
-            <td>{{ bet.overResult }}</td>
-            <td>{{ bet.overPoints }}</td>
-        </tr>
-        </tbody>
     </table>
 </div>

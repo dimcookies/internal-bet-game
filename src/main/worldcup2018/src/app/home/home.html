@@ -1,24 +1,5 @@
 ﻿<div class="row">
-  <div class="col-lg-8">
-    <!-- Card Columns Example Social Feed-->
-    <div class="mb-0 mt-4">
-    <i class="fa fa-newspaper-o"></i> News Feed</div>
-    <hr class="mt-2">
-    <div class="card-columns">
-      <div class="card mb-3" ng-repeat="rss in vm.allRss">
-        <a target="_blank" href="{{ rss.link }}">
-          <img class="img-thumbnail" ng-src="{{ rss.image }}" alt="">
-        </a>
-        <div class="card-body">
-          <h6 class="card-title mb-1">
-          <a target="_blank" href="{{ rss.link }}">{{ rss.title }}</a>
-          </h6>
-        </div>
-      </div>
-    </div>
-    <!-- /Card Columns-->
-  </div>
-  <div class="col-lg-4">
+  <div class="col-lg-4 order-2 order-lg-2">
     <!-- Top Players-->
     <div class="card mb-3">
       <div class="card-header">
@@ -53,4 +34,23 @@
       </div>
     </div>
   </div>
+  <div class="col-lg-8 order-2 order-lg-1">
+    <!-- Card Columns Example Social Feed-->
+    <div class="mb-0 mt-4">
+    <i class="fa fa-newspaper-o"></i> News Feed</div>
+    <hr class="mt-2">
+    <div class="card-columns">
+      <div class="card mb-3" ng-repeat="rss in vm.allRss">
+        <a target="_blank" href="{{ rss.link }}">
+          <img class="img-thumbnail" ng-src="{{ rss.image }}" alt="">
+        </a>
+        <div class="card-body">
+          <h6 class="card-title mb-1">
+          <a target="_blank" href="{{ rss.link }}">{{ rss.title }}</a>
+          </h6>
+        </div>
+      </div>
+    </div>
+    <!-- /Card Columns-->
+  </div>  
 </div>

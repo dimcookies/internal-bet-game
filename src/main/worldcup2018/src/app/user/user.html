@@ -1,36 +1,25 @@
-﻿<h4><small>User {{ vm.selectedUser }}</small></h4>
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th scope="col">Date</th>
-            <th scope="col">Home</th>
-            <th scope="col">Away</th>
-            <th scope="col">Goals Home</th>
-            <th scope="col">Goals Away</th>
-            <th scope="col">Status</th>
-            <th scope="col" style="text-align:center" colspan="2">Score</th>
-            <th scope="col" style="text-align:center" colspan="2">Over</th>
+﻿<div class="row">
+    <div class="col-xl-12 col-sm-12">
+        <div class="card text-white bg-info o-hidden h-100">
+            <div class="card-body text-center">
+                <div class="">{{ vm.selectedUser }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <table ng-table="vm.tableParams" class="table table-condensed table-bordered table-striped" show-filter="true">
+        <tr ng-repeat="bet in $data">
+            <td class="text-center" title="'Match'"><a ui-sref="match({gameId: bet.game.id})">{{ bet.game.homeName }} - {{ bet.game.awayName }}</a></td>
+            <td class="text-center" title="'Date'">{{ bet.game.gameDate | date : 'MMM d, h:mm a'}}</td>
+            <td class="text-center" title="'Score'">{{ bet.game.goalsHome }} - {{ bet.game.goalsAway }}</td>
+            <td class="text-center" title="'Status'" sortable="'status'">{{ bet.game.status }}</td>
+            <td class="text-center" title="'3WayBet'" sortable="'scoreResult'">{{ bet.scoreResult }}</td>
+            <td class="text-center" title="'3WayBet Points'" sortable="'resultPoints'" ng-class="{'table-success'
+            : bet.resultPoints > 0 }">{{ bet.resultPoints }}</td>
+            <td class="text-center" title="'OverUnderBet'" sortable="'overResult'">{{ bet.overResult }}</td>
+            <td class="text-center" title="'OverUnderBet Points'" sortable="'overPoints'" ng-class="{'table-success'
+            : bet.overPoints > 0 }">{{ bet.overPoints }}</td>
         </tr>
-        <tr>
-            <th scope="col" colspan="6"></th>
-            <th scope="col">Bet</th>
-            <th scope="col">Points</th>
-            <th scope="col">Bet</th>
-            <th scope="col">Points</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr ng-repeat="bet in vm.selectedBets | orderBy:'game.gameDate'" class="{{ bet.resultPoints > 0 ? 'success' : 'danger' }}">
-            <td><a ui-sref="match({gameId: game.game.id})">{{ bet.game.gameDate }}<a/></td>
-            <td>{{ bet.game.homeName }}</td>
-            <td>{{ bet.game.awayName }}</td>
-            <td>{{ bet.game.goalsHome }}</td>
-            <td>{{ bet.game.goalsAway }}</td>
-            <td>{{ bet.game.status }}</td>
-            <td>{{ bet.scoreResult }}</td>
-            <td>{{ bet.resultPoints }}</td>
-            <td>{{ bet.overResult }}</td>
-            <td>{{ bet.overPoints }}</td>
-        </tr>
-    </tbody>
-</table>
+    </table>
+</div>

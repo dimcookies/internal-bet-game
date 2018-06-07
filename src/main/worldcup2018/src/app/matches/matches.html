@@ -4,12 +4,14 @@
             <td class="text-center" title="'Match'"><a ui-sref="match({gameId: game.game.id})">{{ game.game.homeName }} - {{ game.game.awayName }}</a></td>
             <td class="text-center" title="'Date'">{{ game.game.gameDate | date : 'MMM d, h:mm a'}}</td>
             <td class="text-center" title="'Score'">{{ game.game.goalsHome }} - {{ game.game.goalsAway }}</td>
-            <td class="text-center" title="'Status'">{{ game.game.status }}</td>
-            <td class="text-center" title="'1'">{{game.oddsHome}}</td>
-            <td class="text-center" title="'X'">{{game.oddsTie}}</td>
-            <td class="text-center" title="'2'">{{game.oddsAway}}</td>
-            <td class="text-center" title="'Under'">{{game.oddsUnder}}</td>
-            <td class="text-center" title="'Over'">{{game.oddsOver}}</td>
+            <td class="text-center" title="'Status'" sortable="'status'" ng-class="{'table-success'
+            : game.game.status == 'RUNNING'}"
+            >{{ game.game.status }}</td>
+            <td class="text-center" title="'1'" sortable="'oddsHome'">{{game.oddsHome}}</td>
+            <td class="text-center" title="'X'" sortable="'oddsTie'">{{game.oddsTie}}</td>
+            <td class="text-center" title="'2'" sortable="'oddsAway'">{{game.oddsAway}}</td>
+            <td class="text-center" title="'Under'" sortable="'oddsUnder'">{{game.oddsUnder}}</td>
+            <td class="text-center" title="'Over'" sortable="'oddsOver'">{{game.oddsOver}}</td>
         </tr>
     </table>
 </div>
