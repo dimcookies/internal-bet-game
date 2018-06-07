@@ -107,4 +107,16 @@ public class UserController {
 
     }
 
+    /**
+     * Get current logged in user
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/currentUser", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public User currentUser(Principal principal) throws Exception {
+        return userRepository.findOneByUsername(principal.getName());
+    }
+
+
+
 }
