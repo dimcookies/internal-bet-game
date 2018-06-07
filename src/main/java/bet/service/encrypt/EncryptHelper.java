@@ -1,4 +1,4 @@
-package bet.service.utils;
+package bet.service.encrypt;
 
 /**
  * Interface for encryption implementations

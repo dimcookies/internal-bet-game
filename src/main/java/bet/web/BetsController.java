@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Web services related to bets
@@ -82,6 +83,7 @@ public class BetsController {
                 .collect(Collectors.toList());
     }
 
+
     /**
      * Get points for users sorted by points
      * @return
@@ -89,6 +91,11 @@ public class BetsController {
      */
     @RequestMapping(value = "/points", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Map<String, String>> allPoints() throws Exception {
+        Map<String, Double> riskIndex = betRepository.listRiskIndex();
+        Map<String, Long> allBets =
+                StreamSupport.stream(betRepository.findAll().spliterator(), false)
+                        .filter(bet -> bet.getResultPoints() > 0)
+                        .collect(Collectors.groupingBy(o -> o.getUser().getUsername(), Collectors.counting()));
         Map<String, Integer> allPoints = betRepository.listAllPoints();
         return allPoints.entrySet().stream()
                 //sort by points desc
@@ -96,6 +103,8 @@ public class BetsController {
                 .map(e -> new HashMap<String, String>() {{
                     put("username", e.getKey());
                     put("points", e.getValue().toString());
+                    put("riskIndex", riskIndex.getOrDefault(e.getKey(), 0.0).toString());
+                    put("correctResults", allBets.getOrDefault(e.getKey(), 0L).toString());
                 }}).collect(Collectors.toList());
     }
 
