@@ -2,8 +2,8 @@
     <table ng-table="vm.tableParams" class="table table-condensed table-bordered table-striped" show-filter="true">
         <tr ng-repeat="entry in $data">
             <td class="text-center" title="'#'">{{$index+1}}</td>
-            <td class="text-center" title="'User'" filter="{ username: 'text'}" sortable="'username'">{{entry.username}}</a></td>
-            <td class="text-center" title="'Points'" filter="{ points: 'number'}" sortable="'points'">{{ entry.points }}</td>
+            <td class="text-center" title="'User'" sortable="'username'">{{entry.username}}</a></td>
+            <td class="text-center" title="'Points'" sortable="'points'">{{ entry.points }}</td>
             <td class="text-center" title="'Action'">
                 <a ui-sref="user({userName: entry.username})">
                     <button type="button" class="btn btn-secondary">View Bets</button>

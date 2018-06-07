@@ -26,11 +26,11 @@
       <div class="card-body">
         <div class="table-responsive">
           <table ng-table="vm.tableParams" class="table table-condensed table-bordered table-striped" show-filter="true">
-            <tr ng-repeat="user in $data">
-              <td title="'Position'">{{$index+1}}</td>
-              <td title="'Name'">{{user.name}}</td>
-              <td title="'Points'">{{user.points}}</td>
-              <td title="'Prize'">{{user.prize}}</td>
+            <tr ng-repeat="user in $data" ng-if="$index < 10">
+              <td class="text-center" title="'Position'">{{$index+1}}</td>
+              <td class="text-center" title="'Name'">{{user.username}}</td>
+              <td class="text-center" title="'Points'">{{user.points}}</td>
+              <!-- <td title="'Prize'">{{user.prize}}</td> -->
             </tr>
           </table>
         </div>

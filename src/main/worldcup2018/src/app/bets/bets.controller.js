@@ -1,7 +1,8 @@
 ﻿export default class BetsController {
-	constructor($scope, $http, logger, messageService) {
+	constructor($scope, $http, logger, NgTableParams) {
 		this.$http = $http;
 		this.logger = logger;
+		this.NgTableParams = NgTableParams;
 		this.activate();
 	}
 	activate() {
@@ -12,13 +13,13 @@
 				self.selectedGames = response.data;
 				self.$http.get("/bets/encrypted/list").then(function(response) {
 					self.savedBets = response.data;
-					console.log('savedBets  > ', self.savedBets);
-					self.pointsVisible = false;
-					self.commentsVisible = false;
-					self.matchesVisible = false;
-					self.matchVisible = false;
-					self.userVisible = false;
-					self.editVisible = true;
+					// console.log('savedBets  > ', self.savedBets);
+					// self.pointsVisible = false;
+					// self.commentsVisible = false;
+					// self.matchesVisible = false;
+					// self.matchVisible = false;
+					// self.userVisible = false;
+					// self.editVisible = true;
 					self.userBets = {};
 					self.userOverBets = {};
 					self.editError = false;
@@ -29,6 +30,13 @@
 						self.userBets[savedBet.gameId] = savedBet.scoreResult;
 						self.userOverBets[savedBet.gameId] = savedBet.overResult;
 					}
+					self.tableParams = new self.NgTableParams({
+						count: self.selectedGames.length // hides pager
+					}, {
+						dataset: self.selectedGames,
+						total: 1,
+						counts: [] // hides page sizes						
+					});
 				});
 			});
 		});
@@ -68,4 +76,4 @@
 		});
 	};
 }
-BetsController.$inject = ['$scope', '$http', 'logger', 'messageService'];
+BetsController.$inject = ['$scope', '$http', 'logger', 'NgTableParams'];

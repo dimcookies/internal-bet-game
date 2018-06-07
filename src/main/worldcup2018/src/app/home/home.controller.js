@@ -16,56 +16,13 @@
         self.$http.get("/comments/list?limit=5").then(function(response) {
             self.allComments = response.data;
         });
-        var self = this;
-        var data = [{
-            name: 'alpha',
-            points: 500,
-            prize: 500
-        }, {
-            name: 'beta',
-            points: 1500,
-            prize: 500
-        }, {
-            name: 'gama',
-            points: 800,
-            prize: 500
-        }, {
-            name: 'gama',
-            points: 800,
-            prize: 500
-        }, {
-            name: 'gama',
-            points: 800,
-            prize: 500
-        }, {
-            name: 'gama',
-            points: 800,
-            prize: 500
-        }, {
-            name: 'gama',
-            points: 800,
-            prize: 500
-        }, {
-            name: 'gama',
-            points: 800,
-            prize: 500
-        }, {
-            name: 'gama',
-            points: 800,
-            prize: 500
-        }, {
-            name: 'gama',
-            points: 800,
-            prize: 500
-}];
-
-        self.tableParams = new self.NgTableParams({
-            count: data.length // hides pager
-        }, {
-            dataset: data,
-            total:1,
-            counts: [] // hides page sizes
-        });
+        self.$http.get("/bets/points").then(function(response) {
+            self.tableParams = new self.NgTableParams({}, {
+                dataset: response.data,
+                total:1,
+                counts: [] // hides page sizes
+            });           
+        });        
     }
     activate() {
         var self = this;

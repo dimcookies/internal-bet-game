@@ -1,43 +1,15 @@
-﻿<!-- <ol class="breadcrumb">
-    <li class="breadcrumb-item">
-        <a>My Bets</a>
-    </li>
-</ol> -->
-<form name="editform">
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Home</th>
-                <th scope="col">Away</th>
-                <th scope="col">Goals Home</th>
-                <th scope="col">Goals Away</th>
-                <th scope="col">Status</th>
-                <th scope="col" colspan="7" style="text-align:center">Odds</th>
-            </tr>
-            <tr>
-                <th scope="col" colspan="6"></th>
-                <th scope="col">1</th>
-                <th scope="col">X</th>
-                <th scope="col">2</th>
-                <th scope="col">Bet</th>
-                <th scope="col">Under</th>
-                <th scope="col">Over</th>
-                <th scope="col">Bet</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="game in vm.selectedGames">
-                <td>{{ game.game.gameDate | date : 'medium'}}</td>
-                <td>{{ game.game.homeName }}</td>
-                <td>{{ game.game.awayName }}</td>
-                <td>{{ game.game.goalsHome }}</td>
-                <td>{{ game.game.goalsAway }}</td>
-                <td>{{ game.game.status }}</td>
-                <td>{{ game.oddsHome }}</td>
-                <td>{{ game.oddsTie }}</td>
-                <td>{{ game.oddsAway }}</td>
-                <td >
+﻿<form name="editform">
+    <div class="table-responsive">
+        <table ng-table="vm.tableParams" class="table table-condensed table-bordered table-striped" show-filter="true">
+            <tr ng-repeat="game in $data">
+                <td class="text-center" title="'Match'"><a ui-sref="match({gameId: game.game.id})">{{ game.game.homeName }} - {{ game.game.awayName }}</a></td>
+                <td class="text-center" title="'Date'">{{ game.game.gameDate | date : 'MMM d, h:mm a'}}</td>
+                <td class="text-center" title="'Score'">{{ game.game.goalsHome }} - {{ game.game.goalsAway }}</td>
+                <td class="text-center" title="'Status'">{{ game.game.status }}</td>
+                <td class="text-center" title="'1'">{{game.oddsHome}}</td>
+                <td class="text-center" title="'X'">{{game.oddsTie}}</td>
+                <td class="text-center" title="'2'">{{game.oddsAway}}</td>
+                <td class="text-center" title="'3WayBet'">
                     <select ng-model="vm.userBets[game.game.id]" required class="betSelect" style="{{ vm.userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}">
                         <option value=""></option>
                         <option value="HOME_1">1</option>
@@ -45,24 +17,21 @@
                         <option value="AWAY_2">2</option>
                     </select>
                 </td>
-                <td>{{ game.oddsUnder }}</td>
-                <td>{{ game.oddsOver }}</td>
-                <td>
-                    <select ng-show="game.game.matchDay > 3" ng-model="vm.userOverBets[game.game.id]" style="{{ userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}" required>
+                <td ng-if="game.game.matchDay > 3" class="text-center" title="'Under'">{{game.oddsUnder}}</td>
+                <td ng-if="game.game.matchDay > 3" class="text-center" title="'Over'">{{game.oddsOver}}</td>
+                <td ng-if="game.game.matchDay > 3" class="text-center" title="'OverUnderBet'">
+                    <select ng-model="vm.userOverBets[game.game.id]" style="{{ userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}" required>
                         <option value=""></option>
                         <option value="UNDER">UNDER</option>
                         <option value="OVER">OVER</option>
                     </select>
                 </td>
             </tr>
-            <tr>
-                <td colspan="13">
-                    <button type="button" ng-disabled="vm.enableSubmit" class="btn btn-success" ng-click="vm.saveBets()">Submit Bets</button><br/>
-                    <br/>
-                    <div ng-show="vm.editError" style="color:red">Missing fields</div>
-                    <div ng-show="vm.editSuccess" style="color:green">Bets saved successfully</div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+        </table>
+        <button type="button" ng-disabled="vm.enableSubmit" class="btn btn-success" ng-click="vm.saveBets()">Submit Bets</button>
+        <br/>
+        <br/>
+        <div ng-show="vm.editError" style="color:red">Missing fields</div>
+        <div ng-show="vm.editSuccess" style="color:green">Bets saved successfully</div>
+    </div>
 </form>
