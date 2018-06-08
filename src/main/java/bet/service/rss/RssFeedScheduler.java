@@ -53,13 +53,27 @@ public class RssFeedScheduler {
 					SyndEntry entry = (SyndEntry) e;
 					//get image if exist
 					String imageUrl = entry.getEnclosures() != null && entry.getEnclosures().size() > 0 ? ((SyndEnclosure)entry.getEnclosures().get(0)).getUrl().replaceFirst("^//","http://") : "/images/emptyRss.jpg";
-					rssFeedRepository.save(new RssFeed(entry.getTitle(), entry.getLink(),  entry.getPublishedDate(), imageUrl));
+					rssFeedRepository.save(new RssFeed(cleanTextContent(entry.getTitle()), entry.getLink(),  entry.getPublishedDate(), imageUrl));
 				});
 			} catch (Exception e) {
 				LOGGER.error("Error loading rss " + feedUrl, e);
 			}
 		});
 
+	}
+
+	private String cleanTextContent(String text)
+	{
+		// strips off all non-ASCII characters
+		text = text.replaceAll("[^\\x00-\\x7F]", "");
+
+		// erases all the ASCII control characters
+		text = text.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
+
+		// removes non-printable characters from Unicode
+		text = text.replaceAll("\\p{C}", "");
+
+		return text.trim();
 	}
 
 
