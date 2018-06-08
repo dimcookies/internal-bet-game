@@ -56,7 +56,7 @@ public class RssFeedScheduler {
 					rssFeedRepository.save(new RssFeed(entry.getTitle(), entry.getLink(),  entry.getPublishedDate(), imageUrl));
 				});
 			} catch (Exception e) {
-				throw new RuntimeException(e);
+				LOGGER.error("Error loading rss " + feedUrl, e);
 			}
 		});
 
