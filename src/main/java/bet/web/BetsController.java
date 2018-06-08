@@ -16,6 +16,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +48,9 @@ public class BetsController {
 
     @Autowired
     private FriendRepository friendRepository;
+
+    @Value("${application.betDeadline}")
+    private String betDeadline;
 
     /**
      * Add/update encrypted bets to currently logged in user
@@ -157,6 +162,16 @@ public class BetsController {
         stats.putAll(bets.stream().filter(bet -> bet.getOverResult() != null).collect(Collectors.groupingBy(o -> o.getOverResult().toString(), Collectors.counting())));
 
         return stats;
+    }
+
+    /**
+     * Get bet deadline info
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/betDeadline", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
+    public String betDeadline() throws Exception {
+        return betDeadline;
     }
 
 }
