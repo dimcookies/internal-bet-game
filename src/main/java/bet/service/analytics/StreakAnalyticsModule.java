@@ -12,6 +12,7 @@ import bet.repository.UserStreakRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
@@ -42,6 +43,7 @@ public class StreakAnalyticsModule implements AnalyticsModule {
     private UserStreakHistoryRepository userStreakHistoryRepository;
 
     @Override
+    @CacheEvict(value = "analytics", allEntries = true)
     public void run() {
         LOGGER.info("Run streak module");
         //delete current values

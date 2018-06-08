@@ -5,6 +5,8 @@ package bet.repository;
 import bet.model.Bet;
 import bet.model.Odd;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -23,6 +25,7 @@ public class BetRepositoryImpl implements BetRepositoryCustom {
 	@Autowired
 	private OddRepository oddRepository;
 
+	@Cacheable(value = "points")
 	public Map<String, Integer> listAllPoints() {
 		List<Bet> bets = entityManager.createQuery("from Bet").getResultList();
 		return bets.stream()
@@ -30,7 +33,7 @@ public class BetRepositoryImpl implements BetRepositoryCustom {
 				.collect(Collectors.groupingBy(o -> o.getUser().getUsername(), Collectors.summingInt(value -> { return value.getOverPoints() + value.getResultPoints(); })));
 	}
 
-
+	@Cacheable(value = "userBets")
 	public Map<String, Double> listRiskIndex() {
 		List<Bet> bets = entityManager.createQuery("from Bet").getResultList();
 		return bets.stream()

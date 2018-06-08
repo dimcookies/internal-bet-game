@@ -8,6 +8,7 @@ import bet.service.livefeed.LiveScoreFeedScheduler;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
@@ -57,6 +58,7 @@ public class HelperController {
 	 * @return
 	 * @throws Exception
 	 */
+	@Cacheable(value = "games")
 	@RequestMapping(value = "/games/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public List<Odd> allGames(@RequestParam(value = "matchDays", required = false) List<Integer> matchDays,
 			@RequestParam(value = "matchId", required = false) Integer matchId) throws Exception {
@@ -72,6 +74,7 @@ public class HelperController {
 	 * @return
 	 * @throws Exception
 	 */
+	@Cacheable(value = "rss")
 	@RequestMapping(value = "/rss/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public List<RssFeed> allRss(@RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit) throws Exception {
 

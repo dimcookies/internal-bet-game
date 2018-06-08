@@ -11,6 +11,7 @@ import bet.service.analytics.Analytics;
 import bet.service.analytics.AnalyticsScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -54,6 +55,7 @@ public class AnalyticsController {
      * @return
      * @throws Exception
      */
+    @Cacheable(value = "userBets")
     @RequestMapping(value = "/riskIndex", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Map<String, String>> riskIndex() throws Exception {
         Map<String, Double> riskIndex = betRepository.listRiskIndex();
@@ -70,6 +72,7 @@ public class AnalyticsController {
      * @return
      * @throws Exception
      */
+    @Cacheable(value = "analytics")
     @RequestMapping(value = "/rankHistory", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<RankHistory> rankHistory(@RequestParam(value = "userName", required = false) String userName) throws Exception {
 
@@ -91,6 +94,7 @@ public class AnalyticsController {
      * @return
      * @throws Exception
      */
+    @Cacheable(value = "analytics")
     @RequestMapping(value = "/topRanked", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Map<String, Long> topRanked() throws Exception {
         return StreamSupport.stream(rankHistoryRepository.findAll().spliterator(), false)
@@ -104,6 +108,7 @@ public class AnalyticsController {
      * @return
      * @throws Exception
      */
+    @Cacheable(value = "analytics")
     @RequestMapping(value = "/userStreak", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<UserStreak> userStreak() throws Exception {
         return StreamSupport.stream(userStreakRepository.findAll().spliterator(), false)
@@ -118,6 +123,7 @@ public class AnalyticsController {
      * @return
      * @throws Exception
      */
+    @Cacheable(value = "analytics")
     @RequestMapping(value = "/userStreakHistory", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<UserStreakHistory> userStreakHistory(@RequestParam(value = "sortByMax", required = false, defaultValue = "true") boolean sortByMax) throws Exception {
         return StreamSupport.stream(userStreakHistoryRepository.findAll().spliterator(), false)

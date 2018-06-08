@@ -3,6 +3,7 @@ package bet.web;
 import bet.api.dto.EncryptedBetDto;
 import bet.api.dto.UserDto;
 import bet.model.Bet;
+import bet.model.Game;
 import bet.model.User;
 import bet.repository.BetRepository;
 import bet.repository.FriendRepository;
@@ -12,6 +13,8 @@ import bet.service.mgmt.UserService;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -114,6 +117,7 @@ public class BetsController {
      * @return
      * @throws Exception
      */
+    @Cacheable("points")
     @RequestMapping(value = "/points", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Map<String, String>> allPoints() throws Exception {
         Map<String, String> names = userService.list().stream()
@@ -152,12 +156,15 @@ public class BetsController {
      * @return
      * @throws Exception
      */
+    @Cacheable(value = "userBets")
     @RequestMapping(value = "/gameStats", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Map<String, Long> allBets(@RequestParam(value = "gameId") Integer gameId) throws Exception {
-        List<Bet> bets =  Lists.newArrayList(betRepository.findAll()).stream()
-                //filter by game
-                .filter(bet -> gameId == null || bet.getGame().getId().equals(gameId))
-                .collect(Collectors.toList());
+        List<Bet> bets;
+        if(gameId != null) {
+            bets = betRepository.findByGame(new Game(gameId));
+        } else {
+            bets = Lists.newArrayList(betRepository.findAll());
+        }
         Map<String, Long> stats = bets.stream().collect(Collectors.groupingBy(o -> o.getScoreResult().toString(), Collectors.counting()));
         stats.putAll(bets.stream().filter(bet -> bet.getOverResult() != null).collect(Collectors.groupingBy(o -> o.getOverResult().toString(), Collectors.counting())));
 

@@ -8,6 +8,7 @@ import bet.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Component;
 
 import java.time.ZoneId;
@@ -38,6 +39,7 @@ public class UserRankAnalyticsModule implements AnalyticsModule {
     private RankHistoryRepository rankHistoryRepository;
 
     @Override
+    @CacheEvict(value = "analytics", allEntries = true)
     public void run() {
         LOGGER.info("Run user rank module");
         //get points for all users

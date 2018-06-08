@@ -3,6 +3,7 @@ package bet.service.analytics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -27,6 +28,7 @@ public class AnalyticsScheduler {
 	private ZonedDateTime lastUpdateDate;
 
 	//@Scheduled(cron = "*/10 * * * * *")
+	@CacheEvict(value = "analytics", allEntries = true)
 	@Scheduled(cron = "0 0 4 * * *")
 	public void runAnalytics() {
 
