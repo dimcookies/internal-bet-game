@@ -1,35 +1,40 @@
-﻿<div class="row">
-    <div class="col-xs-12 col-md-12 col-lg-3">
-        <div class="card text-white bg-primary o-hidden h-100">
-            <div class="card-body">
-                <div class="mr-5">{{ vm.selectedGame.game.gameDate | date : 'MMM d, h:mm a'}}</div>
-                <div class="mr-5">{{ vm.selectedGame.game.homeName }} - {{ vm.selectedGame.game.awayName }}</div>
-                <div class="mr-5">{{ vm.selectedGame.game.goalsHome }} - {{ vm.selectedGame.game.goalsAway }}</div>
-                <div class="mr-5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                <div class="mr-5">Status: {{ vm.selectedGame.game.status }} </div>
+﻿<div class="card">
+    <div class="card-header text-center"><b>{{ vm.selectedGame.game.homeName }} - {{ vm.selectedGame.game.awayName }}</b></div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-xs-12 col-md-12 col-lg-3">
+                <div class="card text-white bg-primary o-hidden h-100">
+                    <div class="card-body">
+                        <div>Status:&nbsp;{{ vm.selectedGame.game.status }} </div>
+                        <div>Date:&nbsp;&nbsp;&nbsp;{{ vm.selectedGame.game.gameDate | date : 'MMM d, h:mm a'}}</div>
+                        <div>Score:&nbsp;&nbsp;{{ vm.selectedGame.game.goalsHome }} - {{ vm.selectedGame.game.goalsAway }}</div>
+                        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-12 col-lg-3">
+                <div class="card text-white bg-danger o-hidden h-100">
+                    <div class="card-body">
+                        <div>Home: &nbsp;&nbsp;&nbsp; {{ vm.selectedGame.oddsHome }}</div>
+                        <div>Draw: &nbsp;&nbsp;&nbsp;&nbsp; {{ vm.selectedGame.oddsTie }}</div>
+                        <div>Away: &nbsp;&nbsp;&nbsp;&nbsp; {{ vm.selectedGame.oddsUnder }}</div>
+                        <div>Over: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ vm.selectedGame.oddsOver }}</div>
+                        <div>Under: &nbsp;&nbsp;&nbsp; {{ vm.selectedGame.oddsUnder }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-12 col-lg-3">
+                <canvas id="pie" class="chart chart-pie"
+                chart-data="vm.data" chart-labels="vm.labels" chart-options="vm.options" labels="true">
+                </canvas>
             </div>
         </div>
-    </div>
-    <div class="col-xs-12 col-md-12 col-lg-3">
-        <div class="card text-white bg-danger o-hidden h-100">
-            <div class="card-body">
-                <div class="mr-5">Home: &nbsp;&nbsp;&nbsp;&nbsp; {{ vm.selectedGame.oddsHome }}</div>
-                <div class="mr-5">Draw: &nbsp;&nbsp;&nbsp;&nbsp; {{ vm.selectedGame.oddsTie }}</div>
-                <div class="mr-5">Away: &nbsp;&nbsp;&nbsp;&nbsp; {{ vm.selectedGame.oddsUnder }}</div>
-                <div class="mr-5">Over: &nbsp;&nbsp;&nbsp;&nbsp; {{ vm.selectedGame.oddsOver }}</div>
-                <div class="mr-5">Under: &nbsp;&nbsp;&nbsp;&nbsp; {{ vm.selectedGame.oddsUnder }}</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xs-12 col-md-12 col-lg-3">
-        <canvas id="polar-area" class="chart chart-polar-area"
-        chart-data="vm.data" chart-labels="vm.labels" chart-options="vm.options">
-        </canvas>
     </div>
 </div>
 <br>
 <div class="table-responsive">
-    <table ng-table="vm.tableParams" class="table table-condensed table-striped" show-filter="true">
+    <table ng-table="vm.tableParams" class="table table-condensed table-striped">
         <tr ng-repeat="entry in $data">
             <td class="text-center" title="'User'" sortable="'username'">{{entry.user.username}}</a></td>
             <td class="text-center" title="'3WayBet'" sortable="'scoreResult'">{{ entry.scoreResult }}</td>
@@ -38,11 +43,6 @@
             <td class="text-center" title="'OverUnderBet'" sortable="'overResult'">{{ entry.overResult }}</td>
             <td class="text-center" title="'OverUnderBet Points'" sortable="'overPoints'" ng-class="{'table-success'
             : entry.overPoints > 0 }">{{ entry.overPoints }}</td>
-<!--             <td class="text-center" title="'Action'">
-                <a ui-sref="user({userName: entry.user.username})">
-                    <button type="button" class="btn btn-secondary">View User</button>
-                </a>
-            </td> -->
         </tr>
     </table>
 </div>

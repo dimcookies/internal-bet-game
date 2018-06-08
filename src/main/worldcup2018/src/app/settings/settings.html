@@ -1,4 +1,25 @@
-﻿<div class="row">
+﻿<div class="container">
+    <div class="card card-login mx-auto mt-5">
+        <div class="card-header">Reset Password</div>
+        <div class="card-body">
+            <div class="text-center mt-4 mb-5">
+                <h4>Please reset your password</h4>
+            </div>
+            <form>
+                <div class="form-group">
+                    <input class="form-control mb-5" id="exampleInputpassword" type="password" aria-describedby="passwordHelp" placeholder="New Password" ng-model="vm.password">
+                    <input class="form-control mb-5" id="exampleInputpassword1" type="password" aria-describedby="passwordHelp" placeholder="Confirm Password" ng-model="vm.passwordConfirm">
+                    <input type="checkbox" id="optOu" name="optOu" value="newsletter" ng-model="vm.optOut"/>
+                    <label for="optOu">
+                        Delete your account and erase your data. (The request will be processed after the end of the competition)
+                    </label>
+                </div>
+                <a class="btn btn-primary btn-block" style="color:white;" ng-click="vm.resetPass()">Reset Password</a>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- <div class="row">
     <div class="col-12 text-center">
         <div class="card text-white bg-danger o-hidden h-100">
             <div class="card-body">
@@ -20,7 +41,7 @@
                 <td class="text-center" title="'DRAW'">{{game.oddsTie}}</td>
                 <td class="text-center" title="'AWAY'">{{game.oddsAway}}</td>
                 <td class="text-center" title="'3WayBet'">
-                    <select ng-model="vm.userBets[game.game.id]" required class="betSelect" style="{{ vm.userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}">
+                    <select ng-model="vm.vm.userBets[game.game.id]" required class="betSelect" style="{{ vm.userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}">
                         <option value=""></option>
                         <option value="HOME_1">HOME</option>
                         <option value="DRAW_X">DRAW</option>
@@ -30,7 +51,7 @@
                 <td ng-if="game.game.matchDay > 3" class="text-center" title="'Under'">{{game.oddsUnder}}</td>
                 <td ng-if="game.game.matchDay > 3" class="text-center" title="'Over'">{{game.oddsOver}}</td>
                 <td ng-if="game.game.matchDay > 3" class="text-center" title="'OverUnderBet'">
-                    <select ng-model="vm.userOverBets[game.game.id]" style="{{ userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}" required>
+                    <select ng-model="vm.vm.userOverBets[game.game.id]" style="{{ userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}" required>
                         <option value=""></option>
                         <option value="UNDER">UNDER</option>
                         <option value="OVER">OVER</option>
@@ -48,4 +69,4 @@
     <div class="float-right">
         <button type="button" ng-disabled="vm.enableSubmit" class="btn btn-success col-m" ng-click="vm.saveBets()">Submit Picks</button>
     </div>
-</form>
+</form> -->

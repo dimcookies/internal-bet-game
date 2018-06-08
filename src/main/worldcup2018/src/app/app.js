@@ -20,6 +20,8 @@ import matchesModule from './matches';
 import betsModule from './bets';
 import chatModule from './chat';
 import analyticsModule from './analytics';
+import rulesModule from './rules';
+import settingsModule from './settings';
 
 import componentsModule from './components';
 
@@ -43,6 +45,8 @@ angular.module('espackApp', [
 		userModule,
 		betsModule,
 		chatModule,
+		rulesModule,
+		settingsModule,
 		ngTableModule.name
 	])
 	.config(config)

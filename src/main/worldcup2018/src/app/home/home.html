@@ -6,9 +6,9 @@
       <i class="fa fa-table"></i> Top 10 Players</div>
       <div class="card-body">
         <div class="table-responsive">
-          <table ng-table="vm.tableParams" class="table table-condensed table-bordered table-striped" show-filter="true">
+          <table ng-table="vm.tableParams" class="table table-condensed table-striped">
             <tr ng-repeat="user in $data" ng-if="$index < 10">
-              <td class="text-center" title="'Position'">{{$index+1}}</td>
+              <td class="text-center" title="'#'">{{$index+1}}</td>
               <td class="text-center" title="'Name'">{{user.username}}</td>
               <td class="text-center" title="'Points'">{{user.points}}</td>
               <!-- <td title="'Prize'">{{user.prize}}</td> -->
@@ -36,9 +36,11 @@
   </div>
   <div class="col-lg-8 order-2 order-lg-1">
     <!-- Card Columns Example Social Feed-->
-    <div class="mb-0 mt-4">
-    <i class="fa fa-newspaper-o"></i> News Feed</div>
-    <hr class="mt-2">
+    <div class="card mb-0 ">
+    <!--     <i class="fa fa-newspaper-o"></i> News Feed</div>
+    -->
+    <div class="card-header">News Feed</div>
+    <!-- <hr class="mt-2"> -->
     <div class="card-columns">
       <div class="card mb-3" ng-repeat="rss in vm.allRss">
         <a target="_blank" href="{{ rss.link }}">
@@ -52,5 +54,5 @@
       </div>
     </div>
     <!-- /Card Columns-->
-  </div>  
+  </div>
 </div>

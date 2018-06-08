@@ -44,6 +44,7 @@
 	saveBets() {
 		var self = this;
 		self.disableSubmit = true;
+		self.enableSubmit = true;
 		const isPlayoffStage = self.allowedMatchDays.split(',') < 3;
 		console.log(isPlayoffStage);
 		self.editError = false;
@@ -52,10 +53,12 @@
 			const game = self.selectedGames[i];
 			if (self.userBets[game.game.id] == null) {
 				self.editError = true;
+				self.enableSubmit = false;
 				return;
 			}
 			if (isPlayoffStage && self.userOverBets[game.game.id] == null) {
 				self.editError = true;
+				self.enableSubmit = false;				
 				return;
 			}
 		}
@@ -71,6 +74,7 @@
 		}
 		var parameter = JSON.stringify(ar);
 		self.$http.post("/bets/encrypted/add", parameter).then(function(response) {
+			self.enableSubmit = false;
 			self.editSuccess = true;
 			self.disableSubmit = true;
 		});

@@ -1,5 +1,5 @@
 ﻿<div class="table-responsive">
-    <table ng-table="vm.tableParams" class="table table-condensed table-bordered table-striped" show-filter="true">
+    <table ng-table="vm.tableParams" class="table table-condensed table-striped">
         <tr ng-repeat="game in $data">
             <td class="text-center" title="'Match'"><a ui-sref="match({gameId: game.game.id})">{{ game.game.homeName }} - {{ game.game.awayName }}</a></td>
             <td class="text-center" title="'Date'">{{ game.game.gameDate | date : 'MMM d, h:mm a'}}</td>

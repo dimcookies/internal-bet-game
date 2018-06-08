@@ -23,7 +23,11 @@
     <toaster-container toaster-options="{'close-button': true}"></toaster-container>
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-      <a class="navbar-brand" ui-sref-active="active" ui-sref="home">World Cup Challenge 2018</a>
+      <a class="navbar-brand" ui-sref-active="active" ui-sref="home">
+            <span><img style="height: 30px;" src="img/logo1.png"/></span>
+
+      World Cup Challenge 2018
+      </a>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
       </button>
@@ -41,10 +45,10 @@
               <span class="nav-link-text">Matches</span>
             </a>
           </li>
-          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="My Bets" ui-sref-active="active">
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="My Picks" ui-sref-active="active">
             <a class="nav-link" ui-sref="bets">
               <i class="fa fa-fw fa-pencil-alt"></i>
-              <span class="nav-link-text">My Bets</span>
+              <span class="nav-link-text">My Picks</span>
             </a>
           </li>
           <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Chat" ui-sref-active="active">
@@ -56,9 +60,21 @@
           <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Analytics" ui-sref-active="active">
             <a class="nav-link">
               <i class="fa fa-fw fa-chart-line"></i>
-              <span class="nav-link-text">Analytics <small>(comming soon)</small></span>
+              <span class="nav-link-text">Analytics <small>(coming soon)</small></span>
             </a>
-          </li>          
+          </li>
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Rules" ui-sref-active="active">
+            <a class="nav-link" ui-sref="rules">
+              <i class="fa fa-fw fa-ruble-sign"></i>
+              <span class="nav-link-text">Rules </span>
+            </a>
+          </li> 
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Settings" ui-sref-active="active">
+            <a class="nav-link" ui-sref="settings">
+              <i class="fa fa-fw fa-cog"></i>
+              <span class="nav-link-text">Settings </span>
+            </a>
+          </li>            
         </ul>
         <ul class="navbar-nav sidenav-toggler">
           <li class="nav-item">
@@ -105,7 +121,7 @@
             <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
             <div class="modal-footer">
               <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-              <a class="btn btn-primary" href="/logout">Logout</a>
+              <a class="btn btn-danger" href="/logout">Logout</a>
             </div>
           </div>
         </div>
