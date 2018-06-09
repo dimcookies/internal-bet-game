@@ -63,8 +63,9 @@ public class BetsController {
      */
     @RequestMapping(path = "/encrypted/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<EncryptedBetDto> create(@RequestBody List<EncryptedBetDto> bets, Principal principal) {
-        User user = userRepository.findOneByUsername(principal.getName());
-        return encryptedBetService.createAll(bets, user);
+        //User user = userRepository.findOneByUsername(principal.getName());
+        UserDto dto = userService.list(principal.getName()).get(0);
+        return encryptedBetService.createAll(bets, dto.toEntity());
     }
 
     /**

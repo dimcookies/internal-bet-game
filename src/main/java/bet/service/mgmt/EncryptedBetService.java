@@ -182,8 +182,6 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 		}).map(encryptedBetDto -> create(encryptedBetDto)).collect(Collectors.toList()); //save bet and return list
 
 		//Send an email to user with saved bets
-
-
 		emailSender.sendEmail(user.getEmail(), "WC2018 Bet", html);
 
 		return result;
