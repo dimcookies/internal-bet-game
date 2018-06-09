@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.time.ZoneId;
@@ -33,7 +36,7 @@ public class CommentController {
     private CommentsService commentsService;
 
     /**
-     * Get all comments sirted by comment date
+     * Get all comments sorted by comment date
      * @param limit
      * @return
      * @throws Exception

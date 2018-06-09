@@ -3,6 +3,7 @@ package bet.service.analytics;
 import bet.model.RankHistory;
 import bet.model.User;
 import bet.repository.BetRepository;
+import bet.repository.CustomBetRepository;
 import bet.repository.RankHistoryRepository;
 import bet.repository.UserRepository;
 import org.slf4j.Logger;
@@ -33,6 +34,9 @@ public class UserRankAnalyticsModule implements AnalyticsModule {
     private BetRepository betRepository;
 
     @Autowired
+    private CustomBetRepository customBetRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -43,7 +47,7 @@ public class UserRankAnalyticsModule implements AnalyticsModule {
     public void run() {
         LOGGER.info("Run user rank module");
         //get points for all users
-        Map<String, Integer> allPoints = betRepository.listAllPoints();
+        Map<String, Integer> allPoints = customBetRepository.listAllPoints();
         List<Map.Entry<String, Integer>> ranking = allPoints.entrySet().stream()
                 //sort by total points and then by username
                 .sorted((o1, o2) -> {

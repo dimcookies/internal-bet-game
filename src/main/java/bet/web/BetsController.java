@@ -6,6 +6,7 @@ import bet.model.Bet;
 import bet.model.Game;
 import bet.model.User;
 import bet.repository.BetRepository;
+import bet.repository.CustomBetRepository;
 import bet.repository.FriendRepository;
 import bet.repository.UserRepository;
 import bet.service.mgmt.EncryptedBetService;
@@ -13,14 +14,11 @@ import bet.service.mgmt.UserService;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +40,9 @@ public class BetsController {
 
     @Autowired
     private BetRepository betRepository;
+
+    @Autowired
+    private CustomBetRepository customBetRepository;
 
     @Value("${application.allowedMatchDays}")
     private String allowedMatchDays;
@@ -123,12 +124,12 @@ public class BetsController {
     public List<Map<String, String>> allPoints() throws Exception {
         Map<String, String> names = userService.list().stream()
                 .collect(Collectors.toMap(UserDto::getUsername, UserDto::getName));
-        Map<String, Double> riskIndex = betRepository.listRiskIndex();
+        Map<String, Double> riskIndex = customBetRepository.listRiskIndex();
         Map<String, Long> allBets =
                 StreamSupport.stream(betRepository.findAll().spliterator(), false)
                         .filter(bet -> bet.getResultPoints() > 0)
                         .collect(Collectors.groupingBy(o -> o.getUser().getUsername(), Collectors.counting()));
-        Map<String, Integer> allPoints = betRepository.listAllPoints();
+        Map<String, Integer> allPoints = customBetRepository.listAllPoints();
         return allPoints.entrySet().stream()
                 //sort by points desc
                 .sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue()))

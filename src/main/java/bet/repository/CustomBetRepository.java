@@ -1,10 +1,8 @@
 package bet.repository;
 
-import bet.model.User;
-
 import java.util.Map;
 
-public interface BetRepositoryCustom {
+public interface CustomBetRepository {
     /**
      * Sums points from bets for all users
      *

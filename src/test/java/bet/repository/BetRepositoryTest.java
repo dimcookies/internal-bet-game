@@ -24,6 +24,9 @@ public class BetRepositoryTest extends AbstractBetIntegrationTest {
     private BetRepository betRepository;
 
     @Autowired
+    private CustomBetRepository customBetRepository;
+
+    @Autowired
     private GamesInitializer gamesInitializer;
 
     @Autowired
@@ -54,7 +57,7 @@ public class BetRepositoryTest extends AbstractBetIntegrationTest {
         betRepository.save(new Bet(null, games.get(1).getId(), userId1, ScoreResult.HOME_1, 300, OverResult.OVER, 400, now));
         betRepository.save(new Bet(null, games.get(0).getId(), userId2, ScoreResult.HOME_1, 500, OverResult.OVER, 600, now));
         betRepository.save(new Bet(null, games.get(1).getId(), userId2, ScoreResult.HOME_1, 700, OverResult.OVER, 800, now));
-        Map<String, Integer> points = betRepository.listAllPoints();
+        Map<String, Integer> points = customBetRepository.listAllPoints();
 
         assertEquals(2, points.size());
         assertEquals(1000, (int) points.get("user1"));
@@ -75,7 +78,7 @@ public class BetRepositoryTest extends AbstractBetIntegrationTest {
         betRepository.save(new Bet(null, games.get(1).getId(), userId2, ScoreResult.DRAW_X, 0, OverResult.UNDER, 0, now));
         betRepository.save(new Bet(null, games.get(2).getId(), userId2, ScoreResult.HOME_1, 0, null, 0, now));
 
-        Map<String, Double> riskIndex = betRepository.listRiskIndex();
+        Map<String, Double> riskIndex = customBetRepository.listRiskIndex();
         assertEquals( odd1.getOddsHome() + odd1.getOddsOver() + odd2.getOddsAway()+ odd2.getOddsOver(), (double) riskIndex.get("user1"), 0.001);
         assertEquals(odd1.getOddsTie() + odd1.getOddsUnder() + odd2.getOddsHome(), riskIndex.get("user2"), 0.001);
 

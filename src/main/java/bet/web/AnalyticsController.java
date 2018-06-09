@@ -3,20 +3,17 @@ package bet.web;
 import bet.model.RankHistory;
 import bet.model.UserStreak;
 import bet.model.UserStreakHistory;
-import bet.repository.BetRepository;
-import bet.repository.RankHistoryRepository;
-import bet.repository.UserStreakHistoryRepository;
-import bet.repository.UserStreakRepository;
-import bet.service.analytics.Analytics;
+import bet.repository.*;
 import bet.service.analytics.AnalyticsScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.ServletContext;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
@@ -34,6 +31,9 @@ public class AnalyticsController {
 
     @Autowired
     private BetRepository betRepository;
+
+    @Autowired
+    private CustomBetRepository customBetRepository;
 
     @Autowired
     private RankHistoryRepository rankHistoryRepository;
@@ -58,7 +58,7 @@ public class AnalyticsController {
     @Cacheable(value = "userBets2")
     @RequestMapping(value = "/riskIndex", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Map<String, String>> riskIndex() throws Exception {
-        Map<String, Double> riskIndex = betRepository.listRiskIndex();
+        Map<String, Double> riskIndex = customBetRepository.listRiskIndex();
         return riskIndex.entrySet().stream().sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue()))
                 .map(e -> new HashMap<String, String>() {{
                     put("username", e.getKey());
