@@ -90,7 +90,7 @@ public class AnalyticsSchedulerTest extends AbstractBetIntegrationTest {
 
         rankHistoryRepository.deleteAll();
         betRepository.save(new Bet(null, games.get(2).getId(), userId1, ScoreResult.HOME_1, 1000, OverResult.OVER, 2000, now));
-        cacheManager.getCache("points").clear();
+        cacheManager.getCacheNames().parallelStream().forEach(name -> cacheManager.getCache(name).clear());
         userRankAnalyticsModule.run();
         ranking = Lists.newArrayList(rankHistoryRepository.findAll());
         assertEquals(2, ranking.size());

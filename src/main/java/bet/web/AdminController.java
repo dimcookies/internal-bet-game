@@ -34,7 +34,7 @@ public class AdminController {
      * @return
      * @throws Exception
      */
-    @CacheEvict(value = "points", allEntries = true)
+    @CacheEvict(allEntries = true, cacheNames = {"points1","points2"})
     @RequestMapping(value = "/liveupdate", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
     public String liveupdate() throws Exception {
         liveScoreFeedScheduler.getLiveScores(false);
@@ -47,7 +47,7 @@ public class AdminController {
      * @return
      * @throws Exception
      */
-    @CacheEvict(value = "points", allEntries = true)
+    @CacheEvict(allEntries = true, cacheNames = {"points1","points2"})
     @RequestMapping(value = "/manualScoreUpdate", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
     public String manualScoreUpdate(@RequestBody GameDto gameDto) throws Exception {
         liveScoreFeedScheduler.checkMatchChanged(gameDto);

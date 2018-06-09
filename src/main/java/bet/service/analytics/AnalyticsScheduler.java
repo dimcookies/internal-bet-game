@@ -28,7 +28,7 @@ public class AnalyticsScheduler {
 	private ZonedDateTime lastUpdateDate;
 
 	//@Scheduled(cron = "*/10 * * * * *")
-	@CacheEvict(value = "analytics", allEntries = true)
+	@CacheEvict(allEntries = true, cacheNames = {"analytics1","analytics1","analytics3","analytics4"})
 	@Scheduled(cron = "0 0 4 * * *")
 	public void runAnalytics() {
 

@@ -117,7 +117,7 @@ public class BetsController {
      * @return
      * @throws Exception
      */
-    @Cacheable("points")
+    @Cacheable("points2")
     @RequestMapping(value = "/points", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Map<String, String>> allPoints() throws Exception {
         Map<String, String> names = userService.list().stream()
@@ -156,7 +156,7 @@ public class BetsController {
      * @return
      * @throws Exception
      */
-    @Cacheable(value = "userBets")
+    @Cacheable(value = "userBets3")
     @RequestMapping(value = "/gameStats", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Map<String, Long> allBets(@RequestParam(value = "gameId") Integer gameId) throws Exception {
         List<Bet> bets;

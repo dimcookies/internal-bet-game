@@ -54,7 +54,7 @@ public class LiveScoreFeedScheduler {
 		getLiveScores(true);
 	}
 
-	@CacheEvict(value = "points", allEntries = true)
+	@CacheEvict(allEntries = true, cacheNames = {"points1","points2"})
 	public void getLiveScores(boolean checkForActiveMatches) {
 		LOGGER.trace("Check live scores");
 		ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
@@ -76,7 +76,7 @@ public class LiveScoreFeedScheduler {
 	 * for user bets
 	 * @param gameDto
 	 */
-	@CacheEvict(value = "points", allEntries = true)
+	@CacheEvict(allEntries = true, cacheNames = {"points1","points2"})
 	public void checkMatchChanged(GameDto gameDto) {
 		//if game already finished, do not check
 		Game dbGame = gameRepository.findOne(gameDto.getId());

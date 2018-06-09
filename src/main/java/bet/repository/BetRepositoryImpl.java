@@ -25,7 +25,7 @@ public class BetRepositoryImpl implements BetRepositoryCustom {
 	@Autowired
 	private OddRepository oddRepository;
 
-	@Cacheable(value = "points")
+	@Cacheable(value = "points1")
 	public Map<String, Integer> listAllPoints() {
 		List<Bet> bets = entityManager.createQuery("from Bet").getResultList();
 		return bets.stream()
@@ -33,7 +33,7 @@ public class BetRepositoryImpl implements BetRepositoryCustom {
 				.collect(Collectors.groupingBy(o -> o.getUser().getUsername(), Collectors.summingInt(value -> { return value.getOverPoints() + value.getResultPoints(); })));
 	}
 
-	@Cacheable(value = "userBets")
+	@Cacheable(value = "userBets1")
 	public Map<String, Double> listRiskIndex() {
 		List<Bet> bets = entityManager.createQuery("from Bet").getResultList();
 		return bets.stream()

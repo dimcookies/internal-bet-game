@@ -39,7 +39,7 @@ public class UserRankAnalyticsModule implements AnalyticsModule {
     private RankHistoryRepository rankHistoryRepository;
 
     @Override
-    @CacheEvict(value = "analytics", allEntries = true)
+    @CacheEvict(allEntries = true, cacheNames = {"analytics1","analytics1","analytics3","analytics4"})
     public void run() {
         LOGGER.info("Run user rank module");
         //get points for all users

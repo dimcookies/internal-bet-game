@@ -55,7 +55,7 @@ public class AnalyticsController {
      * @return
      * @throws Exception
      */
-    @Cacheable(value = "userBets")
+    @Cacheable(value = "userBets2")
     @RequestMapping(value = "/riskIndex", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Map<String, String>> riskIndex() throws Exception {
         Map<String, Double> riskIndex = betRepository.listRiskIndex();
@@ -72,7 +72,7 @@ public class AnalyticsController {
      * @return
      * @throws Exception
      */
-    @Cacheable(value = "analytics")
+    @Cacheable(value = "analytics1")
     @RequestMapping(value = "/rankHistory", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<RankHistory> rankHistory(@RequestParam(value = "userName", required = false) String userName) throws Exception {
 
@@ -94,7 +94,7 @@ public class AnalyticsController {
      * @return
      * @throws Exception
      */
-    @Cacheable(value = "analytics")
+    @Cacheable(value = "analytics2")
     @RequestMapping(value = "/topRanked", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Map<String, Long> topRanked() throws Exception {
         return StreamSupport.stream(rankHistoryRepository.findAll().spliterator(), false)
@@ -108,7 +108,7 @@ public class AnalyticsController {
      * @return
      * @throws Exception
      */
-    @Cacheable(value = "analytics")
+    @Cacheable(value = "analytics3")
     @RequestMapping(value = "/userStreak", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<UserStreak> userStreak() throws Exception {
         return StreamSupport.stream(userStreakRepository.findAll().spliterator(), false)
@@ -123,7 +123,7 @@ public class AnalyticsController {
      * @return
      * @throws Exception
      */
-    @Cacheable(value = "analytics")
+    @Cacheable(value = "analytics4")
     @RequestMapping(value = "/userStreakHistory", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<UserStreakHistory> userStreakHistory(@RequestParam(value = "sortByMax", required = false, defaultValue = "true") boolean sortByMax) throws Exception {
         return StreamSupport.stream(userStreakHistoryRepository.findAll().spliterator(), false)
