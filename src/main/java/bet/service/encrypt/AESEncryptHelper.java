@@ -3,11 +3,9 @@ package bet.service.encrypt;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
-
-import javax.crypto.*;
+import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
+import java.util.Base64;
 
 /**
  * Encrypt text with AES algorith using Base64 representation
@@ -19,13 +17,8 @@ public class AESEncryptHelper implements EncryptHelper {
 	@Value("${application.encryptKey:1234567890qwertyuiopasdf}")
 	private String mainKey;
 
-	private final Cipher cipher;
-
-	public AESEncryptHelper() throws NoSuchPaddingException, NoSuchAlgorithmException {
-		cipher = Cipher.getInstance("AES/ECB/NoPadding");
-	}
-
 	public String encrypt(String text, String salt) throws Exception {
+        final Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
 		byte[] keyBytes = getKey(salt);
 		SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");
 		//pad text to 16 characters
@@ -42,6 +35,7 @@ public class AESEncryptHelper implements EncryptHelper {
 	}
 
 	public String decrypt(String encrypted, String salt) throws Exception {
+        final Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
 		byte[] keyBytes = getKey(salt);
 		SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");
 

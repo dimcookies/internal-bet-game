@@ -12,7 +12,7 @@ spring:
     active: live, lifefeed-footballapiorgnew
   session:
     store-type: None
-    timeout: 1800   
+    timeout: 0
   jpa:
     database: POSTGRESQL
     database-platform: org.hibernate.dialect.PostgreSQLDialect
