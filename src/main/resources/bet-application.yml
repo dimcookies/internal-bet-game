@@ -9,7 +9,7 @@ spring:
     favicon:
       enabled: false
   profiles:
-    active: live, lifefeed-footballapiorg
+    active: live, lifefeed-footballapiorgnew
   session:
     store-type: None
     timeout: 1800   
@@ -50,7 +50,7 @@ application:
     live_feed:
       interval: 300000
       footballapiorg:
-        url: http://localhost:8000/games.json
+        url: http://localhost:8000/games_new.json
 #       url: http://api.football-data.org/v1/competitions/467/fixtures
         token: X
       fifacom:

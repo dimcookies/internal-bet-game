@@ -22,24 +22,28 @@ import java.util.List;
 public class FootballApiOrgLiveFeedImpl implements LiveFeed {
 
 	@Value("${application.live_feed.footballapiorg.url}")
-	private String liveFeedUrl;
+	protected String liveFeedUrl;
 
 	@Value("${application.live_feed.footballapiorg.token}")
-	private String token;
+	protected String token;
 
 	@Autowired
-	private RestTemplate restTemplate;
+	protected RestTemplate restTemplate;
 
 	@Override
 	public List<GameDto> getLiveFeed() {
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("X-Auth-Toke", token);
-
-		HttpEntity entity = new HttpEntity(headers);
+		HttpEntity entity = getHeaders();
 
 		ResponseEntity<GameDto[]> responseEntity = restTemplate.exchange(
 				liveFeedUrl, HttpMethod.GET, entity, GameDto[].class);
 
 		return Arrays.asList(responseEntity.getBody());
+	}
+
+	protected HttpEntity getHeaders() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("X-Auth-Token", token);
+
+		return new HttpEntity(headers);
 	}
 }
