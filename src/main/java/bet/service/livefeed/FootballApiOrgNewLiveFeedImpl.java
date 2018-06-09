@@ -62,9 +62,11 @@ public class FootballApiOrgNewLiveFeedImpl extends FootballApiOrgLiveFeedImpl {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         headers.add("Accept", "*/*");
-        headers.add("X-Auth-Token", token);
+        if(token != null && token.length() > 0) {
+            headers.add("X-Auth-Token", token);
+        }
 
-        HttpEntity<String> requestEntity = new HttpEntity<String>("", headers);
+        HttpEntity<String> requestEntity = new HttpEntity<>("", headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(liveFeedUrl, HttpMethod.GET, requestEntity, String.class);
         return responseEntity.getBody();
     }

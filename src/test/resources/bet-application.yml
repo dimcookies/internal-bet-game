@@ -52,7 +52,7 @@ application:
       footballapiorg:
         url: http://localhost:8000/games.json
 #       url: http://api.football-data.org/v1/competitions/467/fixtures
-        token: X
+        token:
       fifacom:
               url: http://localhost:8000/live.json
               competition: 2018 FIFA World Cup

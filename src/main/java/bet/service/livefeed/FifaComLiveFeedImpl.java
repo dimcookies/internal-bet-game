@@ -108,7 +108,7 @@ public class FifaComLiveFeedImpl implements LiveFeed {
 		headers.add("Content-Type", "application/json");
 		headers.add("Accept", "*/*");
 
-		HttpEntity<String> requestEntity = new HttpEntity<String>("", headers);
+		HttpEntity<String> requestEntity = new HttpEntity<>("", headers);
 		ResponseEntity<String> responseEntity = restTemplate.exchange(liveFeedUrl, HttpMethod.GET, requestEntity, String.class);
 		return responseEntity.getBody().replaceFirst("\\_liveMatchesCallback\\(","").replaceFirst("\\)$", "");
 	}
