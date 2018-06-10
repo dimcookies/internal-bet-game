@@ -11,7 +11,7 @@ public class ClearCacheTask {
     @Autowired
     private CacheManager cacheManager;
 
-    @Scheduled(fixedRateString = "60000")
+    @Scheduled(fixedRateString = "3600000")
     public void clearCaches() {
         cacheManager.getCacheNames().parallelStream().forEach(name -> cacheManager.getCache(name).clear());
     }
