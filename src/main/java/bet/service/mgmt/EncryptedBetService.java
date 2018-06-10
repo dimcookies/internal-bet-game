@@ -193,12 +193,15 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 	 * @return
 	 */
 	private List<Map<String,Object>> getMailBets(List<EncryptedBetDto> bets) {
-		return bets.stream().map(bet -> {
-			Game game = gameRepository.findOne(bet.getGameId());
-			return new HashMap<String, Object>() {{
-				put("game", game);
-				put("bet", bet);
-			}};
-		}).collect(Collectors.toList());
+		return bets.stream()
+				.map(bet -> {
+					Game game = gameRepository.findOne(bet.getGameId());
+					return new HashMap<String, Object>() {{
+						put("game", game);
+						put("bet", bet);
+					}};
+				})
+				.sorted((o1, o2) -> ((Game) o1.get("game")).getGameDate().compareTo(((Game) o1.get("game")).getGameDate()))
+				.collect(Collectors.toList());
 	}
 }
