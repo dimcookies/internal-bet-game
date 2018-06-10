@@ -22,10 +22,7 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import javax.transaction.Transactional;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -201,7 +198,7 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 						put("bet", bet);
 					}};
 				})
-				.sorted((o1, o2) -> ((Game) o1.get("game")).getGameDate().compareTo(((Game) o1.get("game")).getGameDate()))
+                .sorted(Comparator.comparing(o -> ((Game) o.get("game")).getGameDate()))
 				.collect(Collectors.toList());
 	}
 }
