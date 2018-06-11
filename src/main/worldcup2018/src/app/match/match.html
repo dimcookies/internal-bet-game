@@ -5,14 +5,14 @@
             <div class="col-xs-12 col-md-12 col-lg-3">
                 <div class="card text-white bg-primary o-hidden h-100" style="background-color: #43bebc !important;">
                     <div class="card-body">
-                        <div>Status:&nbsp;{{ vm.selectedGame.game.status }} </div>
-                        <div>Date:&nbsp;&nbsp;&nbsp;{{ vm.selectedGame.game.gameDate | date : 'MMM d, h:mm a'}}</div>
-                        <div>Score:&nbsp;&nbsp;{{ vm.selectedGame.game.goalsHome }} - {{ vm.selectedGame.game.goalsAway }}</div>
+                        <div>Status: &nbsp;&nbsp;&nbsp;&nbsp;{{ vm.selectedGame.game.status }} </div>
+                        <div>Date: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ vm.selectedGame.game.gameDate | date : 'MMM d, h:mm a'}}</div>
+                        <div>Score: &nbsp;&nbsp;&nbsp;&nbsp;{{ vm.selectedGame.game.goalsHome }} - {{ vm.selectedGame.game.goalsAway }}</div>
                         <div>Home: &nbsp;&nbsp;&nbsp; {{ vm.selectedGame.oddsHome | number: 2 }}</div>
                         <div>Draw: &nbsp;&nbsp;&nbsp;&nbsp; {{ vm.selectedGame.oddsTie | number: 2 }}</div>
-                        <div>Away: &nbsp;&nbsp;&nbsp;&nbsp; {{ vm.selectedGame.oddsUnder | number: 2 }}</div>
-                        <div>Over: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ vm.selectedGame.oddsOver | number: 2 }}</div>
-                        <div>Under: &nbsp;&nbsp;&nbsp; {{ vm.selectedGame.oddsUnder | number: 2 }}</div>
+                        <div>Away: &nbsp;&nbsp;&nbsp;&nbsp; {{ vm.selectedGame.oddsAway | number: 2 }}</div>
+                        <!-- <div>Over: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ vm.selectedGame.oddsOver | number: 2 }}</div> -->
+                        <!-- <div>Under: &nbsp;&nbsp;&nbsp; {{ vm.selectedGame.oddsUnder | number: 2 }}</div> -->
                     </div>
                 </div>
             </div>
