@@ -4,22 +4,26 @@
 		this.logger = logger;
 		this.NgTableParams = NgTableParams;
 		// this.activate();
-		this.optOut= false;
+		this.optOut = false;
 	}
 	resetPass() {
 		var self = this;
-		console.log('self.password  ', self.password);
-		console.log('self.passwordConfirm  ', self.passwordConfirm);
-		console.log('self.optOut  ', self.optOut);
 		if (self.password && self.passwordConfirm && self.password != self.passwordConfirm) {
 			alert("Passwords must match!")
 		}
 		if (self.password && self.passwordConfirm && self.password === self.passwordConfirm) {
-			self.$http.post("/users/modify?password=" + self.password + "&optOut=" + self.optOut).then(function(response) {
+			self.$http.post("/users/modify?password=" + self.password).then(function(response) {
 				alert("Password altered succesfully!");
 			});
 		}
-
+	};
+	setOptOut() {
+		var self = this;
+		if (self.optOut) {
+			self.$http.post("/users/modify?optOut=" + self.optOut).then(function(response) {
+				alert("Opt out option saved succesfully!");
+			});
+		}
 	};
 }
 SettingsController.$inject = ['$scope', '$http', 'logger', 'NgTableParams'];

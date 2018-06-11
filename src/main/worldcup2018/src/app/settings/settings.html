@@ -1,5 +1,5 @@
 ﻿<div class="container">
-    <div class="card card-login mx-auto mt-5">
+    <div class="card card-login mx-auto mt-3">
         <div class="card-header">Reset Password</div>
         <div class="card-body">
             <div class="text-center mt-4 mb-5">
@@ -9,64 +9,24 @@
                 <div class="form-group">
                     <input class="form-control mb-5" id="exampleInputpassword" type="password" aria-describedby="passwordHelp" placeholder="New Password" ng-model="vm.password">
                     <input class="form-control mb-5" id="exampleInputpassword1" type="password" aria-describedby="passwordHelp" placeholder="Confirm Password" ng-model="vm.passwordConfirm">
-                    <input type="checkbox" id="optOu" name="optOu" value="newsletter" ng-model="vm.optOut"/>
-                    <label for="optOu">
-                        Delete your account and erase your data. (The request will be processed after the end of the competition)
-                    </label>
                 </div>
                 <a class="btn btn-primary btn-block" style="color:white;" ng-click="vm.resetPass()">Reset Password</a>
             </form>
         </div>
     </div>
-</div>
-<!-- <div class="row">
-    <div class="col-12 text-center">
-        <div class="card text-white bg-danger o-hidden h-100">
-            <div class="card-body">
-                <div class="mr-5">Please make sure to submit your picks by Wednesday, June 13.</div>
-            </div>
+    <div class="card card-login mx-auto mt-3">
+        <div class="card-header">Account</div>
+        <div class="card-body">
+            <form>
+                <div class="form-group">
+                    <label for="optOu">
+                        <input type="checkbox" id="optOu" name="optOu" value="newsletter" ng-model="vm.optOut"/>
+                        Delete your account and erase your data. <br>
+                        <b>The request will be processed after the end of the competition</b>
+                    </label>
+                </div>
+                <a class="btn btn-primary btn-block" style="color:white;" ng-click="vm.setOptOut()">Save</a>
+            </form>
         </div>
     </div>
 </div>
-<br>
-<form name="editform">
-    <div class="table-responsive">
-        <table ng-table="vm.tableParams" class="table table-condensed table-striped">
-            <tr ng-repeat="game in $data">
-                <td class="text-center" title="'Match'"><a ui-sref="match({gameId: game.game.id})">{{ game.game.homeName }} - {{ game.game.awayName }}</a></td>
-                <td class="text-center" title="'Date'">{{ game.game.gameDate | date : 'MMM d, h:mm a'}}</td>
-                <td class="text-center" title="'Score'">{{ game.game.goalsHome }} - {{ game.game.goalsAway }}</td>
-                <td class="text-center" title="'Status'">{{ game.game.status }}</td>
-                <td class="text-center" title="'HOME'">{{game.oddsHome}}</td>
-                <td class="text-center" title="'DRAW'">{{game.oddsTie}}</td>
-                <td class="text-center" title="'AWAY'">{{game.oddsAway}}</td>
-                <td class="text-center" title="'3WayBet'">
-                    <select ng-model="vm.vm.userBets[game.game.id]" required class="betSelect" style="{{ vm.userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}">
-                        <option value=""></option>
-                        <option value="HOME_1">HOME</option>
-                        <option value="DRAW_X">DRAW</option>
-                        <option value="AWAY_2">AWAY</option>
-                    </select>
-                </td>
-                <td ng-if="game.game.matchDay > 3" class="text-center" title="'Under'">{{game.oddsUnder}}</td>
-                <td ng-if="game.game.matchDay > 3" class="text-center" title="'Over'">{{game.oddsOver}}</td>
-                <td ng-if="game.game.matchDay > 3" class="text-center" title="'OverUnderBet'">
-                    <select ng-model="vm.vm.userOverBets[game.game.id]" style="{{ userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}" required>
-                        <option value=""></option>
-                        <option value="UNDER">UNDER</option>
-                        <option value="OVER">OVER</option>
-                    </select>
-                </td>`
-            </tr>
-        </table>
-    </div>
-    <br/>
-    <div class="row">
-        <div ng-show="vm.editError" class="col-12 text-center" style="color:red">Missing fields</div>
-        <div ng-show="vm.editSuccess" class="col-12 text-center" style="color:green">Picks saved successfully</div>
-    </div>
-    <br/>
-    <div class="float-right">
-        <button type="button" ng-disabled="vm.enableSubmit" class="btn btn-success col-m" ng-click="vm.saveBets()">Submit Picks</button>
-    </div>
-</form> -->
