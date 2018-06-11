@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,6 +66,7 @@ public class HelperController {
 		return Lists.newArrayList(oddRepository.findAll()).stream()
 				.filter(odd -> matchDays == null || matchDays.indexOf(odd.getGame().getMatchDay()) != -1)
 				.filter(odd -> matchId == null || matchId.equals(odd.getGame().getId()))
+				.sorted(Comparator.comparing(o -> o.getGame().getGameDate()))
 				.collect(Collectors.toList());
 	}
 
