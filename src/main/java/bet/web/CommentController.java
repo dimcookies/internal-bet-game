@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.ZoneId;
@@ -64,6 +61,18 @@ public class CommentController {
         User user = userRepository.findOneByUsername(principal.getName());
         Comment c = new Comment(comment, user, ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Europe/Athens")));
         return commentRepository.save(c);
+    }
+
+    /**
+     * Add a new comment for the currently logged in user
+     * @param comment
+     * @param principal
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/add2", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Comment addComments2(@RequestBody String comment, Principal principal) throws Exception {
+        return addComments(comment, principal);
     }
 
     /**

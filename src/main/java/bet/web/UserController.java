@@ -7,6 +7,7 @@ import bet.repository.FriendRepository;
 import bet.repository.UserRepository;
 import bet.service.mgmt.UserService;
 import com.google.common.collect.Lists;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.MediaType;
@@ -98,6 +99,18 @@ public class UserController {
     }
 
     /**
+     * Change password of currently logged in user
+     * @param principal
+     * @return
+     * @throws Exception
+     */
+    @CacheEvict(allEntries = true, cacheNames = {"users1","users2"})
+    @RequestMapping(value = "/modify2", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
+    public String changePassword2(@RequestBody ChangeUserSettingsDto changeUserSettingsDto, Principal principal) throws Exception {
+        return changePassword(changeUserSettingsDto.getPassword(), changeUserSettingsDto.getOptOUt(), principal);
+    }
+
+    /**
      * Get list of usernames of users
      * @return
      * @throws Exception
@@ -120,5 +133,29 @@ public class UserController {
     }
 
 
+
+}
+
+@Data
+class ChangeUserSettingsDto {
+    private String password;
+    private Boolean optOUt;
+
+    public ChangeUserSettingsDto() {
+        
+    }
+
+    public ChangeUserSettingsDto(String password, Boolean optOut) {
+        this.password = password;
+        this.optOUt = optOut;
+    }
+
+    public ChangeUserSettingsDto(String password) {
+        this.password = password;
+    }
+
+    public ChangeUserSettingsDto(Boolean optOut) {
+        this.optOUt = optOut;
+    }
 
 }
