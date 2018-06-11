@@ -66,7 +66,13 @@ public class HelperController {
 		return Lists.newArrayList(oddRepository.findAll()).stream()
 				.filter(odd -> matchDays == null || matchDays.indexOf(odd.getGame().getMatchDay()) != -1)
 				.filter(odd -> matchId == null || matchId.equals(odd.getGame().getId()))
-				.sorted(Comparator.comparing(o -> o.getGame().getGameDate()))
+				.sorted((o1, o2) -> {
+					int res = o1.getGame().getGameDate().compareTo(o2.getGame().getGameDate());
+					if(res != 0) {
+						return res;
+					}
+					return o1.getGame().getId().compareTo(o2.getGame().getId());
+				})
 				.collect(Collectors.toList());
 	}
 
