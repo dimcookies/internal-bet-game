@@ -139,15 +139,15 @@ public class UserController {
 @Data
 class ChangeUserSettingsDto {
     private String password;
-    private Boolean optOUt;
+    private Boolean optOut;
 
     public ChangeUserSettingsDto() {
-        
+
     }
 
     public ChangeUserSettingsDto(String password, Boolean optOut) {
         this.password = password;
-        this.optOUt = optOut;
+        this.optOut = optOut;
     }
 
     public ChangeUserSettingsDto(String password) {
@@ -155,7 +155,7 @@ class ChangeUserSettingsDto {
     }
 
     public ChangeUserSettingsDto(Boolean optOut) {
-        this.optOUt = optOut;
+        this.optOut = optOut;
     }
 
 }
