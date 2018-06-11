@@ -15,16 +15,26 @@
 			alert("Passwords must match!")
 		}
 		if (self.password && self.passwordConfirm && self.password === self.passwordConfirm) {
-			self.$http.post("/users/modify?password=" + self.password).then(function(response) {
+			self.$http.post("/users/modify2", {
+				password: self.password
+			}).then(function(response) {
 				alert("Password altered succesfully!");
 			});
+			// self.$http.post("/users/modify?password=" + self.password).then(function(response) {
+			// 	alert("Password altered succesfully!");
+			// });
 		}
 	};
 	setOptOut() {
 		var self = this;
-		self.$http.post("/users/modify?optOut=" + self.optOut).then(function(response) {
-			alert("Opt out option saved succesfully!");
-		});
+			self.$http.post("/users/modify2", {
+				optOut: self.optOut
+			}).then(function(response) {
+				alert("Opt out option saved succesfully!");
+			});
+		// self.$http.post("/users/modify?optOut=" + self.optOut).then(function(response) {
+		// 	alert("Opt out option saved succesfully!");
+		// });
 	};
 }
 SettingsController.$inject = ['$scope', '$http', 'logger', 'NgTableParams'];
