@@ -38,6 +38,11 @@ public class Comment implements Serializable {
 	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "bet.entity-cache")
 	private User user;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+	@Column(name = "COMMENT_DATE")
+	@Type(type = "java.time.ZonedDateTime")
+	private ZonedDateTime commentDate;
+
 	@OneToMany(mappedBy = "comment", targetEntity = CommentLike.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "bet.collection-cache")
 	private List<CommentLike> commentLikes = new ArrayList<>();
@@ -50,6 +55,7 @@ public class Comment implements Serializable {
 	public Comment(String comment, User user, ZonedDateTime commentDate) {
 		this.comment = comment;
 		this.user = user;
+		this.commentDate = commentDate;
 	}
 
 }
