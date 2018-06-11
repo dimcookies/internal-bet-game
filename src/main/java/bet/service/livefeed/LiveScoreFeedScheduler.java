@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -53,6 +54,7 @@ public class LiveScoreFeedScheduler {
 		getLiveScores(true);
 	}
 
+	@CacheEvict(allEntries = true, cacheNames = {"points1","points2"})
 	public void getLiveScores(boolean checkForActiveMatches) {
 		LOGGER.trace("Check live scores");
 		ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
@@ -74,6 +76,7 @@ public class LiveScoreFeedScheduler {
 	 * for user bets
 	 * @param gameDto
 	 */
+	@CacheEvict(allEntries = true, cacheNames = {"points1","points2"})
 	public void checkMatchChanged(GameDto gameDto) {
 		//if game already finished, do not check
 		Game dbGame = gameRepository.findOne(gameDto.getId());

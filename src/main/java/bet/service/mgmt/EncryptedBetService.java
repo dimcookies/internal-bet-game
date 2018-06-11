@@ -22,10 +22,7 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import javax.transaction.Transactional;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -182,9 +179,7 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 		}).map(encryptedBetDto -> create(encryptedBetDto)).collect(Collectors.toList()); //save bet and return list
 
 		//Send an email to user with saved bets
-
-
-		emailSender.sendEmail(user.getEmail(), "WC2018 Bet", html);
+		emailSender.sendEmail(user.getEmail(), "WC2018 Bet", html, true);
 
 		return result;
 	}
@@ -195,12 +190,15 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 	 * @return
 	 */
 	private List<Map<String,Object>> getMailBets(List<EncryptedBetDto> bets) {
-		return bets.stream().map(bet -> {
-			Game game = gameRepository.findOne(bet.getGameId());
-			return new HashMap<String, Object>() {{
-				put("game", game);
-				put("bet", bet);
-			}};
-		}).collect(Collectors.toList());
+		return bets.stream()
+				.map(bet -> {
+					Game game = gameRepository.findOne(bet.getGameId());
+					return new HashMap<String, Object>() {{
+						put("game", game);
+						put("bet", bet);
+					}};
+				})
+                .sorted(Comparator.comparing(o -> ((Game) o.get("game")).getGameDate()))
+				.collect(Collectors.toList());
 	}
 }

@@ -5,30 +5,54 @@
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-</head>
-<body style="margin: 0; padding: 0;">
+    <style>
+        #customers {
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
 
-<table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
+        #customers td, #customers th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #customers tr:nth-child(even){background-color: #f2f2f2;}
+
+        #customers tr:hover {background-color: #ddd;}
+
+        #customers th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<table id="customers">
     <tr>
-        <th align="center" bgcolor="#78ab46" style="padding: 40px 0 30px 0;">
+        <th>
             Home
         </th>
-        <th align="center" bgcolor="#78ab46" style="padding: 40px 0 30px 0;">
+        <th>
             Away
         </th>
-        <th align="center" bgcolor="#78ab46" style="padding: 40px 0 30px 0;">
-            Bet Score
+        <th>
+            3WayBet
         </th>
-        <th align="center" bgcolor="#78ab46" style="padding: 40px 0 30px 0;">
-            Bet Over
+        <th>
+            UnderOverBet
         </th>
     </tr>
 
-    <tr bgcolor="#eaeaea" style="padding: 40px 30px 40px 30px;" th:each="bet : ${bets}" >
-        <td align="center" bgcolor="#78ab46" style="padding: 40px 0 30px 0;" th:text="${bet.get('game').homeName}"></td>
-        <td align="center" bgcolor="#78ab46" style="padding: 40px 0 30px 0;" th:text="${bet.get('game').awayName}"></td>
-        <td align="center" bgcolor="#78ab46" style="padding: 40px 0 30px 0;" th:text="${bet.get('bet').scoreResult}"></td>
-        <td align="center" bgcolor="#78ab46" style="padding: 40px 0 30px 0;" th:text="${bet.get('bet').overResult}"></td>
+    <tr th:each="bet : ${bets}" >
+        <td th:text="${bet.get('game').homeName}"></td>
+        <td th:text="${bet.get('game').awayName}"></td>
+        <td th:text="${bet.get('bet').scoreResult}"></td>
+        <td th:text="${bet.get('bet').overResult}"></td>
 
     </tr>
 </table>

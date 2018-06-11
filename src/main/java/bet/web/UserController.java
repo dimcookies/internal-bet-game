@@ -8,6 +8,7 @@ import bet.repository.UserRepository;
 import bet.service.mgmt.UserService;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -79,6 +80,7 @@ public class UserController {
      * @return
      * @throws Exception
      */
+    @CacheEvict(allEntries = true, cacheNames = {"users1","users2"})
     @RequestMapping(value = "/modify", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
     public String changePassword(@RequestParam(value = "password", required = false) String password,
             @RequestParam(value = "optOut", required = false) Boolean optOut, Principal principal) throws Exception {

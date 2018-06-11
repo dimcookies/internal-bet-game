@@ -23,7 +23,7 @@ public class GmailSSLImpl implements EmailSender {
 	@Value("${application.email.password}")
 	private String password;
 
-	public void sendEmail(String emailTo, String subject, String body) {
+	public void sendEmail(String emailTo, String subject, String body, boolean cc) {
 		Properties props = new Properties();
 		props.put("mail.smtp.host", "smtp.gmail.com");
 		props.put("mail.smtp.socketFactory.port", "465");
@@ -43,8 +43,10 @@ public class GmailSSLImpl implements EmailSender {
 			message.setFrom(new InternetAddress(username));
 			message.setRecipients(Message.RecipientType.TO,
 					InternetAddress.parse(emailTo));
-			message.setRecipients(Message.RecipientType.CC,
-					InternetAddress.parse(username));
+			if(cc) {
+				message.setRecipients(Message.RecipientType.CC,
+						InternetAddress.parse(username));
+			}
 			message.setSubject(subject);
 			message.setContent(body, "text/html; charset=utf-8");
 

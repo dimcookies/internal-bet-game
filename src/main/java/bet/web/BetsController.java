@@ -3,8 +3,10 @@ package bet.web;
 import bet.api.dto.EncryptedBetDto;
 import bet.api.dto.UserDto;
 import bet.model.Bet;
+import bet.model.Game;
 import bet.model.User;
 import bet.repository.BetRepository;
+import bet.repository.CustomBetRepository;
 import bet.repository.FriendRepository;
 import bet.repository.UserRepository;
 import bet.service.mgmt.EncryptedBetService;
@@ -12,12 +14,11 @@ import bet.service.mgmt.UserService;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,9 @@ public class BetsController {
     @Autowired
     private BetRepository betRepository;
 
+    @Autowired
+    private CustomBetRepository customBetRepository;
+
     @Value("${application.allowedMatchDays}")
     private String allowedMatchDays;
 
@@ -60,8 +64,9 @@ public class BetsController {
      */
     @RequestMapping(path = "/encrypted/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<EncryptedBetDto> create(@RequestBody List<EncryptedBetDto> bets, Principal principal) {
-        User user = userRepository.findOneByUsername(principal.getName());
-        return encryptedBetService.createAll(bets, user);
+        //User user = userRepository.findOneByUsername(principal.getName());
+        UserDto dto = userService.list(principal.getName()).get(0);
+        return encryptedBetService.createAll(bets, dto.toEntity());
     }
 
     /**
@@ -114,16 +119,17 @@ public class BetsController {
      * @return
      * @throws Exception
      */
+    @Cacheable("points2")
     @RequestMapping(value = "/points", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Map<String, String>> allPoints() throws Exception {
         Map<String, String> names = userService.list().stream()
                 .collect(Collectors.toMap(UserDto::getUsername, UserDto::getName));
-        Map<String, Double> riskIndex = betRepository.listRiskIndex();
+        Map<String, Double> riskIndex = customBetRepository.listRiskIndex();
         Map<String, Long> allBets =
                 StreamSupport.stream(betRepository.findAll().spliterator(), false)
                         .filter(bet -> bet.getResultPoints() > 0)
                         .collect(Collectors.groupingBy(o -> o.getUser().getUsername(), Collectors.counting()));
-        Map<String, Integer> allPoints = betRepository.listAllPoints();
+        Map<String, Integer> allPoints = customBetRepository.listAllPoints();
         return allPoints.entrySet().stream()
                 //sort by points desc
                 .sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue()))
@@ -152,12 +158,15 @@ public class BetsController {
      * @return
      * @throws Exception
      */
+    @Cacheable(value = "userBets3")
     @RequestMapping(value = "/gameStats", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Map<String, Long> allBets(@RequestParam(value = "gameId") Integer gameId) throws Exception {
-        List<Bet> bets =  Lists.newArrayList(betRepository.findAll()).stream()
-                //filter by game
-                .filter(bet -> gameId == null || bet.getGame().getId().equals(gameId))
-                .collect(Collectors.toList());
+        List<Bet> bets;
+        if(gameId != null) {
+            bets = betRepository.findByGame(new Game(gameId));
+        } else {
+            bets = Lists.newArrayList(betRepository.findAll());
+        }
         Map<String, Long> stats = bets.stream().collect(Collectors.groupingBy(o -> o.getScoreResult().toString(), Collectors.counting()));
         stats.putAll(bets.stream().filter(bet -> bet.getOverResult() != null).collect(Collectors.groupingBy(o -> o.getOverResult().toString(), Collectors.counting())));
 

@@ -7,6 +7,8 @@ import bet.service.encrypt.EncryptHelper;
 import bet.service.utils.PasswordGenerator;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
@@ -35,23 +37,34 @@ public class UserService extends AbstractManagementService<User, Integer, UserDt
 	private SpringTemplateEngine templateEngine;
 
 	@Override
+	@Cacheable(value = "users1")
 	public List<UserDto> list() {
-		return Lists.newArrayList(repository.findAll()).stream().map(entity -> {
-			UserDto dto = new UserDto();
-			dto.fromEntity(entity);
-			try {
-				dto.setName(encryptHelper.decrypt(dto.getName(), RANDOM_SALT));
-			} catch (Exception e) {
-				throw new RuntimeException();
-			}
-			return dto;
-		}).collect(Collectors.toList());
+		return list(null);
+	}
+
+	@Cacheable(value = "users2")
+	public List<UserDto> list(String username) {
+		return Lists.newArrayList(repository.findAll()).stream()
+				.filter(user -> username == null || user.getUsername().equals(username))
+				.map(entity -> {
+					UserDto dto = new UserDto();
+					dto.fromEntity(entity);
+					try {
+						dto.setName(encryptHelper.decrypt(dto.getName(), RANDOM_SALT));
+						dto.setEmail(encryptHelper.decrypt(dto.getEmail(), RANDOM_SALT));
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+					return dto;
+				}).collect(Collectors.toList());
 	}
 
 	@Override
+	@CacheEvict(allEntries = true, cacheNames = {"users1","users2"})
 	public UserDto create(UserDto dto) {
 		//generate a random password
 		String password = passwordGenerator.generatePassword();
+
 		//hash provided password
 		dto.setPassword(hashPassword(dto.getName(), password));
 		if(dto.getName() != null) {
@@ -61,11 +74,21 @@ public class UserService extends AbstractManagementService<User, Integer, UserDt
 				throw new RuntimeException(e);
 			}
 		}
+		//hash provided email
+		String email = dto.getEmail();
+		if(email != null) {
+			try {
+				dto.setEmail(encryptHelper.encrypt(dto.getEmail(), RANDOM_SALT));
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+
 		//all users are created with role USER
 		dto.setRole("USER");
 		dto = super.create(dto);
 		//send email to user to provide the password
-		sendPasswordEmail(dto, password);
+		sendPasswordEmail(dto, password, email);
 		return dto;
 	}
 
@@ -78,13 +101,13 @@ public class UserService extends AbstractManagementService<User, Integer, UserDt
 	 * @param dto
 	 * @param password
 	 */
-	private void sendPasswordEmail(UserDto dto, String password) {
+	private void sendPasswordEmail(UserDto dto, String password, String email) {
 		Context context = new Context();
 		context.setVariable("username", dto.getUsername());
 		context.setVariable("password", password);
 		String html = templateEngine.process("email-user", context);
 
-		emailSender.sendEmail(dto.getEmail(), "Upstream WC2018 account", html);
+		emailSender.sendEmail(email, "Upstream WC2018 account", html, false);
 	}
 
 }

@@ -12,9 +12,8 @@ import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.verify;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -55,6 +54,9 @@ public class AnalyticsSchedulerTest extends AbstractBetIntegrationTest {
     @Autowired
     private UserStreakHistoryRepository userStreakHistoryRepository;
 
+    @Autowired
+    private CacheManager cacheManager;
+
     @Before
     public void setUp() {
         super.setUp();
@@ -88,6 +90,7 @@ public class AnalyticsSchedulerTest extends AbstractBetIntegrationTest {
 
         rankHistoryRepository.deleteAll();
         betRepository.save(new Bet(null, games.get(2).getId(), userId1, ScoreResult.HOME_1, 1000, OverResult.OVER, 2000, now));
+        cacheManager.getCacheNames().parallelStream().forEach(name -> cacheManager.getCache(name).clear());
         userRankAnalyticsModule.run();
         ranking = Lists.newArrayList(rankHistoryRepository.findAll());
         assertEquals(2, ranking.size());

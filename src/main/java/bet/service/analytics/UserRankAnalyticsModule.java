@@ -3,11 +3,13 @@ package bet.service.analytics;
 import bet.model.RankHistory;
 import bet.model.User;
 import bet.repository.BetRepository;
+import bet.repository.CustomBetRepository;
 import bet.repository.RankHistoryRepository;
 import bet.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Component;
 
 import java.time.ZoneId;
@@ -32,16 +34,20 @@ public class UserRankAnalyticsModule implements AnalyticsModule {
     private BetRepository betRepository;
 
     @Autowired
+    private CustomBetRepository customBetRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private RankHistoryRepository rankHistoryRepository;
 
     @Override
+    @CacheEvict(allEntries = true, cacheNames = {"analytics1","analytics1","analytics3","analytics4"})
     public void run() {
         LOGGER.info("Run user rank module");
         //get points for all users
-        Map<String, Integer> allPoints = betRepository.listAllPoints();
+        Map<String, Integer> allPoints = customBetRepository.listAllPoints();
         List<Map.Entry<String, Integer>> ranking = allPoints.entrySet().stream()
                 //sort by total points and then by username
                 .sorted((o1, o2) -> {

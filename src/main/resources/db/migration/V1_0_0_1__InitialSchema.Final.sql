@@ -50,8 +50,8 @@ ALTER TABLE ALLOWED_USERS ADD CONSTRAINT ALLOWED_USERS_U03 UNIQUE ( EMAIL );
 
 INSERT INTO bet.allowed_users(
             id, name, username, email, password, role)
-    VALUES (nextval('bet.allowed_users_id_seq'), 'ELZ2xseYxiOqV19jtOkIAhC2dsbHmMYjqldfY7TpCAIQtnbGx5jGI6pXX2O06QgCELZ2xseYxiOqV19jtOkIAhC2dsbHmMYjqldfY7TpCAIQtnbGx5jGI6pXX2O06QgCELZ2xseYxiOqV19jtOkIAjm7ff2XQXqxB8AilMeCj24=',
-     'XXX', 'XXX@XXX.com', 'rG2Gp860hjYuxFf+XIwvHw==', 'ADMIN');
+    VALUES (nextval('bet.allowed_users_id_seq'), 'ELZ2xseYxiOqV19jtOkIAhC2dsbHmMYjqldfY7TpCAIQtnbGx5jGI6pXX2O06QgCELZ2xseYxiOqV19jtOkIAhC2dsbHmMYjqldfY7TpCAIQtnbGx5jGI6pXX2O06QgCELZ2xseYxiOqV19jtOkIAgbWiqn1u/PTuZFxgihvcjM=',
+     'XXX', 'ELZ2xseYxiOqV19jtOkIAhC2dsbHmMYjqldfY7TpCAIQtnbGx5jGI6pXX2O06QgCELZ2xseYxiOqV19jtOkIAhC2dsbHmMYjqldfY7TpCAIQtnbGx5jGI6pXX2O06QgCELZ2xseYxiOqV19jtOkIAtotaH5p7u01d1R605o615U=', 'rG2Gp860hjYuxFf+XIwvHw==', 'ADMIN');
 
 
 CREATE TABLE BET

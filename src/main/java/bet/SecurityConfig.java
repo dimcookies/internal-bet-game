@@ -75,7 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.cors().and().csrf().disable().
 				authorizeRequests()
-				.antMatchers(new String[]{"/css/**", "/js/**", "/img/**"}).permitAll()
+				.antMatchers(new String[]{"/css/**", "/js/**", "/images/**", "/vendor/**", "/img/**", "/app*"}).permitAll()
 				//restrict configuration web services to admin user
 					.antMatchers("/config/**").hasAuthority("ADMIN")// hasRole("ADMIN")
 				//restrict swagger to admin user
@@ -104,7 +104,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring()
-				.antMatchers("/css/**", "/js/**", "/images/**", "/vendor/**", "/img/**"/*"/resources/**","/public/**", "/ws/**"*/);
+				.antMatchers("/css/**", "/js/**", "/images/**", "/vendor/**", "/img/**", "/app*" /*"/resources/**","/public/**", "/ws/**"*/);
 	}
 
 }
