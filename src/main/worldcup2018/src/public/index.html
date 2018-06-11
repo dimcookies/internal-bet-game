@@ -11,8 +11,7 @@
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom fonts for this template-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-        <!-- <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
-
+    <!-- <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
     <!-- Page level plugin CSS-->
     <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
     <!-- Custom styles for this template-->
@@ -24,57 +23,56 @@
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
       <a class="navbar-brand" ui-sref-active="active" ui-sref="home" style="font-size: 1.05rem;">
-            <span><img style="height: 30px;" src="img/logo1.png"/></span>
-
-      World Cup Challenge 2018
+        <span><img style="height: 30px;" src="img/logo1.png"/></span>
+        World Cup Challenge 2018
       </a>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
-          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Leaderboard" ui-sref-active="active">
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Leaderboard" ui-sref-active="active" onclick="collapseMenu()">
             <a class="nav-link" ui-sref="leaderboard">
               <i class="fa fa-fw fa-trophy"></i>
               <span class="nav-link-text">Leaderboard</span>
             </a>
           </li>
-          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Matches" ui-sref-active="active">
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Matches" ui-sref-active="active" onclick="collapseMenu()">
             <a class="nav-link" ui-sref="matches">
               <i class="fa fa-fw fa-futbol"></i>
               <span class="nav-link-text">Matches</span>
             </a>
           </li>
-          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="My Picks" ui-sref-active="active">
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="My Picks" ui-sref-active="active" onclick="collapseMenu()">
             <a class="nav-link" ui-sref="bets">
               <i class="fa fa-fw fa-pencil-alt"></i>
               <span class="nav-link-text">My Picks</span>
             </a>
           </li>
-          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Chat" ui-sref-active="active">
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Chat" ui-sref-active="active" onclick="collapseMenu()">
             <a class="nav-link" ui-sref="chat">
               <i class="fa fa-fw fa-comments"></i>
               <span class="nav-link-text">Chat</span>
             </a>
           </li>
-          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Analytics" ui-sref-active="active">
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Analytics" ui-sref-active="active" onclick="collapseMenu()">
             <a class="nav-link">
               <i class="fa fa-fw fa-chart-line"></i>
               <span class="nav-link-text">Analytics <small>(coming soon)</small></span>
             </a>
           </li>
-          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Rules" ui-sref-active="active">
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Rules" ui-sref-active="active" onclick="collapseMenu()">
             <a class="nav-link" ui-sref="rules">
               <i class="fa fa-fw fa-ruble-sign"></i>
               <span class="nav-link-text">Rules </span>
             </a>
-          </li> 
-          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Settings" ui-sref-active="active">
+          </li>
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Settings" ui-sref-active="active" onclick="collapseMenu()">
             <a class="nav-link" ui-sref="settings">
               <i class="fa fa-fw fa-cog"></i>
               <span class="nav-link-text">Settings </span>
             </a>
-          </li>            
+          </li>
         </ul>
         <ul class="navbar-nav sidenav-toggler">
           <li class="nav-item">
@@ -93,7 +91,7 @@
     </nav>
     <div class="content-wrapper">
       <div class="container-fluid">
-          <div ui-view="main"></div>
+        <div ui-view="main"></div>
       </div>
       <!-- /.container-fluid-->
       <!-- /.content-wrapper-->
@@ -105,7 +103,7 @@
         </div>
       </footer>
       <!-- Scroll to Top Button-->
-<!--       <a class="scroll-to-top rounded" href="#page-top">
+      <!--       <a class="scroll-to-top rounded" href="#page-top">
         <i class="fa fa-angle-up"></i>
       </a> -->
       <!-- Logout Modal-->
@@ -134,4 +132,11 @@
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
     <!-- Page level plugin JavaScript-->
     <script src="js/sb-admin.min.js"></script>
-</html>
+    <script>
+    function collapseMenu() {
+      if($(".navbar-toggler").is(":visible") && !$(".navbar-toggler.navbar-toggler-right").hasClass(".collapsed")){
+        $(".navbar-toggler").click();        
+      }
+    }
+    </script>
+  </html>
