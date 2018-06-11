@@ -198,7 +198,13 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 						put("bet", bet);
 					}};
 				})
-                .sorted(Comparator.comparing(o -> ((Game) o.get("game")).getGameDate()))
+				.sorted((o1, o2) -> {
+					int res = ((Game) o1.get("game")).getGameDate().compareTo(((Game) o2.get("game")).getGameDate());
+					if(res != 0) {
+						return res;
+					}
+					return ((Game) o1.get("game")).getId().compareTo(((Game) o2.get("game")).getId());
+				})
 				.collect(Collectors.toList());
 	}
 }
