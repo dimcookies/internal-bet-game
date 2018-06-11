@@ -107,7 +107,7 @@ public class UserController {
     @CacheEvict(allEntries = true, cacheNames = {"users1","users2"})
     @RequestMapping(value = "/modify2", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
     public String changePassword2(@RequestBody ChangeUserSettingsDto changeUserSettingsDto, Principal principal) throws Exception {
-        return changePassword(changeUserSettingsDto.getPassword(), changeUserSettingsDto.getOptOUt(), principal);
+        return changePassword(changeUserSettingsDto.getPassword(), changeUserSettingsDto.getOptOut(), principal);
     }
 
     /**
