@@ -7,11 +7,11 @@
             <td class="text-center" title="'Status'" sortable="'status'" ng-class="{'table-success'
             : game.game.status == 'RUNNING'}"
             >{{ game.game.status }}</td>
-            <td class="text-center" title="'1'" sortable="'oddsHome'">{{game.oddsHome}}</td>
-            <td class="text-center" title="'X'" sortable="'oddsTie'">{{game.oddsTie}}</td>
-            <td class="text-center" title="'2'" sortable="'oddsAway'">{{game.oddsAway}}</td>
-            <td class="text-center" title="'Under'" sortable="'oddsUnder'">{{game.oddsUnder}}</td>
-            <td class="text-center" title="'Over'" sortable="'oddsOver'">{{game.oddsOver}}</td>
+            <td class="text-center" title="'1'" sortable="'oddsHome'">{{game.oddsHome | number: 2}}</td>
+            <td class="text-center" title="'X'" sortable="'oddsTie'">{{game.oddsTie | number: 2}}</td>
+            <td class="text-center" title="'2'" sortable="'oddsAway'">{{game.oddsAway | number: 2}}</td>
+            <!-- <td class="text-center" title="'Under'" sortable="'oddsUnder'">{{game.oddsUnder}}</td> -->
+            <!-- <td class="text-center" title="'Over'" sortable="'oddsOver'">{{game.oddsOver}}</td> -->
         </tr>
     </table>
 </div>

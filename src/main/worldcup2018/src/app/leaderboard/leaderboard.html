@@ -4,7 +4,7 @@
             <td class="text-center" title="'#'">{{$index+1}}</td>
             <td class="text-center" title="'User'" sortable="'username'">{{entry.username}}</a></td>
             <td class="text-center" title="'Points'" sortable="'points'">{{ entry.points }}</td>
-            <td class="text-center" title="'RiskIndex'" sortable="'riskIndex'">{{ entry.riskIndex }}</td>
+            <td class="text-center" title="'RiskIndex'" sortable="'riskIndex'">{{ entry.riskIndex | number: 4}}</td>
             <td class="text-center" title="'Correct Results'" sortable="'correctResults'">{{ entry.correctResults }}</td>
             <td class="text-center" title="'Action'">
                 <a ui-sref="user({userName: entry.username})">
