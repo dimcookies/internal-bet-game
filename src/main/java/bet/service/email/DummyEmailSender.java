@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class DummyEmailSender implements EmailSender {
 
 
-	public void sendEmail(String emailTo, String subject, String body) {
+	public void sendEmail(String emailTo, String subject, String body, boolean cc) {
 
 	}
 }
