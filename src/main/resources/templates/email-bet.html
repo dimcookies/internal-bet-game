@@ -47,11 +47,14 @@
             UnderOverBet
         </th>
     </tr>
-
     <tr th:each="bet : ${bets}" >
         <td th:text="${bet.get('game').homeName}"></td>
         <td th:text="${bet.get('game').awayName}"></td>
-        <td th:text="${bet.get('bet').scoreResult}"></td>
+        <td th:switch="${bet.get('bet').scoreResult}">
+            <span th:case="HOME_1">1</span>
+            <span th:case="DRAW_X">X</span>
+            <span th:case="AWAY_2">2</span>
+        </td>
         <td th:text="${bet.get('bet').overResult}"></td>
 
     </tr>

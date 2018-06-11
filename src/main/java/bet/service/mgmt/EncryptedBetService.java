@@ -76,7 +76,9 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 			if(dto.getOverResult() != null) {
 				dto.setOverResult(encryptHelper.encrypt(dto.getOverResult(), salt));
 			}
-			dto.setScoreResult(encryptHelper.encrypt(dto.getScoreResult(), salt));
+			if(dto.getScoreResult() != null) {
+				dto.setScoreResult(encryptHelper.encrypt(dto.getScoreResult(), salt));
+			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -153,6 +155,7 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 		//the configured days that are allowed to get bets for
 		List<Integer> allowedDays = Arrays.asList(allowedMatchDays).stream().map(Integer::parseInt).collect(Collectors.toList());
 
+
 		//check if a provided bet is for a game outside allowed days
 		bets.forEach(encryptedBetDto -> {
 			Game game = gameRepository.findOne(encryptedBetDto.getGameId());
@@ -161,15 +164,21 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 			}
 		});
 
+		List<EncryptedBetDto> validBets
+				= bets.stream()
+				.filter(encryptedBetDto -> encryptedBetDto.getOverResult() != null || encryptedBetDto.getScoreResult() != null)
+				.collect(Collectors.toList());
+
+
 		Context context = new Context();
-		context.setVariable("bets", getMailBets(bets));
+		context.setVariable("bets", getMailBets(validBets));
 		String html = templateEngine.process("email-bet", context);
 
 		//delete current bets
 		encryptedBetRepository.deleteByUser(user);
 
 		ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
-		List<EncryptedBetDto> result = bets.stream().map(encryptedBetDto -> {
+		List<EncryptedBetDto> result = validBets.stream().map(encryptedBetDto -> {
 			encryptedBetDto.setId(null);
 			//set user of bet to current user
 			encryptedBetDto.setUserId(user.getId());
