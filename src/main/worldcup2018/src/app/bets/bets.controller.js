@@ -49,19 +49,19 @@
 		console.log(isPlayoffStage);
 		self.editError = false;
 		self.editSuccess = false;
-		for (var i = 0; i < self.selectedGames.length; i++) {
-			const game = self.selectedGames[i];
-			if (self.userBets[game.game.id] == null) {
-				self.editError = true;
-				self.enableSubmit = false;
-				return;
-			}
-			if (isPlayoffStage && self.userOverBets[game.game.id] == null) {
-				self.editError = true;
-				self.enableSubmit = false;				
-				return;
-			}
-		}
+		// for (var i = 0; i < self.selectedGames.length; i++) {
+		// 	const game = self.selectedGames[i];
+		// 	if (self.userBets[game.game.id] == null) {
+		// 		self.editError = true;
+		// 		self.enableSubmit = false;
+		// 		return;
+		// 	}
+		// 	if (isPlayoffStage && self.userOverBets[game.game.id] == null) {
+		// 		self.editError = true;
+		// 		self.enableSubmit = false;				
+		// 		return;
+		// 	}
+		// }
 		const ar = [];
 		for (var key in self.userBets) {
 			var value = self.userBets[key];

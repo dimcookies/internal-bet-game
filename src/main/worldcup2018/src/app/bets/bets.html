@@ -20,7 +20,8 @@
                 <td class="text-center" title="'X'">{{game.oddsTie | number: 2}}</td>
                 <td class="text-center" title="'2'">{{game.oddsAway | number: 2}}</td>
                 <td class="text-center" title="'3WayBet'">
-                    <select ng-model="vm.userBets[game.game.id]" required class="betSelect" style="{{ vm.userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}">
+<!--                     <select ng-model="vm.userBets[game.game.id]" required class="betSelect" style="{{ vm.userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}"> -->
+                    <select ng-model="vm.userBets[game.game.id]" required class="betSelect">
                         <option value=""></option>
                         <option value="HOME_1">1</option>
                         <option value="DRAW_X">X</option>
@@ -30,7 +31,8 @@
                 <td ng-if="game.game.matchDay > 3" class="text-center" title="'Under'">{{game.oddsUnder}}</td>
                 <td ng-if="game.game.matchDay > 3" class="text-center" title="'Over'">{{game.oddsOver}}</td>
                 <td ng-if="game.game.matchDay > 3" class="text-center" title="'OverUnderBet'">
-                    <select ng-model="vm.userOverBets[game.game.id]" style="{{ userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}" required>
+<!--                     <select ng-model="vm.userOverBets[game.game.id]" style="{{ userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}" required> -->           
+                    <select ng-model="vm.userOverBets[game.game.id]" required>
                         <option value=""></option>
                         <option value="UNDER">UNDER</option>
                         <option value="OVER">OVER</option>
