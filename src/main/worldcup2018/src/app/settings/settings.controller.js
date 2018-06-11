@@ -3,8 +3,11 @@
 		this.$http = $http;
 		this.logger = logger;
 		this.NgTableParams = NgTableParams;
-		// this.activate();
-		this.optOut = false;
+		var self = this;
+		self.optOut = false;
+		self.$http.get("/users/currentUser").then(function(response) {
+			self.optOut = response.data.optOut;
+		});
 	}
 	resetPass() {
 		var self = this;
@@ -19,11 +22,9 @@
 	};
 	setOptOut() {
 		var self = this;
-		if (self.optOut) {
-			self.$http.post("/users/modify?optOut=" + self.optOut).then(function(response) {
-				alert("Opt out option saved succesfully!");
-			});
-		}
+		self.$http.post("/users/modify?optOut=" + self.optOut).then(function(response) {
+			alert("Opt out option saved succesfully!");
+		});
 	};
 }
 SettingsController.$inject = ['$scope', '$http', 'logger', 'NgTableParams'];
