@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -131,10 +132,29 @@ public class AnalyticsController {
                     if(sortByMax) {
                         return o2.getMaxStreak().compareTo(o1.getMaxStreak());
                     } else {
-                        return o1.getMinStreak().compareTo(o1.getMinStreak());
+                        return o2.getMinStreak().compareTo(o1.getMinStreak());
                     }
                 })
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Get the min max user streak history
+     *
+     * @return
+     * @throws Exception
+     */
+    @Cacheable(value = "analytics5")
+    @RequestMapping(value = "/userStreakHistoryLimits", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Map<String, UserStreakHistory> userStreakHistoryLimits() throws Exception {
+        UserStreakHistory minStreak = StreamSupport.stream(userStreakHistoryRepository.findAll().spliterator(), false)
+                .min(Comparator.comparing(UserStreakHistory::getMinStreak)).get();
+        UserStreakHistory maxStreak = StreamSupport.stream(userStreakHistoryRepository.findAll().spliterator(), false)
+                .max(Comparator.comparing(UserStreakHistory::getMaxStreak)).get();
+        return new HashMap<String, UserStreakHistory>() {{
+            put("max", maxStreak);
+            put("min", minStreak);
+        }};
     }
 
 
