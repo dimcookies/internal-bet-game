@@ -1,7 +1,8 @@
 ﻿export default class BetsController {
-	constructor($scope, $http, logger, NgTableParams) {
+	constructor($scope, $http, $window, logger, NgTableParams) {
 		this.$http = $http;
 		this.logger = logger;
+		this.$window = $window;		
 		this.NgTableParams = NgTableParams;
 		this.activate();
 	}
@@ -77,7 +78,13 @@
 			self.enableSubmit = false;
 			self.editSuccess = true;
 			self.disableSubmit = true;
+			if (response.data.includes("DOCTYPE html") && typeof response.data === 'string') {
+                self.$window.location.reload();
+			}
+
+		}).catch(function(data) {
+			alert("Opps! Something went wrong");
 		});
 	};
 }
-BetsController.$inject = ['$scope', '$http', 'logger', 'NgTableParams'];
+BetsController.$inject = ['$scope', '$http', '$window', 'logger', 'NgTableParams'];
