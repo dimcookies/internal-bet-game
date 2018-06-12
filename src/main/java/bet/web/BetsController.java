@@ -136,7 +136,7 @@ public class BetsController {
                 .map(e -> new HashMap<String, String>() {{
                     put("username", e.getKey());
                     put("points", e.getValue().toString());
-                    put("riskIndex", riskIndex.getOrDefault(e.getKey(), 0.0).toString());
+                    put("riskIndex", String.format("%.2f", riskIndex.getOrDefault(e.getKey(), 0.0)));
                     put("correctResults", allBets.getOrDefault(e.getKey(), 0L).toString());
                     put("name", names.getOrDefault(e.getKey(), ""));
                 }}).collect(Collectors.toList());

@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +28,7 @@ public class AnalyticsScheduler {
 
 	//@Scheduled(cron = "*/10 * * * * *")
 	@CacheEvict(allEntries = true, cacheNames = {"analytics1","analytics1","analytics3","analytics4"})
-	@Scheduled(cron = "0 0 4 * * *")
+	@Scheduled(cron = "0 0 1 * * *")
 	public void runAnalytics() {
 
 		LOGGER.info("Analytics run");

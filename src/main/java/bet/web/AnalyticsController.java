@@ -62,7 +62,7 @@ public class AnalyticsController {
         return riskIndex.entrySet().stream().sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue()))
                 .map(e -> new HashMap<String, String>() {{
                     put("username", e.getKey());
-                    put("riskIndex", e.getValue().toString());
+                    put("riskIndex", String.format("%.2f", e.getValue()));
                 }}).collect(Collectors.toList());
     }
 
