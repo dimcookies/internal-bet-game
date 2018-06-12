@@ -59,6 +59,7 @@
         </div>
         <div class="card-body">
           <form th:action="@{/login}" method="post">
+            <input type="hidden" name="remember-me" value="1"/>
             <div class="form-group">
               <label for="username">Username</label>:
               <input type="text"

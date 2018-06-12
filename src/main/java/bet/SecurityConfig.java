@@ -88,11 +88,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					.permitAll()
 				.and()
 					.logout()
-					.invalidateHttpSession(true)
-					.clearAuthentication(true)
+					//.invalidateHttpSession(true)
+					//.clearAuthentication(true)
+					.deleteCookies("JSESSIONID")
 					.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 					.logoutSuccessUrl("/login?logout")
-					.permitAll();
+					.permitAll()
+				.and()
+					.rememberMe()
+					.key("AppKey")
+					.alwaysRemember(true)
+					.rememberMeParameter("rememberMe")
+					.rememberMeCookieName("javasampleapproach-remember-me")
+					.tokenValiditySeconds(60* 24 * 60 * 60);
 
 	}
 
