@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -47,6 +44,9 @@ public class AnalyticsController {
 
     @Autowired
     private AnalyticsScheduler analyticsScheduler;
+
+    @Autowired
+    private OddRepository oodOddRepository;
 
     @Value("${application.timezone}")
     private String timezone;
@@ -155,6 +155,22 @@ public class AnalyticsController {
             put("max", maxStreak);
             put("min", minStreak);
         }};
+    }
+
+
+    /**
+     * Get the min max user streak history
+     *
+     * @return
+     * @throws Exception
+     */
+    @Cacheable(value = "analytics6")
+    @RequestMapping(value = "/riskIndexMax", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Double riskIndexMax() throws Exception {
+        return StreamSupport.stream(oodOddRepository.findAll().spliterator(), false)
+                .map(odd -> (double) Collections.max(Arrays.asList(odd.getOddsHome(), odd.getOddsAway(), odd.getOddsTie())) +
+                        (double) Collections.max(Arrays.asList(odd.getOddsOver(), odd.getOddsUnder()))
+                ).collect(Collectors.summingDouble(value -> value));
     }
 
 
