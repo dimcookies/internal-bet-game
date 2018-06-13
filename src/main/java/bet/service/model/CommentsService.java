@@ -1,21 +1,20 @@
 package bet.service.model;
 
-import bet.api.constants.GameStatus;
 import bet.model.Comment;
 import bet.model.CommentLike;
-import bet.model.Game;
 import bet.model.User;
 import bet.repository.CommentLikeRepository;
-import bet.repository.GameRepository;
-import com.google.common.collect.Lists;
+import bet.service.utils.UrlExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.time.ZonedDateTime;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Helper methods for games schedule
@@ -23,8 +22,14 @@ import java.util.stream.Collectors;
 @Component
 public class CommentsService {
 
+	final String HTML_TAG_PATTERN = "<(\"[^\"]*\"|'[^']*'|[^'\">])*>";
+	final private Pattern pattern = Pattern.compile(HTML_TAG_PATTERN, Pattern.MULTILINE);
+
 	@Autowired
 	private CommentLikeRepository commentLikeRepository;
+
+	@Autowired
+	private UrlExtractor urlExtractor;
 
 	@Transactional
 	@Modifying
@@ -39,4 +44,55 @@ public class CommentsService {
 		}
 
 	}
+
+	private boolean stringContainsHtml(String text) {
+		final Matcher matcher = pattern.matcher(text);
+		return matcher.find();
+	}
+
+	public String enhanceComment(String comment) {
+		if(stringContainsHtml(comment)) {
+			throw new RuntimeException("Comments contains html:" + comment);
+		}
+		List<String> links = urlExtractor.pullLinks(comment);
+		if(links.size() == 0) {
+			return comment;
+		}
+		String link = links.get(0);
+
+		StringBuilder result = new StringBuilder(comment);
+		result.append("<br>");
+		if(isImage(link)) {
+			result.append(String.format("<img src=\"%s\" />", link));
+		} else if(isYoutubeLink(link)) {
+			result.append(String.format("<iframe width=\"1280\" height=\"720\" src=\"%s?ecver=1\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen></iframe>", link));
+		} else {
+			result.append(String.format("<a href=\"%s\" >%s</a>", link, link));
+		}
+
+		return result.toString();
+	}
+
+	private boolean isYoutubeLink(String link) {
+		return link.indexOf("youtube.com") != -1;
+	}
+
+	private boolean isImage(String link) {
+		try {
+			URL url = new URL(link);
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("HEAD");
+			String contentType = con.getHeaderField("content-type");
+			if(contentType != null) {
+				if(contentType.startsWith("image")) {
+					return true;
+				}
+			}
+		} catch (Exception e) {
+			return false;
+		}
+
+		return false;
+	}
+
 }

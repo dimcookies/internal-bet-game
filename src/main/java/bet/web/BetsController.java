@@ -110,6 +110,14 @@ public class BetsController {
                     bet.addArgs("isFriend", ""+ friends.contains(currentUsername + "_" +  bet.getUser().getUsername()));
                     return bet;
                 })
+                .sorted((o1, o2) -> {
+                    int res = o1.getGame().getGameDate().compareTo(o2.getGame().getGameDate());
+                    if(res != 0) {
+                        return res;
+                    }
+
+                    return o1.getUser().getUsername().compareTo(o2.getUser().getUsername());
+                })
                 .collect(Collectors.toList());
     }
 
