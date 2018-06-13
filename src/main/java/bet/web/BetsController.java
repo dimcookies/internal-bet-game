@@ -129,7 +129,7 @@ public class BetsController {
      */
     @Cacheable("points2")
     @RequestMapping(value = "/points", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<Map<String, String>> allPoints() throws Exception {
+    public List<Map<String, Object>> allPoints() throws Exception {
         Map<String, String> names = userService.list().stream()
                 .collect(Collectors.toMap(UserDto::getUsername, UserDto::getName));
         Map<String, Double> riskIndex = customBetRepository.listRiskIndex();
@@ -141,10 +141,10 @@ public class BetsController {
         return allPoints.entrySet().stream()
                 //sort by points desc
                 .sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue()))
-                .map(e -> new HashMap<String, String>() {{
+                .map(e -> new HashMap<String, Object>() {{
                     put("username", e.getKey());
                     put("points", e.getValue().toString());
-                    put("riskIndex", String.format("%.2f", riskIndex.getOrDefault(e.getKey(), 0.0)));
+                    put("riskIndex", riskIndex.getOrDefault(e.getKey(), 0.0));
                     put("correctResults", allBets.getOrDefault(e.getKey(), 0L).toString());
                     put("name", names.getOrDefault(e.getKey(), ""));
                 }}).collect(Collectors.toList());
