@@ -67,6 +67,7 @@ public class LiveScoreFeedScheduler {
 			}
 		}
 
+		LOGGER.info("Getting live feed");
 		liveFeed.getLiveFeed().forEach(gameDto -> checkMatchChanged(gameDto));
 		this.lastUpdateDate = now;
 	}
