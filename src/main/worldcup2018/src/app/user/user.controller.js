@@ -26,7 +26,7 @@
     activate() {
         var self = this;
         if (this.userName) {
-            fetchBets();
+            self.fetchBets();
         } else {
             this.$http.get("/users/currentUser").then(function(response) {
                 // console.log('response///...  ', response);
