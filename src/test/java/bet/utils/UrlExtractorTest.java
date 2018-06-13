@@ -52,7 +52,7 @@ public class UrlExtractorTest extends AbstractBetTest {
 
 	@Test
 	public void test_singleUrl_https() {
-		test_singleMatch("Text https://img.in.gr/ Text", "http://img.in.gr/");
+		test_singleMatch("Text https://img.in.gr/ Text", "https://img.in.gr/");
 	}
 
 	@Test
