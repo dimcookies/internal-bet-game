@@ -15,6 +15,7 @@ import java.security.Principal;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Web services related to comments
@@ -41,7 +42,12 @@ public class CommentController {
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Comment> allComments(@RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit) throws Exception {
 
-        return commentRepository.findAllOrdered(new PageRequest(0, limit, new Sort(Sort.Direction.DESC, "comment_date")));
+        return commentRepository.findAllOrdered(new PageRequest(0, limit, new Sort(Sort.Direction.DESC, "comment_date")))
+                .stream().map(comment -> {
+                    comment.setCommentDate(comment.getCommentDate().withZoneSameInstant(ZoneId.of("Europe/Athens")));
+                    return comment;
+                })
+                .collect(Collectors.toList());
     }
 
     /**
