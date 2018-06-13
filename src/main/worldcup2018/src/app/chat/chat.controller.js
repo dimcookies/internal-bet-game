@@ -33,7 +33,7 @@
         self.fetchComments();
         self.mytimeout = self.$timeout(function() {
             self.activate();
-        }, 5000);
+        }, 90000);
         this.$rootScope.$on('$locationChangeStart', function() {
             self.$timeout.cancel(self.mytimeout);
         });
