@@ -5,6 +5,8 @@ import bet.model.User;
 import bet.repository.CommentRepository;
 import bet.repository.UserRepository;
 import bet.service.model.CommentsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -23,6 +25,9 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/comments/")
 public class CommentController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommentController.class);
+
 
     @Autowired
     private CommentRepository commentRepository;
@@ -59,12 +64,19 @@ public class CommentController {
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Comment addComments(@RequestParam(value = "comment", required = true) String comment, Principal principal) throws Exception {
+        User user = userRepository.findOneByUsername(principal.getName());
+
         if(comment == null || comment.length() == 0) {
             return null;
         } /*else if(comment.length() > 200) {
             comment = comment.substring(0,200)+"...";
         }*/
-        User user = userRepository.findOneByUsername(principal.getName());
+//        try {
+//            comment = commentsService.enhanceComment(comment);
+//        } catch (Exception e) {
+//            LOGGER.error(user.getUsername() + " tried to upload:" + comment);
+//            throw e;
+//        }
         Comment c = new Comment(comment, user, ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Europe/Athens")));
         return commentRepository.save(c);
     }
