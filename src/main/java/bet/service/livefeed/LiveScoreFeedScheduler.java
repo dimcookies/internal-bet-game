@@ -54,7 +54,7 @@ public class LiveScoreFeedScheduler {
 		getLiveScores(true);
 	}
 
-	@CacheEvict(allEntries = true, cacheNames = {"points1","points2"})
+	@CacheEvict(allEntries = true, cacheNames = {"points1","points2","games"})
 	public void getLiveScores(boolean checkForActiveMatches) {
 		LOGGER.trace("Check live scores");
 		ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
@@ -76,7 +76,7 @@ public class LiveScoreFeedScheduler {
 	 * for user bets
 	 * @param gameDto
 	 */
-	@CacheEvict(allEntries = true, cacheNames = {"points1","points2"})
+	@CacheEvict(allEntries = true, cacheNames = {"points1","points2","games"})
 	public void checkMatchChanged(GameDto gameDto) {
 		//if game already finished, do not check
 		Game dbGame = gameRepository.findOne(gameDto.getId());
@@ -86,7 +86,8 @@ public class LiveScoreFeedScheduler {
 		Game liveGame = gameDto.toEntity();
 
 		//if score has changed
-		if (liveGame.getGoalsHome() != dbGame.getGoalsHome() || liveGame.getGoalsAway() != dbGame.getGoalsAway()) {
+		if (liveGame.getGoalsHome() != dbGame.getGoalsHome() || liveGame.getGoalsAway() != dbGame.getGoalsAway()
+				|| liveGame.getStatus() != dbGame.getStatus() ) {
 			LOGGER.info("Game changed:" + liveGame.toString());
 
 			//get odd results (0-> result points 1->over points)

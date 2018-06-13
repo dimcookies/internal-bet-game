@@ -71,12 +71,12 @@ public class CommentController {
         } /*else if(comment.length() > 200) {
             comment = comment.substring(0,200)+"...";
         }*/
-//        try {
-//            comment = commentsService.enhanceComment(comment);
-//        } catch (Exception e) {
-//            LOGGER.error(user.getUsername() + " tried to upload:" + comment);
-//            throw e;
-//        }
+        try {
+            comment = commentsService.enhanceComment(comment);
+        } catch (Exception e) {
+            LOGGER.error(user.getUsername() + " tried to upload:" + comment);
+            throw e;
+        }
         Comment c = new Comment(comment, user, ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Europe/Athens")));
         return commentRepository.save(c);
     }

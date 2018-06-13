@@ -140,7 +140,12 @@ public class BetsController {
         Map<String, Integer> allPoints = customBetRepository.listAllPoints();
         return allPoints.entrySet().stream()
                 //sort by points desc
-                .sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue()))
+                .sorted((o1, o2) -> {
+                    int res = o2.getValue().compareTo(o1.getValue());
+                    if(res != 0) {
+                        return res;
+                    }
+                    return o1.getKey().compareTo(o2.getKey()); })
                 .map(e -> new HashMap<String, Object>() {{
                     put("username", e.getKey());
                     put("points", e.getValue().toString());
