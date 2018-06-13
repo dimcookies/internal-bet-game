@@ -31,24 +31,36 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="My Picks" ui-sref-active="active" onclick="collapseMenu()">
+            <a class="nav-link" ui-sref="user">
+              <i class="fa fa-fw fa-pencil-alt"></i>
+              <span class="nav-link-text">My Picks</span>
+            </a>
+          </li>
           <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Leaderboard" ui-sref-active="active" onclick="collapseMenu()">
             <a class="nav-link" ui-sref="leaderboard">
               <i class="fa fa-fw fa-trophy"></i>
               <span class="nav-link-text">Leaderboard</span>
             </a>
           </li>
+<!--           <li class="nav-item" data-toggle="tooltip" data-placement="right" title="My Picks" ui-sref-active="active" onclick="collapseMenu()">
+            <a class="nav-link" ui-sref="bets">
+              <i class="fa fa-fw fa-pencil-alt"></i>
+              <span class="nav-link-text">My Picks</span>
+            </a>
+          </li>      -->     
           <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Matches" ui-sref-active="active" onclick="collapseMenu()">
             <a class="nav-link" ui-sref="matches">
               <i class="fa fa-fw fa-futbol"></i>
               <span class="nav-link-text">Matches</span>
             </a>
           </li>
-          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="My Picks" ui-sref-active="active" onclick="collapseMenu()">
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Bet Now" ui-sref-active="active" onclick="collapseMenu()">
             <a class="nav-link" ui-sref="bets">
-              <i class="fa fa-fw fa-pencil-alt"></i>
-              <span class="nav-link-text">My Picks</span>
+              <i class="fa fa-fw fa-play"></i>
+              <span class="nav-link-text">Bet Now</span>
             </a>
-          </li>
+          </li>          
           <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Chat" ui-sref-active="active" onclick="collapseMenu()">
             <a class="nav-link" ui-sref="chat">
               <i class="fa fa-fw fa-comments"></i>
