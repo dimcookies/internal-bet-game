@@ -21,7 +21,13 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.Reader;
 import java.io.StringReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Get rss feeds from the selected sources and stores to database
@@ -42,28 +48,39 @@ public class RssFeedScheduler {
 	private RestTemplate restTemplate;
 
 	@Scheduled(fixedRate = 3600000)
-	public void getRssFeed() {
-		//delete existing records
-		rssFeedRepository.deleteAll();
+	public void getRssFeed() throws Exception {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		final Date minRssDate = sdf.parse("01/06/2018");
 
-		Arrays.stream(feeds).forEach(feedUrl -> {
+		List<RssFeed> allFeeds = Arrays.stream(feeds).flatMap(feedUrl -> {
+			List<RssFeed> feeds = new ArrayList<>();
 			try {
 				SyndFeedInput input = new SyndFeedInput();
 				input.setXmlHealerOn(true);
 
 				//SyndFeed feed = input.build(new XmlReader(feedUrl));
 				SyndFeed feed = input.build(getResponse(feedUrl));
+
 				feed.getEntries().forEach (e -> {
 					SyndEntry entry = (SyndEntry) e;
+					if(entry.getPublishedDate() == null || entry.getPublishedDate().before(minRssDate)) {
+						return;
+					}
 					//get image if exist
 					String imageUrl = entry.getEnclosures() != null && entry.getEnclosures().size() > 0 ? ((SyndEnclosure)entry.getEnclosures().get(0)).getUrl().replaceFirst("^//","http://") : "/images/emptyRss.jpg";
-					rssFeedRepository.save(new RssFeed(entry.getTitle(), entry.getLink(), entry.getPublishedDate(), imageUrl));
+					feeds.add(new RssFeed(entry.getTitle(), entry.getLink(), entry.getPublishedDate(), imageUrl));
 				});
 			} catch (Exception e) {
 				LOGGER.error("Error loading rss " + feedUrl, e);
 			}
-		});
+			return feeds.stream();
+		}).collect(Collectors.toList());
 
+		if(allFeeds.size() > 0) {
+			//delete existing records
+			rssFeedRepository.deleteAll();
+			rssFeedRepository.save(allFeeds);
+		}
 	}
 
 	private String cleanTextContent(String text)
