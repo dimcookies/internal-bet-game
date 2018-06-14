@@ -45,7 +45,7 @@ public class BetsController {
     private CustomBetRepository customBetRepository;
 
     @Value("${application.allowedMatchDays}")
-    private String allowedMatchDays;
+    private String[] allowedMatchDays;
 
     @Autowired
     private UserService userService;
@@ -160,8 +160,8 @@ public class BetsController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/allowedMatchDays", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
-    public String allowedMatchDays() throws Exception {
+    @RequestMapping(value = "/allowedMatchDays", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public String[] allowedMatchDays() throws Exception {
         return allowedMatchDays;
     }
 
