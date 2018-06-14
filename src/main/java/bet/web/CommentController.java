@@ -94,6 +94,28 @@ public class CommentController {
     }
 
     /**
+     * Delete a user comment
+     * @param commentId
+     * @param principal
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/delete", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Comment delete(@RequestParam(value = "commentId", required = true) Integer commentId, Principal principal) throws Exception {
+        Comment comment = commentRepository.findOne(commentId);
+
+        if(comment != null) {
+            if(!comment.getUser().getUsername().equals(principal.getName())) {
+                throw new RuntimeException("User " + principal.getName() + " tried to delete comment " + comment);
+            }
+            commentRepository.delete(commentId);
+        }
+        return comment;
+
+    }
+
+
+    /**
      * Add a new comment for the currently logged in user
      * @param principal
      * @return
