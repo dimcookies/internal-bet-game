@@ -7,6 +7,7 @@ import bet.model.Odd;
 import bet.repository.BetRepository;
 import bet.repository.GameRepository;
 import bet.repository.OddRepository;
+import bet.service.cache.ClearCacheTask;
 import bet.service.utils.GamesSchedule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +50,10 @@ public class LiveScoreFeedScheduler {
 	@Autowired
 	private GamesSchedule gameScheduler;
 
+	@Autowired
+	private ClearCacheTask clearCacheTask;
+
+	@CacheEvict(allEntries = true, cacheNames = {"points1","points2","games"})
 	@Scheduled(fixedRate = interval)
 	public void getLiveScores() {
 		getLiveScores(true);
@@ -68,6 +73,7 @@ public class LiveScoreFeedScheduler {
 		}
 
 		LOGGER.info("Getting live feed");
+		clearCacheTask.clearCaches();
 		liveFeed.getLiveFeed().forEach(gameDto -> checkMatchChanged(gameDto));
 		this.lastUpdateDate = now;
 	}
