@@ -95,11 +95,11 @@ public class CommentsService {
 	}
 
 	private boolean isImage(String link) {
-		if(isImageBySuffix(link)) {
-			return true;
-		}
 		try {
 			URL url = new URL(link);
+			if(isImageBySuffix(url.getPath())) {
+				return true;
+			}
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			String contentType = con.getHeaderField("content-type");
 			if(contentType != null) {
