@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import javax.transaction.Transactional;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -78,11 +79,28 @@ public class CommentsService {
 		return link.indexOf("youtube.com") != -1;
 	}
 
+	private final List<String> imageSuffixes = Arrays.asList("jpg", "jpeg", "gif", "png", "bmp");
+	private boolean isImageBySuffix(String link) {
+		String extension = "";
+
+		int i = link.lastIndexOf('.');
+		if (i > 0) {
+			extension = link.substring(i+1);
+		}
+
+		if(imageSuffixes.contains(extension)) {
+			return true;
+		}
+		return false;
+	}
+
 	private boolean isImage(String link) {
+		if(isImageBySuffix(link)) {
+			return true;
+		}
 		try {
 			URL url = new URL(link);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
-			con.setRequestMethod("HEAD");
 			String contentType = con.getHeaderField("content-type");
 			if(contentType != null) {
 				if(contentType.startsWith("image")) {
