@@ -8,7 +8,8 @@
     </div>
 </div>
 <br> -->
-<form name="editform">
+<h4 class="text-center" ng-show="vm.allowedMatchDays && vm.allowedMatchDays.length == 0">No bets to submit currently!</h4>
+<form name="editform" ng-show="vm.allowedMatchDays && vm.allowedMatchDays.length > 0">
     <div class="table-responsive">
         <table ng-table="vm.tableParams" class="table table-condensed table-striped">
             <tr ng-repeat="game in $data">

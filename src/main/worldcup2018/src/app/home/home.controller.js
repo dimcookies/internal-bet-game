@@ -17,12 +17,14 @@
             self.allComments = response.data;
         });
         self.$http.get("/bets/points").then(function(response) {
-            self.tableParams = new self.NgTableParams({}, {
+            self.tableParams = new self.NgTableParams({
+                count: response.data.length // hides pager
+            }, {
                 dataset: response.data,
-                total:1,
+                total: 1,
                 counts: [] // hides page sizes
-            });           
-        });        
+            });
+        });
     }
     activate() {
         var self = this;

@@ -5,7 +5,7 @@
             <td class="text-center" title="'Date'">{{ game.game.gameDate | date : 'MMM d, h:mm a'}}</td>
             <td class="text-center" title="'Score'">{{ game.game.goalsHome }} - {{ game.game.goalsAway }}</td>
             <td class="text-center" title="'Status'" sortable="'status'" ng-class="{'table-success'
-            : game.game.status == 'RUNNING'}"
+            : game.game.status == 'IN_PLAY'}"
             >{{ game.game.status }}</td>
             <td class="text-center" title="'1'" sortable="'oddsHome'">{{game.oddsHome | number: 2}}</td>
             <td class="text-center" title="'X'" sortable="'oddsTie'">{{game.oddsTie | number: 2}}</td>

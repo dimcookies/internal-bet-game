@@ -14,7 +14,7 @@
             <td class="text-center" title="'Date'">{{ bet.game.gameDate | date : 'MMM d, h:mm a'}}</td>
             <td class="text-center" title="'Score'">{{ bet.game.goalsHome }} - {{ bet.game.goalsAway }}</td>
             <td class="text-center" title="'Status'" sortable="'status'">{{ bet.game.status }}</td>
-            <td class="text-center" title="'3WayBet'" sortable="'scoreResult'">{{ bet.scoreResult }}</td>
+            <td class="text-center" title="'3WayBet'" sortable="'scoreResult'">{{ bet.scoreResult | betName}}</td>
             <td class="text-center" title="'3WayBet Points'" sortable="'resultPoints'" ng-class="{'table-success'
             : bet.resultPoints > 0 }">{{ bet.resultPoints }}</td>
 <!--             <td class="text-center" title="'OverUnderBet'" sortable="'overResult'">{{ bet.overResult }}</td>

@@ -35,7 +35,7 @@
     <table ng-table="vm.tableParams" class="table table-condensed table-striped">
         <tr ng-repeat="entry in $data">
             <td class="text-center" title="'User'" sortable="'username'">{{entry.user.username}}</a></td>
-            <td class="text-center" title="'3WayBet'" sortable="'scoreResult'">{{ entry.scoreResult }}</td>
+            <td class="text-center" title="'3WayBet'" sortable="'scoreResult'">{{ entry.scoreResult | betName}}</td>
             <td class="text-center" title="'3WayBet Points'" sortable="'resultPoints'" ng-class="{'table-success'
             : entry.resultPoints > 0 }">{{ entry.resultPoints }}</td>
 <!--             <td class="text-center" title="'OverUnderBet'" sortable="'overResult'">{{ entry.overResult }}</td>

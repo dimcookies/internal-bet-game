@@ -1,11 +1,15 @@
 ﻿<div class="input-group">
-  <input ng-model="vm.new_comment" type="text" class="form-control" placeholder="Comment" maxlength="200">
+  <input ng-model="vm.new_comment" type="text" class="form-control" placeholder="Comment" maxlength="500">
   <span class="input-group-btn">
     <button class="btn btn-default" type="button" ng-click="vm.addComment()">
     <span class="glyphicon glyphicon-send">Send</span>
     </button>
   </span>
 </div>
+<p id="passwordHelpBlock" class="form-text text-muted">
+  Post image link: Right click on the online image -> select "Copy image address" -> Paste inside Comment textfield -> Hit "Send"<br>
+  Post youtube link: Copy video url -> Paste inside Comment textfield -> Hit "Send"
+</p>
 <br>
 <div class="card mb-3">
   <div class="card-header">
