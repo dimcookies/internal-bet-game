@@ -1,10 +1,12 @@
 package bet.web;
 
+import bet.model.Game;
 import bet.model.Odd;
 import bet.model.RssFeed;
 import bet.repository.OddRepository;
 import bet.repository.RssFeedRepository;
 import bet.service.livefeed.LiveScoreFeedScheduler;
+import bet.service.utils.GamesSchedule;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,6 +43,9 @@ public class HelperController {
 	@Value("${application.timezone}")
 	private String timezone;
 
+	@Autowired
+	private GamesSchedule gamesSchedule;
+
 	/**
 	 * Get last update date of live feed
 	 * @return
@@ -74,6 +79,13 @@ public class HelperController {
 					return o1.getGame().getId().compareTo(o2.getGame().getId());
 				})
 				.collect(Collectors.toList());
+	}
+
+	@RequestMapping(value = "/games/live", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public List<Game> liveGames() throws Exception {
+		ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
+
+		return gamesSchedule.getActiveGames(now);
 	}
 
 	/**
