@@ -116,7 +116,7 @@ public class BetsController {
                         return res;
                     }
 
-                    return o1.getUser().getUsername().compareTo(o2.getUser().getUsername());
+                    return (o1.getArgs().get("name")).compareTo(o2.getArgs().get("name"));
                 })
                 .collect(Collectors.toList());
     }
@@ -139,20 +139,22 @@ public class BetsController {
                         .collect(Collectors.groupingBy(o -> o.getUser().getUsername(), Collectors.counting()));
         Map<String, Integer> allPoints = customBetRepository.listAllPoints();
         return allPoints.entrySet().stream()
-                //sort by points desc
-                .sorted((o1, o2) -> {
-                    int res = o2.getValue().compareTo(o1.getValue());
-                    if(res != 0) {
-                        return res;
-                    }
-                    return o1.getKey().compareTo(o2.getKey()); })
                 .map(e -> new HashMap<String, Object>() {{
                     put("username", e.getKey());
-                    put("points", e.getValue().toString());
+                    put("points", e.getValue());
                     put("riskIndex", riskIndex.getOrDefault(e.getKey(), 0.0));
                     put("correctResults", allBets.getOrDefault(e.getKey(), 0L).toString());
                     put("name", names.getOrDefault(e.getKey(), ""));
-                }}).collect(Collectors.toList());
+                }})
+                //sort by points desc, name asc
+                .sorted((o1, o2) -> {
+                    int res = ((Integer) o2.get("points")).compareTo((Integer) o1.get("points"));
+                    if (res != 0) {
+                        return res;
+                    }
+                    return ((String) o1.get("name")).compareTo((String) o2.get("name"));
+                })
+                .collect(Collectors.toList());
     }
 
     /**
