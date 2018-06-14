@@ -9,7 +9,7 @@
           <table ng-table="vm.tableParams" class="table table-condensed table-striped">
             <tr ng-repeat="user in $data" ng-if="$index < 10">
               <td class="text-center" title="'#'">{{$index+1}}</td>
-              <td class="text-center" title="'Name'">{{user.username}}</td>
+              <td class="text-center" title="'Name'">{{user.name}}</td>
               <td class="text-center" title="'Points'">{{user.points}}</td>
               <!-- <td title="'Prize'">{{user.prize}}</td> -->
             </tr>
