@@ -2,10 +2,10 @@
     <table ng-table="vm.tableParams" class="table table-condensed table-striped">
         <tr ng-repeat="entry in $data">
             <td class="text-center" title="'#'">{{$index+1}}</td>
-            <td class="text-center" title="'User'" sortable="'username'">{{entry.username}}</a></td>
-            <td class="text-center" title="'Points'" sortable="'points'">{{ entry.points }}</td>
-            <td class="text-center" title="'RiskIndex'" sortable="'riskIndex'">{{ entry.riskIndex | number: 2}}</td>
-            <td class="text-center" title="'Correct Results'" sortable="'correctResults'">{{ entry.correctResults }}</td>
+            <td class="text-left" title="'Player'" sortable="'username'">{{entry.user}}</a></td>
+            <td class="text-right" title="'Points'" sortable="'points'">{{ entry.points }}</td>
+            <td class="text-right" title="'RiskIndex'" sortable="'riskIndex'">{{ entry.riskIndex | number: 2}}</td>
+            <td class="text-right" title="'Correct Results'" sortable="'correctResults'">{{ entry.correctResults }}</td>
             <td class="text-center" title="'Action'">
                 <a ui-sref="user({userName: entry.username})">
                     <button type="button" class="btn btn-secondary">View Bets</button>
