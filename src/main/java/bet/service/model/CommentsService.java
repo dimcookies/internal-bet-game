@@ -68,7 +68,7 @@ public class CommentsService {
 			link = link.replace("watch?v=", "embed/");
 			result.append(String.format("<div class=\"embed-responsive embed-responsive-4by3\"><iframe class=\"embed-responsive-item\" src=\"%s?rel=0\" allowfullscreen></iframe></div>", link));
 		} else {
-			result.append(String.format("<a href=\"%s\" >%s</a>", link, link));
+            result.append(String.format("<a target=\"_blank\" href=\"%s\" >%s</a>", link, link));
 		}
 
 		return result.toString();
