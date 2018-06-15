@@ -58,7 +58,9 @@ application:
               competition: 2018 FIFA World Cup
       #       url: http://data.fifa.com/livescores/live/matches
       livescorescom:
-                url: http://www.livescores.com/soccer/%s/
+              url: http://www.livescores.com/soccer/%s/
+      scorespro:
+              url: https://www.scorespro.com/rss2/live-soccer.xml
     database-schema: bet
     email:
       username: X

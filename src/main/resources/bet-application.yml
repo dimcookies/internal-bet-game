@@ -9,7 +9,7 @@ spring:
     favicon:
       enabled: false
   profiles:
-    active: live, lifefeed-livescorescom
+    active: live, lifefeed-scorespro
   session:
     store-type: None
     timeout: 0
@@ -58,6 +58,8 @@ application:
               competition: 2018 FIFA World Cup
       livescorescom:
               url: http://www.livescores.com/soccer/%s/
+      scorespro:
+              url: https://www.scorespro.com/rss2/live-soccer.xml
     database-schema: bet
     email:
       username: X

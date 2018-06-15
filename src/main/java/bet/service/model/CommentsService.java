@@ -64,7 +64,7 @@ public class CommentsService {
 		StringBuilder result = new StringBuilder(comment);
 		result.append("<br>");
 		if(isImage(link)) {
-			result.append(String.format("<img class=\"img-responsive\" src=\"%s\" />", link));
+			result.append(String.format("<img class=\"img-fluid\" src=\"%s\" />", link));
 		} else if(isYoutubeLink(link)) {
 			link = link.replace("watch?v=", "embed/");
 			result.append(String.format("<div class=\"embed-responsive embed-responsive-4by3\"><iframe class=\"embed-responsive-item\" src=\"%s?rel=0\" allowfullscreen></iframe></div>", link));
