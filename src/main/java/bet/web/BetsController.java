@@ -22,6 +22,7 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -138,10 +139,13 @@ public class BetsController {
                         .filter(bet -> bet.getResultPoints() > 0)
                         .collect(Collectors.groupingBy(o -> o.getUser().getUsername(), Collectors.counting()));
         Map<String, Integer> allPoints = customBetRepository.listAllPoints();
+        AtomicInteger atomicInteger = new AtomicInteger(0);
+
         return allPoints.entrySet().stream()
                 .map(e -> new HashMap<String, Object>() {{
                     put("username", e.getKey());
                     put("points", e.getValue());
+                    put("idx", atomicInteger.incrementAndGet());
                     put("riskIndex", riskIndex.getOrDefault(e.getKey(), 0.0));
                     put("correctResults", allBets.getOrDefault(e.getKey(), 0L).toString());
                     put("name", names.getOrDefault(e.getKey(), ""));
