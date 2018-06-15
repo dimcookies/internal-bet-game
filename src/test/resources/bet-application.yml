@@ -57,6 +57,8 @@ application:
               url: http://localhost:8000/live.json
               competition: 2018 FIFA World Cup
       #       url: http://data.fifa.com/livescores/live/matches
+      livescorescom:
+                url: http://www.livescores.com/soccer/%s/
     database-schema: bet
     email:
       username: X

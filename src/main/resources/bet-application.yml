@@ -9,7 +9,7 @@ spring:
     favicon:
       enabled: false
   profiles:
-    active: live, lifefeed-footballapiorgnew
+    active: live, lifefeed-livescorescom
   session:
     store-type: None
     timeout: 0
@@ -56,7 +56,8 @@ application:
       fifacom:
               url: http://localhost:8000/live.json
               competition: 2018 FIFA World Cup
-      #       url: http://data.fifa.com/livescores/live/matches
+      livescorescom:
+              url: http://www.livescores.com/soccer/%s/
     database-schema: bet
     email:
       username: X
