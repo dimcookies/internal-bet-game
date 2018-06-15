@@ -16,7 +16,7 @@
         //     self.new_comment = "";
         // });
         self.$http.post("/comments/add2", self.new_comment).then(function(response) {
-            self.$http.get("/comments/list?limit=1000").then(function(response) {
+            self.$http.get("/comments/list?limit=20").then(function(response) {
                 self.allComments = response.data;
             });
             self.new_comment = "";
@@ -24,7 +24,7 @@
     };
     fetchComments() {
         var self = this;
-        self.$http.get("/comments/list?limit=1000").then(function(response) {
+        self.$http.get("/comments/list?limit=20").then(function(response) {
             self.allComments = response.data;
         });
     }
