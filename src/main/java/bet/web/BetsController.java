@@ -145,7 +145,6 @@ public class BetsController {
                 .map(e -> new HashMap<String, Object>() {{
                     put("username", e.getKey());
                     put("points", e.getValue());
-                    put("idx", atomicInteger.incrementAndGet());
                     put("riskIndex", riskIndex.getOrDefault(e.getKey(), 0.0));
                     put("correctResults", allBets.getOrDefault(e.getKey(), 0L).toString());
                     put("name", names.getOrDefault(e.getKey(), ""));
@@ -157,6 +156,10 @@ public class BetsController {
                         return res;
                     }
                     return ((String) o1.get("name")).compareTo((String) o2.get("name"));
+                })
+                .map(hashMap -> {
+                    hashMap.put("idx", atomicInteger.incrementAndGet());
+                    return hashMap;
                 })
                 .collect(Collectors.toList());
     }
