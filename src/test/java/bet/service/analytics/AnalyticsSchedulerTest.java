@@ -3,21 +3,24 @@ package bet.service.analytics;
 import bet.api.constants.GameStatus;
 import bet.api.constants.OverResult;
 import bet.api.constants.ScoreResult;
+import bet.api.dto.UserDto;
 import bet.base.AbstractBetIntegrationTest;
 import bet.model.*;
 import bet.repository.*;
 import bet.service.GamesInitializer;
 import bet.service.livefeed.LiveScoreFeedScheduler;
+import bet.service.mgmt.UserService;
 import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 
-
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 
 public class AnalyticsSchedulerTest extends AbstractBetIntegrationTest {
 
@@ -57,12 +60,15 @@ public class AnalyticsSchedulerTest extends AbstractBetIntegrationTest {
     @Autowired
     private CacheManager cacheManager;
 
+    @Autowired
+    private UserService userService;
+
     @Before
     public void setUp() {
         super.setUp();
         gamesInitializer.initialize();
-        userRepository.save(new User(null, "user1", "user1", "", "", "user1", false));
-        userRepository.save(new User(null, "user2", "user2", "", "", "user2", false));
+        userService.create(new UserDto("user1", "user1", "", "", "user1", false));
+        userService.create(new UserDto("user2", "user2", "", "", "user2", false));
     }
 
     @Test

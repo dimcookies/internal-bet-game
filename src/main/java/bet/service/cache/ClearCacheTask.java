@@ -15,4 +15,10 @@ public class ClearCacheTask {
     public void clearCaches() {
         cacheManager.getCacheNames().parallelStream().forEach(name -> cacheManager.getCache(name).clear());
     }
+
+    public void clearCache(String cacheName) {
+        cacheManager.getCacheNames().parallelStream()
+                .filter(s -> s.equals(cacheName))
+                .forEach(name -> cacheManager.getCache(name).clear());
+    }
 }

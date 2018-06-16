@@ -1,6 +1,7 @@
 package bet.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
@@ -44,9 +45,19 @@ public class Comment implements Serializable {
 	@Type(type = "java.time.ZonedDateTime")
 	private ZonedDateTime commentDate;
 
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "COMMENT_PARENT", referencedColumnName = "ID", nullable = true)
+	//@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "bet.entity-cache")
+	private Comment parentComment;
+
 	@OneToMany(mappedBy = "comment", targetEntity = CommentLike.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "bet.collection-cache")
 	private List<CommentLike> commentLikes = new ArrayList<>();
+
+	@OneToMany(mappedBy = "parentComment", targetEntity = Comment.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	//@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "bet.collection-cache")
+	private List<Comment> replies = new ArrayList<>();
 
 
 	public Comment() {
@@ -58,5 +69,11 @@ public class Comment implements Serializable {
 		this.user = user;
 		this.commentDate = commentDate;
 	}
+
+	public Comment(String comment, User user, ZonedDateTime commentDate, Comment parentComment) {
+		this(comment, user, commentDate);
+		this.parentComment = parentComment;
+	}
+
 
 }
