@@ -79,7 +79,7 @@ public class BetRepositoryTest extends AbstractBetIntegrationTest {
         betRepository.save(new Bet(null, games.get(2).getId(), userId2, ScoreResult.HOME_1, 0, null, 0, now));
 
         Map<String, Double> riskIndex = customBetRepository.listRiskIndex();
-        assertEquals( odd1.getOddsHome() + odd1.getOddsOver() + odd2.getOddsAway()+ odd2.getOddsOver(), (double) riskIndex.get("user1"), 0.001);
+        assertEquals(odd1.getOddsHome() + odd1.getOddsOver() + odd2.getOddsAway() + odd2.getOddsOver(), riskIndex.get("user1"), 0.001);
         assertEquals(odd1.getOddsTie() + odd1.getOddsUnder() + odd2.getOddsHome(), riskIndex.get("user2"), 0.001);
 
     }

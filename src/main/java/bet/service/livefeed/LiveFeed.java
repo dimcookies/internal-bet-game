@@ -10,6 +10,6 @@ import java.util.List;
  */
 public interface LiveFeed {
 
-	public List<GameDto> getLiveFeed();
+    List<GameDto> getLiveFeed();
 
 }

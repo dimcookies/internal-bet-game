@@ -131,7 +131,7 @@ public class AnalyticsSchedulerTest extends AbstractBetIntegrationTest {
         betRepository.save(new Bet(null, games.get(2).getId(), userId1, ScoreResult.HOME_1, 0, OverResult.OVER, 0, now));
         streakAnalyticsModule.run();
         validateStreak(userId1, -1);
-        validateStreakHistory(userId1, 3, -1);
+        validateStreakHistory(userId1, 2, -1);
         betRepository.deleteAll();
         betRepository.save(new Bet(null, games.get(0).getId(), userId1, ScoreResult.HOME_1, 100, OverResult.OVER, 200, now));
         betRepository.save(new Bet(null, games.get(1).getId(), userId1, ScoreResult.HOME_1, 300, OverResult.OVER, 400, now));
@@ -139,7 +139,7 @@ public class AnalyticsSchedulerTest extends AbstractBetIntegrationTest {
         betRepository.save(new Bet(null, games.get(3).getId(), userId1, ScoreResult.HOME_1, 0, OverResult.OVER, 0, now));
         streakAnalyticsModule.run();
         validateStreak(userId1, -2);
-        validateStreakHistory(userId1, 3, -2);
+        validateStreakHistory(userId1, 2, -2);
         betRepository.deleteAll();
         betRepository.save(new Bet(null, games.get(0).getId(), userId1, ScoreResult.HOME_1, 100, OverResult.OVER, 200, now));
         betRepository.save(new Bet(null, games.get(1).getId(), userId1, ScoreResult.HOME_1, 300, OverResult.OVER, 400, now));
@@ -147,7 +147,7 @@ public class AnalyticsSchedulerTest extends AbstractBetIntegrationTest {
         betRepository.save(new Bet(null, games.get(3).getId(), userId1, ScoreResult.HOME_1, 100, OverResult.OVER, 200, now));
         streakAnalyticsModule.run();
         validateStreak(userId1, 1);
-        validateStreakHistory(userId1, 3, -2);
+        validateStreakHistory(userId1, 2, -1);
 
         betRepository.deleteAll();
         betRepository.save(new Bet(null, games.get(0).getId(), userId1, ScoreResult.HOME_1, 100, OverResult.OVER, 200, now));
@@ -155,9 +155,11 @@ public class AnalyticsSchedulerTest extends AbstractBetIntegrationTest {
         betRepository.save(new Bet(null, games.get(2).getId(), userId1, ScoreResult.HOME_1, 0, OverResult.OVER, 0, now));
         betRepository.save(new Bet(null, games.get(3).getId(), userId1, ScoreResult.HOME_1, 100, OverResult.OVER, 200, now));
         betRepository.save(new Bet(null, games.get(4).getId(), userId1, ScoreResult.HOME_1, 100, OverResult.OVER, 200, now));
+        betRepository.save(new Bet(null, games.get(5).getId(), userId1, ScoreResult.HOME_1, 100, OverResult.OVER, 200, now));
+        betRepository.save(new Bet(null, games.get(6).getId(), userId1, ScoreResult.HOME_1, 0, OverResult.OVER, 0, now));
         streakAnalyticsModule.run();
-        validateStreak(userId1, 2);
-        validateStreakHistory(userId1, 3, -2);
+        validateStreak(userId1, -1);
+        validateStreakHistory(userId1, 3, -1);
 
     }
 

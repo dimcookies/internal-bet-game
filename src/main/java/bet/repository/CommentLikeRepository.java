@@ -25,6 +25,6 @@ public interface CommentLikeRepository extends CrudRepository<CommentLike, Integ
     @Transactional
     @Modifying
     @Query("delete from CommentLike where user = ? and comment = ? ")
-    public void deleteByUserAndComment(User user, Comment comment);
+    void deleteByUserAndComment(User user, Comment comment);
 
 }

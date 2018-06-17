@@ -43,10 +43,9 @@ public class UserController {
      * @param usernames
      * @param principal
      * @return
-     * @throws Exception
      */
     @RequestMapping(value = "/friends/update", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Friend> updateFriends(@RequestBody List<String> usernames, Principal principal) throws Exception {
+    public List<Friend> updateFriends(@RequestBody List<String> usernames, Principal principal) {
         User user = userRepository.findOneByUsername(principal.getName());
         //delete current values
         friendRepository.deleteByUser(user);
@@ -66,10 +65,9 @@ public class UserController {
      * Get currently logged in user friends
      * @param principal
      * @return
-     * @throws Exception
      */
     @RequestMapping(value = "/friends/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Friend> listFriends(Principal principal) throws Exception {
+    public List<Friend> listFriends(Principal principal) {
         User user = userRepository.findOneByUsername(principal.getName());
         return friendRepository.findByUser(user);
     }
@@ -79,12 +77,11 @@ public class UserController {
      * @param password
      * @param principal
      * @return
-     * @throws Exception
      */
     @CacheEvict(allEntries = true, cacheNames = {"users1","users2"})
     @RequestMapping(value = "/modify", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
     public String changePassword(@RequestParam(value = "password", required = false) String password,
-            @RequestParam(value = "optOut", required = false) Boolean optOut, Principal principal) throws Exception {
+                                 @RequestParam(value = "optOut", required = false) Boolean optOut, Principal principal) {
         User user = userRepository.findOneByUsername(principal.getName());
         UserDto userDto = new UserDto();
         userDto.fromEntity(user);
@@ -102,21 +99,19 @@ public class UserController {
      * Change password of currently logged in user
      * @param principal
      * @return
-     * @throws Exception
      */
     @CacheEvict(allEntries = true, cacheNames = {"users1","users2"})
     @RequestMapping(value = "/modify2", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-    public String changePassword2(@RequestBody ChangeUserSettingsDto changeUserSettingsDto, Principal principal) throws Exception {
+    public String changePassword2(@RequestBody ChangeUserSettingsDto changeUserSettingsDto, Principal principal) {
         return changePassword(changeUserSettingsDto.getPassword(), changeUserSettingsDto.getOptOut(), principal);
     }
 
     /**
      * Get list of usernames of users
      * @return
-     * @throws Exception
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String,String> participants() throws Exception {
+    public Map<String, String> participants() {
         return userService.list().stream()
                 .collect(Collectors.toMap(UserDto::getUsername, UserDto::getName));
 
@@ -125,10 +120,9 @@ public class UserController {
     /**
      * Get current logged in user
      * @return
-     * @throws Exception
      */
     @RequestMapping(value = "/currentUser", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public User currentUser(Principal principal) throws Exception {
+    public User currentUser(Principal principal) {
         return userRepository.findOneByUsername(principal.getName());
     }
 

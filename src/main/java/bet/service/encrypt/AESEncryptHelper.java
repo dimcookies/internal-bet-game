@@ -45,7 +45,7 @@ public class AESEncryptHelper implements EncryptHelper {
 		byte[] plainText = new byte[128];
 		cipher.init(Cipher.DECRYPT_MODE, key);
 		int ptLength = cipher.update(decodedBytes, 0, 128, plainText, 0);
-		ptLength += cipher.doFinal(plainText, ptLength);
+		//ptLength += cipher.doFinal(plainText, ptLength);
 		return new String(plainText).trim();
 	}
 

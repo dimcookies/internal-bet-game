@@ -20,12 +20,12 @@ public interface EncryptedBetRepository extends CrudRepository<EncryptedBet, Int
             @QueryHint(name = "org.hibernate.cacheMode", value = "NORMAL"),
             @QueryHint(name = "org.hibernate.cacheRegion", value = "bet.query-cache")
     })
-    public List<EncryptedBet> findByUser(User user);
+    List<EncryptedBet> findByUser(User user);
 
     @Transactional
     @Modifying
     @Query("delete from EncryptedBet where user = ? ")
-    public void deleteByUser(User user);
+    void deleteByUser(User user);
 
     @Query("from EncryptedBet")
     @QueryHints(value = {

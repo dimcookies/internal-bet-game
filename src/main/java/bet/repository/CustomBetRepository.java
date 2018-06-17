@@ -8,7 +8,7 @@ public interface CustomBetRepository {
      *
      * @return map username->total points from bets.
      */
-    public Map<String, Integer> listAllPoints();
+    Map<String, Integer> listAllPoints();
 
     /**
      * Sums odds for bets for all users. The higher
@@ -16,5 +16,5 @@ public interface CustomBetRepository {
      *
      * @return map username-> cumulative odds
      */
-    public Map<String, Double> listRiskIndex();
+    Map<String, Double> listRiskIndex();
 }

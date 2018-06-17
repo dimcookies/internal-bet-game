@@ -57,11 +57,10 @@ public class AdminController {
      * Manually perform a score update from the live feed
      *
      * @return
-     * @throws Exception
      */
     @CacheEvict(allEntries = true, cacheNames = {"points1","points2","games"})
     @RequestMapping(value = "/liveupdate", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-    public String liveupdate() throws Exception {
+    public String liveupdate() {
         liveScoreFeedScheduler.getLiveScores(false);
         return "OK";
     }
@@ -70,11 +69,10 @@ public class AdminController {
      * Manually update a game
      * @param gameDto
      * @return
-     * @throws Exception
      */
     @CacheEvict(allEntries = true, cacheNames = {"points1","points2","games"})
     @RequestMapping(value = "/manualScoreUpdate", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-    public String manualScoreUpdate(@RequestBody GameDto gameDto) throws Exception {
+    public String manualScoreUpdate(@RequestBody GameDto gameDto) {
         liveScoreFeedScheduler.checkMatchChanged(gameDto);
         liveScoreFeedScheduler.setLastUpdateDate(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC")));
         return "OK";
@@ -84,10 +82,9 @@ public class AdminController {
      * Move encrypted bets to public available
      *
      * @return
-     * @throws Exception
      */
     @RequestMapping(value = "/decryptandmove", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
-    public String decryptandmove() throws Exception {
+    public String decryptandmove() {
         encryptedBetService.decryptAndCopy();
         return "Ok";
     }
@@ -97,10 +94,9 @@ public class AdminController {
      * Change user password
      *
      * @return
-     * @throws Exception
      */
     @RequestMapping(value = "/changePassword", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-    public String changePassword(String password, String username) throws Exception {
+    public String changePassword(String password, String username) {
         User user = userRepository.findOneByUsername(username);
         UserDto userDto = new UserDto();
         userDto.fromEntity(user);
@@ -115,10 +111,9 @@ public class AdminController {
      * Manual run analytics
      *
      * @return
-     * @throws Exception
      */
     @RequestMapping(value = "/manualAnalytics", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-    public String manualAnalytics() throws Exception {
+    public String manualAnalytics() {
         analyticsScheduler.runAnalytics();
         return "OK";
     }
@@ -139,10 +134,9 @@ public class AdminController {
      * Manual run rss
      *
      * @return
-     * @throws Exception
      */
     @RequestMapping(value = "/clearCache", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-    public String manualClearCaches() throws Exception {
+    public String manualClearCaches() {
         cacheManager.getCacheNames().parallelStream().forEach(name -> cacheManager.getCache(name).clear());
         return "OK";
     }

@@ -87,13 +87,12 @@ public class BetsController {
      * @param userName
      * @param gameId
      * @return
-     * @throws Exception
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Bet> allBets(@RequestParam(value = "userId", required = false) Integer userId,
                              @RequestParam(value = "userName", required = false) String userName,
                              @RequestParam(value = "gameId", required = false) Integer gameId,
-                            Principal principal) throws Exception {
+                             Principal principal) {
         String currentUsername = principal.getName();
         List<String> friends = StreamSupport.stream(friendRepository.findAll().spliterator(), false)
                 .map(friend -> friend.getUser().getUsername() + "_" + friend.getFriend().getUsername()).collect(Collectors.toList());
@@ -126,11 +125,10 @@ public class BetsController {
     /**
      * Get points for users sorted by points
      * @return
-     * @throws Exception
      */
     @Cacheable("points2")
     @RequestMapping(value = "/points", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<Map<String, Object>> allPoints() throws Exception {
+    public List<Map<String, Object>> allPoints() {
         Map<String, String> names = userService.list().stream()
                 .collect(Collectors.toMap(UserDto::getUsername, UserDto::getName));
         Map<String, Double> riskIndex = customBetRepository.listRiskIndex();
@@ -167,10 +165,9 @@ public class BetsController {
     /**
      * Get configured allowed matchdays for bets
      * @return
-     * @throws Exception
      */
     @RequestMapping(value = "/allowedMatchDays", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String[] allowedMatchDays() throws Exception {
+    public String[] allowedMatchDays() {
         return allowedMatchDays;
     }
 
@@ -178,11 +175,10 @@ public class BetsController {
      * Get grouped bets counts for a particular game
      * @param gameId
      * @return
-     * @throws Exception
      */
     @Cacheable(value = "userBets3")
     @RequestMapping(value = "/gameStats", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Map<String, Long> allBets(@RequestParam(value = "gameId") Integer gameId) throws Exception {
+    public Map<String, Long> allBets(@RequestParam(value = "gameId") Integer gameId) {
         List<Bet> bets;
         if(gameId != null) {
             bets = betRepository.findByGame(new Game(gameId));
@@ -198,10 +194,9 @@ public class BetsController {
     /**
      * Get bet deadline info
      * @return
-     * @throws Exception
      */
     @RequestMapping(value = "/betDeadline", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
-    public String betDeadline() throws Exception {
+    public String betDeadline() {
         return betDeadline;
     }
 

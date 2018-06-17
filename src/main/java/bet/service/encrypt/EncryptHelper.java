@@ -11,7 +11,7 @@ public interface EncryptHelper {
      * @return
      * @throws Exception
      */
-    public String encrypt(String text, String salt) throws Exception;
+    String encrypt(String text, String salt) throws Exception;
 
     /**
      * Decrypt the provided text using the provided salt
@@ -20,6 +20,6 @@ public interface EncryptHelper {
      * @return
      * @throws Exception
      */
-    public String decrypt(String encrypted, String salt) throws Exception;
+    String decrypt(String encrypted, String salt) throws Exception;
 
 }

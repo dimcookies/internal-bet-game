@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,10 +48,9 @@ public class HelperController {
 	/**
 	 * Get last update date of live feed
 	 * @return
-	 * @throws Exception
-	 */
+     */
 	@RequestMapping(value = "/livefeed/lastupdate", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
-	public String liveFeedLastUpdate() throws Exception {
+    public String liveFeedLastUpdate() {
 		ZonedDateTime lastUpdate = liveScoreFeedScheduler.getLastUpdateDate();
 		return lastUpdate != null ? lastUpdate.withZoneSameInstant(ZoneId.of(timezone)).toString() : "N/A";
 	}
@@ -62,12 +60,11 @@ public class HelperController {
 	 * @param matchDays
 	 * @param matchId
 	 * @return
-	 * @throws Exception
-	 */
+     */
 	@Cacheable(value = "games")
 	@RequestMapping(value = "/games/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public List<Odd> allGames(@RequestParam(value = "matchDays", required = false) List<Integer> matchDays,
-			@RequestParam(value = "matchId", required = false) Integer matchId) throws Exception {
+                              @RequestParam(value = "matchId", required = false) Integer matchId) {
 		return Lists.newArrayList(oddRepository.findAll()).stream()
 				.filter(odd -> matchDays == null || matchDays.indexOf(odd.getGame().getMatchDay()) != -1)
 				.filter(odd -> matchId == null || matchId.equals(odd.getGame().getId()))
@@ -82,7 +79,7 @@ public class HelperController {
 	}
 
 	@RequestMapping(value = "/games/live", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public List<Game> liveGames() throws Exception {
+    public List<Game> liveGames() {
 		ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
 
 		return gamesSchedule.getActiveGames(now);
@@ -92,11 +89,10 @@ public class HelperController {
 	 * Get all rss
 	 * @param limit
 	 * @return
-	 * @throws Exception
-	 */
+     */
 	@Cacheable(value = "rss")
 	@RequestMapping(value = "/rss/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public List<RssFeed> allRss(@RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit) throws Exception {
+    public List<RssFeed> allRss(@RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit) {
 
 		return rssFeedRepository.findAllOrdered(new PageRequest(0, limit, new Sort(Sort.Direction.DESC, "publish_date")));
 	}

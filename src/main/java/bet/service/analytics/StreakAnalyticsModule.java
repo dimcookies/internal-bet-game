@@ -2,7 +2,6 @@ package bet.service.analytics;
 
 import bet.api.constants.GameStatus;
 import bet.model.Bet;
-import bet.model.User;
 import bet.model.UserStreak;
 import bet.model.UserStreakHistory;
 import bet.repository.BetRepository;
@@ -15,8 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
@@ -47,62 +49,41 @@ public class StreakAnalyticsModule implements AnalyticsModule {
     public void run() {
         LOGGER.info("Run streak module");
         //delete current values
+        userStreakHistoryRepository.deleteAll();
         userStreakRepository.deleteAll();
         //for all users
         StreamSupport.stream(userRepository.findAll().spliterator(),false).forEach(user -> {
-            //get all bets
-            List<Bet> userBets = betRepository.findByUser(user);
-            //sort by game date
-            userBets.sort(Comparator.comparing(o -> o.getGame().getGameDate()));
+            //get all user bets for completed matches order by date
+            List<Bet> userBets = betRepository.findByUser(user).stream()
+                    .filter(bet -> bet.getGame().getStatus().equals(GameStatus.FINISHED))
+                    .sorted(Comparator.comparing(bet -> bet.getGame().getGameDate()))
+                    .collect(Collectors.toList());
             int streak = 0;
             boolean isPrevCorrect = false;
 
+            List<Integer> userStreaks = new ArrayList<>();
+
             for(Bet bet: userBets) {
-                //compute streak only for finished games
-                if(bet.getGame().getStatus().equals(GameStatus.FINISHED)) {
-                    boolean isCurrentCorrect = bet.getResultPoints() > 0;
-                    //in case of status change set streak to zero
-                    if(isCurrentCorrect != isPrevCorrect) {
-                        streak =0;
-                        isPrevCorrect = !isPrevCorrect;
-                    }
-                    if(isCurrentCorrect) { //correct, positive streak
-                        streak++;
-                    } else { //incorrect, negative streak
-                        streak--;
-                    }
+                boolean isCurrentCorrect = bet.getResultPoints() > 0;
+                //in case of status change
+                if (isCurrentCorrect != isPrevCorrect) {
+                    //save streak
+                    userStreaks.add(streak);
+                    //reset streak
+                    streak = 0;
+                    isPrevCorrect = !isPrevCorrect;
+                }
+                if (isCurrentCorrect) { //correct, positive streak
+                    streak++;
+                } else { //incorrect, negative streak
+                    streak--;
                 }
             }
-            //save updated value
+            userStreaks.add(streak);
+            //save current user streak
             userStreakRepository.save(new UserStreak(streak, user));
-
-            updateMinMaxStreak(streak, user);
+            //save min and max streak of user
+            userStreakHistoryRepository.save(new UserStreakHistory(Collections.max(userStreaks), Collections.min(userStreaks), user));
         });
-    }
-
-    /**
-     * Update history for min and max streaks of the user. If no
-     * history exists, a new one is created
-     * @param streak
-     * @param user
-     */
-    private void updateMinMaxStreak(int streak, User user) {
-        UserStreakHistory history = userStreakHistoryRepository.findOneByUser(user);
-        if(history == null) {
-            history = new UserStreakHistory(0, 0, user);
-        }
-
-        //positive streak
-        if(streak > 0) {
-            if(streak > history.getMaxStreak()) {
-                history.setMaxStreak(streak);
-            }
-        } else { //negative streak
-            if(streak < history.getMinStreak()) {
-                history.setMinStreak(streak);
-            }
-        }
-
-        userStreakHistoryRepository.save(history);
     }
 }

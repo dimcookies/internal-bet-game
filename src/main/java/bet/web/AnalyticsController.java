@@ -54,11 +54,10 @@ public class AnalyticsController {
     /**
      * Get a sorted list of username->risk index for each user
      * @return
-     * @throws Exception
      */
     @Cacheable(value = "userBets2")
     @RequestMapping(value = "/riskIndex", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<Map<String, String>> riskIndex() throws Exception {
+    public List<Map<String, String>> riskIndex() {
         Map<String, Double> riskIndex = customBetRepository.listRiskIndex();
         return riskIndex.entrySet().stream().sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue()))
                 .map(e -> new HashMap<String, String>() {{
@@ -71,11 +70,10 @@ public class AnalyticsController {
      * Get the ranking history sorted by date
      * @param userName
      * @return
-     * @throws Exception
      */
     @Cacheable(value = "analytics1")
     @RequestMapping(value = "/rankHistory", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<RankHistory> rankHistory(@RequestParam(value = "userName", required = false) String userName) throws Exception {
+    public List<RankHistory> rankHistory(@RequestParam(value = "userName", required = false) String userName) {
 
         return StreamSupport.stream(rankHistoryRepository.findAll().spliterator(), false)
                 .filter(rankHistory -> userName == null || rankHistory.getUser().getUsername().equals(userName))
@@ -93,11 +91,10 @@ public class AnalyticsController {
     /**
      * Get a map username-> #times ranked as number one
      * @return
-     * @throws Exception
      */
     @Cacheable(value = "analytics2")
     @RequestMapping(value = "/topRanked", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Map<String, Long> topRanked() throws Exception {
+    public Map<String, Long> topRanked() {
         return StreamSupport.stream(rankHistoryRepository.findAll().spliterator(), false)
                 .filter(rankHistory -> rankHistory.getRank() == 1)
                 .collect(Collectors.groupingBy(o ->  o.getUser().getUsername(), Collectors.counting()));
@@ -107,11 +104,10 @@ public class AnalyticsController {
     /**
      * Get the user streak sorted by streak (desc)
      * @return
-     * @throws Exception
      */
     @Cacheable(value = "analytics3")
     @RequestMapping(value = "/userStreak", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<UserStreak> userStreak() throws Exception {
+    public List<UserStreak> userStreak() {
         return StreamSupport.stream(userStreakRepository.findAll().spliterator(), false)
                 .sorted((o1, o2) -> {
                     return o2.getStreak().compareTo(o1.getStreak());
@@ -122,11 +118,10 @@ public class AnalyticsController {
     /**
      * Get the user streak history  sorted by streak (desc)
      * @return
-     * @throws Exception
      */
     @Cacheable(value = "analytics4")
     @RequestMapping(value = "/userStreakHistory", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<UserStreakHistory> userStreakHistory(@RequestParam(value = "sortByMax", required = false, defaultValue = "true") boolean sortByMax) throws Exception {
+    public List<UserStreakHistory> userStreakHistory(@RequestParam(value = "sortByMax", required = false, defaultValue = "true") boolean sortByMax) {
         return StreamSupport.stream(userStreakHistoryRepository.findAll().spliterator(), false)
                 .sorted((o1, o2) -> {
                     if(sortByMax) {
@@ -142,11 +137,10 @@ public class AnalyticsController {
      * Get the min max user streak history
      *
      * @return
-     * @throws Exception
      */
     @Cacheable(value = "analytics5")
     @RequestMapping(value = "/userStreakHistoryLimits", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Map<String, UserStreakHistory> userStreakHistoryLimits() throws Exception {
+    public Map<String, UserStreakHistory> userStreakHistoryLimits() {
         UserStreakHistory minStreak = StreamSupport.stream(userStreakHistoryRepository.findAll().spliterator(), false)
                 .min(Comparator.comparing(UserStreakHistory::getMinStreak)).get();
         UserStreakHistory maxStreak = StreamSupport.stream(userStreakHistoryRepository.findAll().spliterator(), false)
@@ -162,11 +156,10 @@ public class AnalyticsController {
      * Get the min max user streak history
      *
      * @return
-     * @throws Exception
      */
     @Cacheable(value = "analytics6")
     @RequestMapping(value = "/riskIndexMax", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Double riskIndexMax() throws Exception {
+    public Double riskIndexMax() {
         return StreamSupport.stream(oodOddRepository.findAll().spliterator(), false)
                 .map(odd -> (double) Collections.max(Arrays.asList(odd.getOddsHome(), odd.getOddsAway(), odd.getOddsTie())) +
                         (double) Collections.max(Arrays.asList(odd.getOddsOver(), odd.getOddsUnder()))
@@ -177,10 +170,9 @@ public class AnalyticsController {
     /**
      * Get last run date for reporting
      * @return
-     * @throws Exception
      */
     @RequestMapping(value = "/lastupdate", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
-    public String liveFeedLastUpdate() throws Exception {
+    public String liveFeedLastUpdate() {
         ZonedDateTime lastUpdate = analyticsScheduler.getLastUpdateDate();
         return lastUpdate != null ? lastUpdate.withZoneSameInstant(ZoneId.of(timezone)).toString() : "N/A";
     }

@@ -107,10 +107,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	/**
 	 * Set public available paths with no authorization
 	 * @param web
-	 * @throws Exception
-	 */
+     */
 	@Override
-	public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
 		web.ignoring()
 				.antMatchers("/css/**", "/js/**", "/images/**", "/vendor/**", "/img/**", "/app*" /*"/resources/**","/public/**", "/ws/**"*/);
 	}

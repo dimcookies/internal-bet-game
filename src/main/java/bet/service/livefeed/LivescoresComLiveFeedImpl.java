@@ -10,9 +10,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.web.ErrorMvcAutoConfiguration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,18 +18,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
@@ -93,7 +87,7 @@ public class LivescoresComLiveFeedImpl implements LiveFeed {
 		String[] scoreAr = score.split("-");
 		List<String> teams = e.getElementsByClass("ply")
 				.stream()
-				.sorted((o1, o2) -> ((Integer)o2.classNames().size()).compareTo(o1.classNames().size()))
+				.sorted((o1, o2) -> Integer.compare(o2.classNames().size(), o1.classNames().size()))
 				.map(element -> element.text())
 				.collect(Collectors.toList());
 		//try to find a db game with same teams
@@ -123,7 +117,7 @@ public class LivescoresComLiveFeedImpl implements LiveFeed {
 	}
 
 	private int parseMinute(String minute) {
-		if(minute.indexOf("+") != -1) {
+		if (minute.contains("+")) {
 			minute = minute.split("\\+")[0];
 		}
 		minute = minute.replace("'","");

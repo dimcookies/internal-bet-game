@@ -16,7 +16,7 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 			@QueryHint(name = "org.hibernate.cacheMode", value = "NORMAL"),
 			@QueryHint(name = "org.hibernate.cacheRegion", value = "bet.query-cache")
 	})
-	public User findOneByUsername(String username);
+    User findOneByUsername(String username);
 
 	@Query("from User")
 	@QueryHints(value = {

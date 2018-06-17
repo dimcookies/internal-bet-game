@@ -1,5 +1,6 @@
 package bet.service.analytics;
 
+import bet.service.cache.ClearCacheTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class AnalyticsScheduler {
 	@Autowired
 	private ApplicationContext context;
 
+    @Autowired
+    private ClearCacheTask clearCacheTask;
+
 	/* Date analytics was run */
 	private ZonedDateTime lastUpdateDate;
 
@@ -32,6 +36,7 @@ public class AnalyticsScheduler {
 	public void runAnalytics() {
 
 		LOGGER.info("Analytics run");
+        clearCacheTask.clearCaches();
 		//get all reporting modules and run
 		Map<String,Object> customPageActions = context.getBeansWithAnnotation(Analytics.class);
 		customPageActions.forEach((s, o) -> ((AnalyticsModule)o).run());

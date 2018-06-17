@@ -16,7 +16,7 @@ public interface UserStreakHistoryRepository extends CrudRepository<UserStreakHi
             @QueryHint(name = "org.hibernate.cacheMode", value = "NORMAL"),
             @QueryHint(name = "org.hibernate.cacheRegion", value = "bet.query-cache")
     })
-    public UserStreakHistory findOneByUser(User user);
+    UserStreakHistory findOneByUser(User user);
 
 
 }

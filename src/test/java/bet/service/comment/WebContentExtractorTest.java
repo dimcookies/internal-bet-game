@@ -1,27 +1,17 @@
-package bet.utils;
+package bet.service.comment;
 
-import bet.api.constants.GameStatus;
-import bet.base.AbstractBetIntegrationTest;
 import bet.base.AbstractBetTest;
-import bet.repository.GameRepository;
-import bet.service.GamesInitializer;
-import bet.service.livefeed.FifaComLiveFeedImpl;
-import bet.service.utils.GamesSchedule;
-import bet.service.utils.UrlExtractor;
-import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 
-public class UrlExtractorTest extends AbstractBetTest {
+public class WebContentExtractorTest extends AbstractBetTest {
 
-	private UrlExtractor urlExtractor = new UrlExtractor();
+    private WebContentExtractor webContentExtractor = new WebContentExtractor();
 
 	@Test
 	public void test_noMatch() {
-		List<String> urls = urlExtractor.pullLinks("this is a string");
+        List<String> urls = webContentExtractor.pullLinks("this is a string");
 		assertEquals(0, urls.size());
 	}
 
@@ -57,14 +47,31 @@ public class UrlExtractorTest extends AbstractBetTest {
 
 	@Test
 	public void test_multipleUrl() {
-		List<String> urls = urlExtractor.pullLinks("Text https://img.in.gr/ https://www.cnn.com/ Text");
+        List<String> urls = webContentExtractor.pullLinks("Text https://img.in.gr/ https://www.cnn.com/ Text");
 		assertEquals(2, urls.size());
 	}
 
 	private void test_singleMatch(String text, String url) {
-		List<String> urls = urlExtractor.pullLinks(text);
+        List<String> urls = webContentExtractor.pullLinks(text);
 		assertEquals(1, urls.size());
 		assertEquals(url, urls.get(0));
 	}
+
+    @Test
+    public void test_containsHtml_positive() {
+        assertTrue(webContentExtractor.stringContainsHtml("This is a test <b>test</b> Test"));
+        assertTrue(webContentExtractor.stringContainsHtml("This is a test <br/>"));
+        assertTrue(webContentExtractor.stringContainsHtml("This is a test < br attr=\"a\"/>"));
+    }
+
+    @Test
+    public void test_containsHtml_malformed() {
+        assertTrue(webContentExtractor.stringContainsHtml("This is a test <b>Test"));
+    }
+
+    @Test
+    public void test_containsHtml_simpleText() {
+        assertFalse(webContentExtractor.stringContainsHtml("This is a test"));
+    }
 
 }

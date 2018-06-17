@@ -25,7 +25,7 @@ public interface FriendRepository extends CrudRepository<Friend, Integer> {
 	@Transactional
 	@Modifying
 	@Query("delete from Friend where user = ? ")
-	public void deleteByUser(User user);
+    void deleteByUser(User user);
 
 	@Query("from Friend")
 	@QueryHints(value = {

@@ -7,7 +7,6 @@ import bet.model.User;
 import bet.repository.CommentLikeRepository;
 import bet.repository.CommentRepository;
 import bet.repository.UserRepository;
-import bet.service.model.CommentsService;
 import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
@@ -99,7 +98,7 @@ public class CommentServiceTest extends AbstractBetIntegrationTest {
 
         Comment comment = commentRepository.save(new Comment("comment1", user1, now));
 
-        assertTrue(commentsService.toogleLike(comment, user2));
+        assertTrue(commentsService.toggleLike(comment, user2));
 
         comment = commentRepository.findOne(comment.getId());
         assertEquals(1, comment.getCommentLikes().size());
@@ -108,7 +107,7 @@ public class CommentServiceTest extends AbstractBetIntegrationTest {
 
 
     @Test
-    public void test_comment_toogleLikeRemove() {
+    public void test_comment_toggleLikeRemove() {
         List<User> users = Lists.newArrayList(userRepository.findAll());
 
         User user1 = users.get(0);
@@ -122,12 +121,11 @@ public class CommentServiceTest extends AbstractBetIntegrationTest {
         commentLikeRepository.save(new CommentLike(comment, user2));
         commentLikeRepository.save(new CommentLike(comment, user3));
 
-        assertFalse(commentsService.toogleLike(comment, user2));
+        assertFalse(commentsService.toggleLike(comment, user2));
 
         comment = commentRepository.findOne(comment.getId());
         assertEquals(1, comment.getCommentLikes().size());
 
     }
-
 
 }

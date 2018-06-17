@@ -7,7 +7,7 @@ import org.mockito.MockitoAnnotations;
 public abstract class AbstractBetTest extends Assert {
 
 	@Before
-	public void setUp() throws Exception {
+    public void setUp() {
 		MockitoAnnotations.initMocks(this);
 	}
 

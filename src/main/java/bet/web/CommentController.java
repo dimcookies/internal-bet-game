@@ -5,7 +5,7 @@ import bet.model.User;
 import bet.repository.CommentRepository;
 import bet.repository.UserRepository;
 import bet.service.cache.ClearCacheTask;
-import bet.service.model.CommentsService;
+import bet.service.comment.CommentsService;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,11 +49,10 @@ public class CommentController {
      * Get all comments sorted by comment date
      * @param limit
      * @return
-     * @throws Exception
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Cacheable("comments")
-    public List<Comment> allComments(@RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit) throws Exception {
+    public List<Comment> allComments(@RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit) {
 
         return commentRepository.findAllOrdered(new PageRequest(0, 1000, new Sort(Sort.Direction.DESC, "comment_date")))
                 .stream()
@@ -72,13 +71,12 @@ public class CommentController {
      * @param comment
      * @param principal
      * @return
-     * @throws Exception
      */
     @CacheEvict("comments")
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Comment addComments(@RequestParam(value = "comment", required = true) String comment,
                                @RequestParam(value = "parentCommentId", required = false) Integer parentCommentId,
-                               Principal principal) throws Exception {
+                               Principal principal) {
         User user = userRepository.findOneByUsername(principal.getName());
 
         Comment parent = null;
@@ -109,11 +107,10 @@ public class CommentController {
      * @param comment
      * @param principal
      * @return
-     * @throws Exception
      */
     @CacheEvict("comments")
     @RequestMapping(value = "/add2", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Comment addComments2(@RequestBody String comment, Principal principal) throws Exception {
+    public Comment addComments2(@RequestBody String comment, Principal principal) {
         return addComments(comment, null, principal);
     }
 
@@ -123,11 +120,10 @@ public class CommentController {
      * @param commentsParamDto
      * @param principal
      * @return
-     * @throws Exception
      */
     @CacheEvict("comments")
     @RequestMapping(value = "/add3", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Comment addComments3(@RequestBody CommentsParamDto commentsParamDto, Principal principal) throws Exception {
+    public Comment addComments3(@RequestBody CommentsParamDto commentsParamDto, Principal principal) {
         return addComments(commentsParamDto.getComment(), commentsParamDto.getParentCommentId(), principal);
     }
 
@@ -136,11 +132,10 @@ public class CommentController {
      * @param commentId
      * @param principal
      * @return
-     * @throws Exception
      */
     @CacheEvict("comments")
     @RequestMapping(value = "/delete", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Comment delete(@RequestParam(value = "commentId", required = true) Integer commentId, Principal principal) throws Exception {
+    public Comment delete(@RequestParam(value = "commentId", required = true) Integer commentId, Principal principal) {
         Comment comment = commentRepository.findOne(commentId);
 
         if(comment != null) {
@@ -158,17 +153,16 @@ public class CommentController {
      * Add a new comment for the currently logged in user
      * @param principal
      * @return
-     * @throws Exception
      */
     @CacheEvict("comments")
-    @RequestMapping(value = "/toogleLike", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Boolean toogleLike(@RequestParam(value = "commentId", required = true) Integer commentId, Principal principal) throws Exception {
+    @RequestMapping(value = "/toggleLike", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Boolean toogleLike(@RequestParam(value = "commentId", required = true) Integer commentId, Principal principal) {
         User user = userRepository.findOneByUsername(principal.getName());
         Comment comment = commentRepository.findOne(commentId);
         if(comment == null) {
             throw new RuntimeException();
         }
-        return commentsService.toogleLike(comment, user);
+        return commentsService.toggleLike(comment, user);
     }
 
 

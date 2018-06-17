@@ -90,9 +90,9 @@ public class Game implements Serializable {
 	@Transient
 	public ScoreResult getScoreResult() {
 		return goalsHome > goalsAway ? ScoreResult.HOME_1 : goalsHome < goalsAway ? ScoreResult.AWAY_2 : ScoreResult.DRAW_X;
-	};
+    }
 
-	@Transient
+    @Transient
 	public OverResult getOverResult() {
 		return goalsHome + goalsAway > 2 ? OverResult.OVER : OverResult.UNDER;
 	}
