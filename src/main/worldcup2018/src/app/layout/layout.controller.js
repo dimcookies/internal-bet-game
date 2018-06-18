@@ -1,7 +1,8 @@
 ﻿import angular from 'angular';
 
 export default class LayoutController {
-    constructor($scope, $http, $timeout, $window) {
+    constructor($scope, $http, $timeout, $window, $state) {
+        this.$state = $state;
         this.$http = $http;
         this.$window = $window;
         this.$timeout = $timeout;
@@ -33,6 +34,10 @@ export default class LayoutController {
 
         }, 90000);
     }
+    stateReload(){
+     // this.$state.go(this.$state.current, {}, {reload: true});
+     this.$window.scrollTo(0, 0);
+    }
 }
 
-LayoutController.$inject = ['$scope', '$http', '$timeout', '$window'];
+LayoutController.$inject = ['$scope', '$http', '$timeout', '$window', '$state'];
