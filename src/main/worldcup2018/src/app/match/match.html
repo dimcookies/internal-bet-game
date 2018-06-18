@@ -16,26 +16,27 @@
                     </div>
                 </div>
             </div>
-<!--             <div class="col-xs-12 col-md-12 col-lg-3">
-                <div class="card text-white bg-danger o-hidden h-100">
-                    <div class="card-body">
-                    </div>
-                </div>
-            </div> -->
             <div class="col-xs-12 col-md-12 col-lg-3">
+                <h6 ng-if="vm.data.length > 0" class="text-center">3WayBets stats</h6>
                 <canvas id="pie" class="chart chart-pie"
                 chart-data="vm.data" chart-labels="vm.labels" chart-options="vm.options" labels="true">
                 </canvas>
             </div>
+            <div class="col-xs-12 col-md-12 col-lg-3">
+                <h6 ng-if="vm.data2[0] || vm.data2[1]" class="text-center">OverUnderBet stats</h6>
+                <canvas id="pie" class="chart chart-pie"
+                chart-data="vm.data2" chart-labels="vm.labels2" chart-options="vm.options" labels="true">
+                </canvas>
+            </div>            
         </div>
     </div>
 </div>
 <br>
 <div class="table-responsive">
-    <table ng-table="vm.tableParams" class="table table-condensed table-striped">
+    <table ng-table="vm.tableParams" class="table table-condensed table-striped" show-filter="true">
         <tr ng-repeat="entry in $data">
-            <td class="text-left" title="'Player'" sortable="'username'">{{entry.args.name}}</a></td>
-            <td class="text-right" title="'3WayBet'" sortable="'scoreResult'">{{ entry.scoreResult | betName}}</td>
+            <td class="text-left" title="'Player'" filter="{ username: 'text'}" sortable="'username'">{{entry.args.name}}</a></td>
+            <td class="text-right" title="'3WayBet'" filter="{ scoreResult: 'text'}" sortable="'scoreResult'">{{ entry.scoreResult | betName}}</td>
             <td class="text-right" title="'3WayBet Points'" sortable="'resultPoints'" ng-class="{'table-success'
             : entry.resultPoints > 0 }">{{ entry.resultPoints }}</td>
 <!--             <td class="text-center" title="'OverUnderBet'" sortable="'overResult'">{{ entry.overResult }}</td>
