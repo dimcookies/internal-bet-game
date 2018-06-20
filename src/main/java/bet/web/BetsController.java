@@ -144,7 +144,7 @@ public class BetsController {
                     put("username", e.getKey());
                     put("points", e.getValue());
                     put("riskIndex", riskIndex.getOrDefault(e.getKey(), 0.0));
-                    put("correctResults", allBets.getOrDefault(e.getKey(), 0L).toString());
+                    put("correctResults", allBets.getOrDefault(e.getKey(), 0L));
                     put("name", names.getOrDefault(e.getKey(), ""));
                 }})
                 //sort by points desc, name asc
