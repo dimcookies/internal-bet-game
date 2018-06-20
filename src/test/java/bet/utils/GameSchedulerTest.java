@@ -4,13 +4,13 @@ import bet.api.constants.GameStatus;
 import bet.base.AbstractBetIntegrationTest;
 import bet.repository.GameRepository;
 import bet.service.GamesInitializer;
-import bet.service.livefeed.FifaComLiveFeedImpl;
 import bet.service.utils.GamesSchedule;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.ZonedDateTime;
+import java.util.Arrays;
 
 
 public class GameSchedulerTest extends AbstractBetIntegrationTest {
@@ -52,6 +52,21 @@ public class GameSchedulerTest extends AbstractBetIntegrationTest {
 
 		assertFalse(gameScheduler.hasActiveGame(c1.plusMinutes(61)));
 
+
+
+	}
+
+	@Test
+	public void testScheduleFinished() {
+
+		gameRepository.findAll().forEach(game -> {
+			game.setStatus(GameStatus.FINISHED);
+			gameRepository.save(game);
+		});
+
+		ZonedDateTime c1 = ZonedDateTime.parse("2018-06-15T14:00:00Z[UTC]");
+
+		assertEquals(3, gameScheduler.getGamesAtDate(c1, Arrays.asList(GameStatus.FINISHED)).size());
 
 
 	}
