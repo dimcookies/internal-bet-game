@@ -9,13 +9,12 @@
                             <table class="table mr-5">
                                 <tr>
                                     <th>User</th>
-                                    <th>Max</th>
-                                    <th>Min</th>
+                                    <th>Streak</th>
                                 </tr>
-                                <tr ng-repeat="entry in vm.userStreakHistoryLimits">
+                                <tr ng-repeat="(key, entry) in vm.userStreakHistoryLimits">
                                     <td>{{entry.user.username}}</td>
-                                    <td>{{entry.maxStreak}}</td>
-                                    <td>{{entry.maxStreak}}</td>
+                                    <td ng-if="key == 'max'">{{entry.maxStreak}}</td>
+                                    <td ng-if="key == 'min'">{{entry.minStreak}}</td>
                                 </tr>
                             </table>
                         </div>
@@ -33,8 +32,8 @@
                                     <th>Days</th>
                                 </tr>
                                 <tr ng-repeat="(key, value) in vm.topRanked">
-                                    <td>{{key}}</td>
-                                    <td>{{value}}</td>
+                                    <td>{{value.name}}</td>
+                                    <td>{{value.value}}</td>
                                 </tr>
                             </table>
                         </div>                        

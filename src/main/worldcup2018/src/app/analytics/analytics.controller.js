@@ -37,7 +37,13 @@
             self.userStreak.data = _.map(response.data, 'streak');
         });
         self.$http.get("/analytics/topRanked").then(function(response) {
-            self.topRanked = response.data;
+            const formated = _.map(_.toPairs(response.data), (value) => {
+                return {
+                    name: value[0],
+                    value: value[1]
+                };
+            });
+            self.topRanked = _.orderBy(formated,['value'], ['desc'])
         });
         self.$http.get("/analytics/userStreakHistory").then(function(response) {
             self.userStreakHistory = {};
