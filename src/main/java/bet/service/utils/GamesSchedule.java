@@ -7,7 +7,10 @@ import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +19,8 @@ import java.util.stream.Collectors;
  */
 @Component
 public class GamesSchedule {
+
+	private final List<GameStatus> activeStatuses = Arrays.asList(GameStatus.TIMED, GameStatus.IN_PLAY);
 
 	@Autowired
 	private GameRepository gameRepository;
@@ -32,7 +37,15 @@ public class GamesSchedule {
 
 	public List<Game> getActiveGames(ZonedDateTime date) {
 		return Lists.newArrayList(gameRepository.findAll()).stream()
-				.filter(game -> game.getGameDate().isBefore(date) && (game.getStatus().equals(GameStatus.TIMED) || game.getStatus().equals(GameStatus.IN_PLAY)))
+				.filter(game -> game.getGameDate().isBefore(date) && activeStatuses.contains(game.getStatus()))
+				.collect(Collectors.toList());
+	}
+
+	public List<Game> getGamesAtDate(ZonedDateTime date, List<GameStatus> statuses) {
+		return Lists.newArrayList(gameRepository.findAll()).stream()
+				.filter(game -> game.getGameDate().withZoneSameInstant(ZoneId.of("UTC")).truncatedTo(ChronoUnit.DAYS)
+						.equals(date.withZoneSameInstant(ZoneId.of("UTC")).truncatedTo(ChronoUnit.DAYS))
+						&& statuses.contains(game.getStatus()))
 				.collect(Collectors.toList());
 	}
 }
