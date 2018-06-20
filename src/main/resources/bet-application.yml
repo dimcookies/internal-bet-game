@@ -24,8 +24,8 @@ spring:
       net.sf.ehcache.configurationResourceName: /bet-ehcache.xml
       hibernate.generate_statistics: false
   datasource:
-    url: jdbc:postgresql://rdbms:5432/bet
-    username: postgres
+    url: jdbc:postgresql://dkoukis:5432/bet
+    username: bet
     password: upstream
     driver-class-name: org.postgresql.Driver
   jackson:
