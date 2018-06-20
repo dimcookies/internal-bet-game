@@ -10,6 +10,8 @@
     activate() {
         var self = this;
         self.$http.get("/games/list").then(function(response) {
+
+            console.log('response  ', response);
             self.tableParams = new self.NgTableParams({
                 count: response.data.length // hides pager
             }, {

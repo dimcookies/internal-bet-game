@@ -1,103 +1,92 @@
 ﻿<div class="row">
-    <div class="col-xl-3 col-sm-6 mb-3">
-        <div class="card text-white bg-primary o-hidden h-100">
-            <div class="card-body">
-                <div class="card-body-icon">
-                    <i class="fa fa-fw fa-comments"></i>
+    <div class="col-lg-3 mb-3">
+        <div class="row">
+            <div class="col-12">
+                <div class="card text-white bg-danger o-hidden h-100">
+                    <div class="card-body">
+                        <h5 class="text-center text-dark">Streak Overview</h5>
+                        <div class="table-responsive">                        
+                            <table class="table mr-5">
+                                <tr>
+                                    <th>User</th>
+                                    <th>Max</th>
+                                    <th>Min</th>
+                                </tr>
+                                <tr ng-repeat="entry in vm.userStreakHistoryLimits">
+                                    <td>{{entry.user.username}}</td>
+                                    <td>{{entry.maxStreak}}</td>
+                                    <td>{{entry.maxStreak}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="mr-5">26 New Messages!</div>
             </div>
-            <a class="card-footer text-white clearfix small z-1" href="#">
-                <span class="float-left">View Details</span>
-                <span class="float-right">
-                    <i class="fa fa-angle-right"></i>
-                </span>
-            </a>
+            <div class="col-12 mt-5">
+                <div class="card text-white bg-danger o-hidden h-100">
+                    <div class="card-body">
+                        <h5 class="text-center text-dark">Days in top Positions</h5>
+                        <div class="table-responsive">                        
+                            <table class="table mr-5">
+                                <tr>
+                                    <th>User</th>
+                                    <th>Days</th>
+                                </tr>
+                                <tr ng-repeat="(key, value) in vm.topRanked">
+                                    <td>{{key}}</td>
+                                    <td>{{value}}</td>
+                                </tr>
+                            </table>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-xl-3 col-sm-6 mb-3">
-        <div class="card text-white bg-warning o-hidden h-100">
-            <div class="card-body">
-                <div class="card-body-icon">
-                    <i class="fa fa-fw fa-list"></i>
-                </div>
-                <div class="mr-5">11 New Tasks!</div>
-            </div>
-            <a class="card-footer text-white clearfix small z-1" href="#">
-                <span class="float-left">View Details</span>
-                <span class="float-right">
-                    <i class="fa fa-angle-right"></i>
-                </span>
-            </a>
-        </div>
-    </div>
-    <div class="col-xl-3 col-sm-6 mb-3">
-        <div class="card text-white bg-success o-hidden h-100">
-            <div class="card-body">
-                <div class="card-body-icon">
-                    <i class="fa fa-fw fa-shopping-cart"></i>
-                </div>
-                <div class="mr-5">123 New Orders!</div>
-            </div>
-            <a class="card-footer text-white clearfix small z-1" href="#">
-                <span class="float-left">View Details</span>
-                <span class="float-right">
-                    <i class="fa fa-angle-right"></i>
-                </span>
-            </a>
-        </div>
-    </div>
-    <div class="col-xl-3 col-sm-6 mb-3">
-        <div class="card text-white bg-danger o-hidden h-100">
-            <div class="card-body">
-                <div class="card-body-icon">
-                    <i class="fa fa-fw fa-support"></i>
-                </div>
-                <div class="mr-5">13 New Tickets!</div>
-            </div>
-            <a class="card-footer text-white clearfix small z-1" href="#">
-                <span class="float-left">View Details</span>
-                <span class="float-right">
-                    <i class="fa fa-angle-right"></i>
-                </span>
-            </a>
-        </div>
-    </div>
-</div>
-<!-- Area Chart Example-->
-<div class="card mb-3">
-    <div class="card-header">
-    <i class="fa fa-area-chart"></i> Area Chart Example</div>
-    <div class="card-body">
-        <canvas class="chart chart-line" chart-data="vm.data" chart-labels="vm.labels" 
-    chart-series="vm.series" chart-click="onClick"></canvas> 
-    </div>
-    <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-</div>
-<div class="row">
-    <div class="col-lg-8">
-        <!-- Example Bar Chart Card-->
+    <div class="col-lg-9">
         <div class="card mb-3">
             <div class="card-header">
-            <i class="fa fa-bar-chart"></i> Bar Chart Example</div>
+            <i class="fa fa-bar-chart"></i> User Rank History</div>
             <div class="card-body">
-                <canvas id="myBarChart" width="100" height="50"></canvas>
+                <canvas id="line" class="chart chart-line" chart-data="vm.userRankHistory.data" chart-labels="vm.userRankHistory.labels" chart-options="vm.userRankHistory.options" width="100" height="50"> </canvas>
             </div>
-            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+        </div>
+    </div>
+</div>
+<div class="row">
+</div>
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card mb-3">
+            <div class="card-header">
+            <i class="fa fa-bar-chart"></i>Current Users Streak</div>
+            <div class="card-body">
+                <canvas id="base1" class="chart-horizontal-bar"
+                chart-data="vm.userStreak.data" chart-labels="vm.userStreak.labels" width="100" height="350" >
+                </canvas>
+            </div>
         </div>
     </div>
     <div class="col-lg-4">
-        <!-- Example Pie Chart Card-->
         <div class="card mb-3">
             <div class="card-header">
-            <i class="fa fa-pie-chart"></i> Pie Chart Example</div>
+            <i class="fa fa-pie-chart"></i> Users Risk Index</div>
             <div class="card-body">
-                <canvas id="myPieChart" width="100%" height="100"></canvas>
+                <canvas id="base2" class="chart-horizontal-bar"
+                chart-data="vm.riskIndex.data" width="100" height="350" chart-labels="vm.riskIndex.labels" >
+                </canvas>
             </div>
-            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card mb-3">
+            <div class="card-header">
+            <i class="fa fa-bar-chart"></i> User Streak History</div>
+            <div class="card-body">
+                <canvas id="base3" class="chart-horizontal-bar"
+                chart-data="vm.userStreakHistory.data" chart-labels="vm.userStreakHistory.labels" width="100" height="350">
+                </canvas>
+            </div>
         </div>
     </div>
 </div>
-</div>
-
-    <script src="js/sb-admin-charts.min.js"></script>
