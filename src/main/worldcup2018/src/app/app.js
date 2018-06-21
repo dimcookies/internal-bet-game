@@ -28,6 +28,9 @@ import componentsModule from './components';
 import filtersModule from './common/filters';
 import servicesModule from './common/services';
 import angularChart from 'angular-chart.js';
+import 'angularjs-dropdown-multiselect/dist/angularjs-dropdown-multiselect.min.js'
+import 'angularjs-dropdown-multiselect/dist/index.css'
+
 import { ngTableModule } from 'ng-table/bundles/ng-table';
 
 angular.module('espackApp', [
@@ -47,7 +50,8 @@ angular.module('espackApp', [
 		chatModule,
 		rulesModule,
 		settingsModule,
-		ngTableModule.name
+		ngTableModule.name,
+		'angularjs-dropdown-multiselect'
 	])
 	.config(config)
 	.controller('LayoutController', LayoutController);

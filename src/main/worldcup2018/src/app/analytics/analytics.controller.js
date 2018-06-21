@@ -4,32 +4,54 @@
         this.logger = logger;
         this.activate();
         //http://jtblin.github.io/angular-chart.js/#getting_started
+            this.userDropdown = {};
+            this.userDropdown.settings = {
+                scrollable: true,
+                scrollableHeight: '350px',
+                selectionLimit: 5
+            };
     }
     activate() {
+
         var self = this;
+        self.$http.get("/users/list").then(function(response) {
+            const formated = _.map(_.toPairs(response.data), (value) => {
+                return {
+                    id: value[0],
+                    label: value[0]
+                };
+            });
+            self.userDropdown.model = [];
+            self.userDropdown.data = formated;
+        });
+        self.$http.get("/analytics/lastupdate").then(function(response) {
+            self.lastUpdateDate = response.data;
+        });
         self.$http.get("/users/currentUser").then(function(responseUser) {
             self.$http.get("/analytics/rankHistory?userName=" + responseUser.data.username).then(function(response) {
                 self.userRankHistory = {};
                 self.userRankHistory.labels = _.map(response.data, 'rankDate');
-                self.userRankHistory.data = _.map(response.data, 'rank');
-                self.userRankHistory.options = {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                reverse: true,
-                            },
-                            display: true,
+                self.userRankHistory.data = _.map(response.data, 'points');
+                self.userRankHistory.options = {};
+                // self.userRankHistory.data = _.map(response.data, 'rank');
+                // self.userRankHistory.options = {
+                //     scales: {
+                //         yAxes: [{
+                //             ticks: {
+                //                 reverse: true,
+                //             },
+                //             display: true,
 
-                        }]
-                    }
-                };
+                //         }]
+                //     }
+                // };
             });
 
         });
         self.$http.get("/analytics/riskIndex").then(function(response) {
             self.riskIndex = {};
-            self.riskIndex.labels = _.map(response.data, 'username');
-            self.riskIndex.data = _.map(response.data, 'riskIndex');
+            self.riskIndex.labels = _.reverse(_.map(response.data, 'username'));
+            self.riskIndex.data = _.reverse(_.map(response.data, 'riskIndex'));
         });
         self.$http.get("/analytics/userStreak").then(function(response) {
             self.userStreak = {};
@@ -43,7 +65,7 @@
                     value: value[1]
                 };
             });
-            self.topRanked = _.orderBy(formated,['value'], ['desc'])
+            self.topRanked = _.orderBy(formated, ['value'], ['desc'])
         });
         self.$http.get("/analytics/userStreakHistory").then(function(response) {
             self.userStreakHistory = {};
