@@ -1,20 +1,18 @@
 ﻿<div class="row">
-    <div class="col-lg-3 mb-3">
+    <div class="col-lg-3 col-xl-4 mb-3">
         <div class="row">
             <div class="col-12">
-                <div class="card text-white bg-danger o-hidden h-100">
+                <div class="card text-white bg-light text-secondary o-hidden h-100">
                     <div class="card-body">
-                        <h5 class="text-center text-dark">Streak Overview</h5>
-                        <div class="table-responsive">                        
+                        <div class="table-responsive">
                             <table class="table mr-5">
                                 <tr>
                                     <th>User</th>
-                                    <th>Streak</th>
+                                    <th class="text-right">Best Streak</th>
                                 </tr>
-                                <tr ng-repeat="(key, entry) in vm.userStreakHistoryLimits">
+                                <tr ng-repeat="(key, entry) in vm.userStreakHistoryLimits" ng-if="key == 'max'">
                                     <td>{{entry.user.username}}</td>
-                                    <td ng-if="key == 'max'">{{entry.maxStreak}}</td>
-                                    <td ng-if="key == 'min'">{{entry.minStreak}}</td>
+                                    <td class="text-right">{{entry.maxStreak}}</td>
                                 </tr>
                             </table>
                         </div>
@@ -22,33 +20,63 @@
                 </div>
             </div>
             <div class="col-12 mt-5">
-                <div class="card text-white bg-danger o-hidden h-100">
+                <div class="card text-white bg-light text-secondary o-hidden h-100">
                     <div class="card-body">
-                        <h5 class="text-center text-dark">Days in top Positions</h5>
-                        <div class="table-responsive">                        
+                        <div class="table-responsive">
                             <table class="table mr-5">
                                 <tr>
                                     <th>User</th>
-                                    <th>Days</th>
+                                    <th class="text-right">Worst Streak</th>
                                 </tr>
-                                <tr ng-repeat="(key, value) in vm.topRanked">
-                                    <td>{{value.name}}</td>
-                                    <td>{{value.value}}</td>
+                                <tr ng-repeat="(key, entry) in vm.userStreakHistoryLimits" ng-if="key == 'min'">
+                                    <td>{{entry.user.username}}</td>
+                                    <td class="text-right">{{entry.minStreak}}</td>
                                 </tr>
                             </table>
-                        </div>                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 mt-5">
+                <div class="card text-white bg-light text-secondary o-hidden h-100">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table mr-5">
+                                <tr>
+                                    <th>User</th>
+                                    <th class="text-right">Match days in 1st Place</th>
+                                </tr>
+                                <tr ng-repeat="(key, value) in vm.topRanked" ng-show="$index < 2">
+                                    <td>{{value.name}}</td>
+                                    <td class="text-right">{{value.value}}</td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-lg-9">
+    <div class="col-lg-9 col-xl-8">
         <div class="card mb-3">
             <div class="card-header">
-            <i class="fa fa-bar-chart"></i> User Rank History</div>
+            <i class="fa fa-bar-chart"></i> User History</div>
             <div class="card-body">
+                <div class="row">
+                    <div class="col-6 text-left" ng-dropdown-multiselect="" options="vm.userDropdown.data" selected-model="vm.userDropdown.model" extra-settings="vm.userDropdown.settings"></div>
+                    <div class="col-6 text-right">
+                        <button type="button" class="btn btn-secondary">Points / Rank</button>
+                    </div>
+                    <div class="col-12 text-center" ng-repeat="(key, value) in vm.userDropdown.model">
+                        <span>{{value.label}}</span>
+                    </div>
+                </div>
+                <br>
                 <canvas id="line" class="chart chart-line" chart-data="vm.userRankHistory.data" chart-labels="vm.userRankHistory.labels" chart-options="vm.userRankHistory.options" width="100" height="50"> </canvas>
             </div>
+            <div class="card-footer text-center text-secondary clearfix small z-1">
+                Analytics Last Update @ {{vm.lastUpdateDate}}
+            </div>
         </div>
     </div>
 </div>
@@ -58,10 +86,10 @@
     <div class="col-lg-4">
         <div class="card mb-3">
             <div class="card-header">
-            <i class="fa fa-bar-chart"></i>Current Users Streak</div>
+            <i class="fa fa-bar-chart"></i>User Trend</div>
             <div class="card-body">
                 <canvas id="base1" class="chart-horizontal-bar"
-                chart-data="vm.userStreak.data" chart-labels="vm.userStreak.labels" width="100" height="350" >
+                chart-data="vm.userStreak.data" chart-labels="vm.userStreak.labels" width="100" height="550" >
                 </canvas>
             </div>
         </div>
@@ -69,21 +97,21 @@
     <div class="col-lg-4">
         <div class="card mb-3">
             <div class="card-header">
-            <i class="fa fa-pie-chart"></i> Users Risk Index</div>
-            <div class="card-body">
-                <canvas id="base2" class="chart-horizontal-bar"
-                chart-data="vm.riskIndex.data" width="100" height="350" chart-labels="vm.riskIndex.labels" >
-                </canvas>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4">
-        <div class="card mb-3">
-            <div class="card-header">
-            <i class="fa fa-bar-chart"></i> User Streak History</div>
+            <i class="fa fa-bar-chart"></i>Best/Worst User Streak</div>
             <div class="card-body">
                 <canvas id="base3" class="chart-horizontal-bar"
-                chart-data="vm.userStreakHistory.data" chart-labels="vm.userStreakHistory.labels" width="100" height="350">
+                chart-data="vm.userStreakHistory.data" chart-labels="vm.userStreakHistory.labels" width="100" height="550">
+                </canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card mb-3">
+            <div class="card-header">
+            <i class="fa fa-pie-chart"></i>Chicken Index</div>
+            <div class="card-body">
+                <canvas id="base2" class="chart-horizontal-bar"
+                chart-data="vm.riskIndex.data" width="100" height="550" chart-labels="vm.riskIndex.labels">
                 </canvas>
             </div>
         </div>
