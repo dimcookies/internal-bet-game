@@ -49,7 +49,7 @@
               <i class="fa fa-fw fa-trophy"></i>
               <span class="nav-link-text">Leaderboard</span>
             </a>
-          </li>   
+          </li>
           <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Matches" ui-sref-active="active" onclick="collapseMenu()">
             <a class="nav-link" ui-sref="matches">
               <i class="fa fa-fw fa-futbol"></i>
@@ -61,7 +61,7 @@
               <i class="fa fa-fw fa-play"></i>
               <span class="nav-link-text">Bet Now</span>
             </a>
-          </li>          
+          </li>
           <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Chat" ui-sref-active="active" onclick="collapseMenu()">
             <a class="nav-link" ui-sref="chat">
               <i class="fa fa-fw fa-comments"></i>
@@ -69,11 +69,9 @@
             </a>
           </li>
           <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Analytics" ui-sref-active="active" onclick="collapseMenu()">
-<!--             <a class="nav-link" ui-sref="analytics">-->      
-            <a class="nav-link">
-
-            <i class="fa fa-fw fa-chart-line"></i>
-              <span class="nav-link-text">Analytics <small>(coming soon)</small></span>
+            <a class="nav-link text-danger" ui-sref="analytics">
+              <i class="fa fa-fw fa-chart-line"></i>
+              <span class="nav-link-text">Analytics</span>
             </a>
           </li>
           <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Rules" ui-sref-active="active" onclick="collapseMenu()">
@@ -127,7 +125,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-<!--               <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <!--               <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
               </button> -->
             </div>
@@ -149,9 +147,9 @@
     <script src="js/sb-admin.min.js"></script>
     <script>
     function collapseMenu() {
-      if($(".navbar-toggler").is(":visible") && !$(".navbar-toggler.navbar-toggler-right").hasClass(".collapsed")){
-        $(".navbar-toggler").click();        
-      }
+    if($(".navbar-toggler").is(":visible") && !$(".navbar-toggler.navbar-toggler-right").hasClass(".collapsed")){
+    $(".navbar-toggler").click();
+    }
     }
     </script>
   </html>

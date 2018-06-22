@@ -5,11 +5,8 @@
                 <div class="card text-white bg-light text-secondary o-hidden h-100">
                     <div class="card-body">
                         <div class="table-responsive">
+                            <h5 class="text-center">Best Streak</h5>
                             <table class="table mr-5">
-                                <tr>
-                                    <th>User</th>
-                                    <th class="text-right">Best Streak</th>
-                                </tr>
                                 <tr ng-repeat="(key, entry) in vm.userStreakHistoryLimits" ng-if="key == 'max'">
                                     <td>{{entry.user.username}}</td>
                                     <td class="text-right">{{entry.maxStreak}}</td>
@@ -23,11 +20,8 @@
                 <div class="card text-white bg-light text-secondary o-hidden h-100">
                     <div class="card-body">
                         <div class="table-responsive">
+                            <h5 class="text-center">Worst Streak</h5>
                             <table class="table mr-5">
-                                <tr>
-                                    <th>User</th>
-                                    <th class="text-right">Worst Streak</th>
-                                </tr>
                                 <tr ng-repeat="(key, entry) in vm.userStreakHistoryLimits" ng-if="key == 'min'">
                                     <td>{{entry.user.username}}</td>
                                     <td class="text-right">{{entry.minStreak}}</td>
@@ -41,11 +35,8 @@
                 <div class="card text-white bg-light text-secondary o-hidden h-100">
                     <div class="card-body">
                         <div class="table-responsive">
+                            <h5 class="text-center">Match days in 1st Place</h5>
                             <table class="table mr-5">
-                                <tr>
-                                    <th>User</th>
-                                    <th class="text-right">Match days in 1st Place</th>
-                                </tr>
                                 <tr ng-repeat="(key, value) in vm.topRanked" ng-show="$index < 2">
                                     <td>{{value.name}}</td>
                                     <td class="text-right">{{value.value}}</td>

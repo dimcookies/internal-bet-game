@@ -119,7 +119,6 @@
 
             self.userRankHistory.datasetOverride = [];
             _.forEach(self.usersIdx, function(value) {
-                console.log('value   ',value);
                 self.fetchOtherUsersRank(value.id);
             });
         });
@@ -136,7 +135,7 @@
                 };
             });
             self.userDropdown.model = [];
-            self.userDropdown.data = formated;
+            self.userDropdown.data =  _.orderBy(formated, ['label'], ['asc']);
         });
         self.$http.get("/analytics/lastupdate").then(function(response) {
             self.lastUpdateDate = response.data;
