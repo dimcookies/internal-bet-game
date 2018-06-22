@@ -37,6 +37,8 @@
 
     }
     userRankHistoryClick() {
+        var self = this;
+
         if (this.userRankHistory.selection === 'Points') {
             this.userRankHistory.selection = 'Rank';
         } else {
@@ -115,6 +117,10 @@
             }
 
             self.userRankHistory.datasetOverride = [];
+            _.forEach(self.usersIdx, function(value) {
+                console.log('value   ',value);
+                self.fetchOtherUsersRank(value.id);
+            });
         });
 
     }

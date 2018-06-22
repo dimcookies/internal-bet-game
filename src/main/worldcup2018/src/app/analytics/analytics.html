@@ -62,9 +62,11 @@
             <div class="card-header">
             <i class="fa fa-bar-chart"></i> User History</div>
             <div class="card-body">
+                <small>(max 5 selections)</small>
                 <div class="row">
                     <div class="col-6 text-left" ng-dropdown-multiselect="" options="vm.userDropdown.data" selected-model="vm.userDropdown.model" extra-settings="vm.userDropdown.settings" events="vm.userDropdown.events"></div>
                     <div class="col-6 text-right">
+
                         <button type="button" class="btn btn-secondary" ng-click="vm.userRankHistoryClick()">{{vm.userRankHistory.selection}}</button>
                     </div>
                     <div class="col-12 text-center" ng-repeat="(key, value) in vm.userDropdown.model">
