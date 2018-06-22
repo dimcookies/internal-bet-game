@@ -39,7 +39,7 @@ public class AnalyticsScheduler {
 	private GamesSchedule gamesSchedule;
 
 	//@Scheduled(cron = "*/10 * * * * *")
-	@CacheEvict(allEntries = true, cacheNames = {"analytics1", "analytics1", "analytics3", "analytics4", "analytics5", "analytics6"})
+	@CacheEvict(allEntries = true, cacheNames = {"analytics1", "analytics1", "analytics3", "analytics4", "analytics5", "analytics6", "analytics7"})
 	@Scheduled(cron = "0 0 1 * * *")
 	public void runAnalytics() {
 		//check if there was any games for yesterday. If not do not run analytics

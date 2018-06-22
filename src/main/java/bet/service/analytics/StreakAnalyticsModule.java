@@ -45,7 +45,7 @@ public class StreakAnalyticsModule implements AnalyticsModule {
     private UserStreakHistoryRepository userStreakHistoryRepository;
 
     @Override
-    @CacheEvict(allEntries = true, cacheNames = {"analytics1", "analytics1", "analytics3", "analytics4", "analytics5", "analytics6"})
+    @CacheEvict(allEntries = true, cacheNames = {"analytics1", "analytics1", "analytics3", "analytics4", "analytics5", "analytics6", "analytics7"})
     public void run() {
         LOGGER.info("Run streak module");
         //delete current values

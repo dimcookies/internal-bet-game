@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -170,14 +171,14 @@ public class AnalyticsController {
      * Get last run date for reporting
      * @return
      */
+    @Cacheable(value = "analytics7")
     @RequestMapping(value = "/lastupdate", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
     public String liveFeedLastUpdate() {
         RankHistory maxDate = rankHistoryRepository.findFirstByOrderByRankDateDesc();
         if (maxDate != null) {
-            return maxDate.getRankDate().withZoneSameInstant(ZoneId.of(timezone)).toString();
+            return DateTimeFormatter.ofPattern(" MMM dd, hh:mm a").format(maxDate.getRankDate().withZoneSameInstant(ZoneId.of(timezone)));
         }
         return "N/A";
     }
-
 
 }
