@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -173,8 +172,11 @@ public class AnalyticsController {
      */
     @RequestMapping(value = "/lastupdate", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
     public String liveFeedLastUpdate() {
-        ZonedDateTime lastUpdate = analyticsScheduler.getLastUpdateDate();
-        return lastUpdate != null ? lastUpdate.withZoneSameInstant(ZoneId.of(timezone)).toString() : "N/A";
+        RankHistory maxDate = rankHistoryRepository.findFirstByOrderByRankDateDesc();
+        if (maxDate != null) {
+            return maxDate.getRankDate().withZoneSameInstant(ZoneId.of(timezone)).toString();
+        }
+        return "N/A";
     }
 
 
