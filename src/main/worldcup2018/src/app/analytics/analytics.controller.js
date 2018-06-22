@@ -3,13 +3,120 @@
         this.$http = $http;
         this.logger = logger;
         this.activate();
+        this.usersIdx = [];
         //http://jtblin.github.io/angular-chart.js/#getting_started
-            this.userDropdown = {};
-            this.userDropdown.settings = {
-                scrollable: true,
-                scrollableHeight: '350px',
-                selectionLimit: 5
-            };
+        this.userRankHistory = {};
+        this.userRankHistory.selection = 'Rank';
+        this.userDropdown = {};
+        this.userDropdown.settings = {
+            scrollable: true,
+            scrollableHeight: '350px',
+            selectionLimit: 5
+        };
+        var self = this;
+        this.userDropdown.events = {
+            onDeselectAll: function(item) {
+                self.fetchUserRank(self.activeUser);
+            },
+            onItemDeselect: function(item) {
+                if (item.id === self.activeUser) return;
+                const index = _.findIndex(self.usersIdx, {
+                    'id': item.id
+                }) + 1;
+                self.usersIdx.splice(index, 1);
+                self.userRankHistory.data.splice(index, 1);
+                self.userRankHistory.series.splice(index, 1);
+            },
+            onItemSelect: function(item) {
+                if (item.id === self.activeUser) return;
+
+                self.usersIdx.push(item);
+                self.fetchOtherUsersRank(item.id);
+            }
+        };
+
+    }
+    userRankHistoryClick() {
+        if (this.userRankHistory.selection === 'Points') {
+            this.userRankHistory.selection = 'Rank';
+        } else {
+            this.userRankHistory.selection = 'Points';
+        }
+        this.fetchUserRank(this.activeUser);
+
+    }
+    fetchOtherUsersRank(username) {
+        var self = this;
+        self.$http.get("/analytics/rankHistory?userName=" + username).then(function(response) {
+            self.userRankHistory.series.push(username);
+            if (self.userRankHistory.selection === 'Points') {
+                self.userRankHistory.data.push(_.map(response.data, 'points'));
+                self.userRankHistory.options = {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                reverse: false,
+                            },
+                            display: true,
+
+                        }]
+                    }
+                };
+            } else {
+                self.userRankHistory.data.push(_.map(response.data, 'rank'));
+                self.userRankHistory.options = {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                reverse: true,
+                            },
+                            display: true,
+
+                        }]
+                    }
+                };
+            }
+
+            self.userRankHistory.datasetOverride = [];
+        });
+    }
+
+    fetchUserRank(username) {
+        var self = this;
+        self.$http.get("/analytics/rankHistory?userName=" + username).then(function(response) {
+            self.userRankHistory.series = [username];
+            self.userRankHistory.labels = _.map(response.data, 'rankDate');
+            if (self.userRankHistory.selection === 'Points') {
+                self.userRankHistory.data = [_.map(response.data, 'points')];
+                self.userRankHistory.options = {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                reverse: false,
+                            },
+                            display: true,
+
+                        }]
+                    }
+                };
+            } else {
+                self.userRankHistory.data = [_.map(response.data, 'rank')];
+                self.userRankHistory.options = {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                reverse: true,
+                            },
+                            display: true,
+
+                        }]
+                    }
+                };
+            }
+
+            self.userRankHistory.datasetOverride = [];
+        });
+
     }
     activate() {
 
@@ -28,25 +135,8 @@
             self.lastUpdateDate = response.data;
         });
         self.$http.get("/users/currentUser").then(function(responseUser) {
-            self.$http.get("/analytics/rankHistory?userName=" + responseUser.data.username).then(function(response) {
-                self.userRankHistory = {};
-                self.userRankHistory.labels = _.map(response.data, 'rankDate');
-                self.userRankHistory.data = _.map(response.data, 'points');
-                self.userRankHistory.options = {};
-                // self.userRankHistory.data = _.map(response.data, 'rank');
-                // self.userRankHistory.options = {
-                //     scales: {
-                //         yAxes: [{
-                //             ticks: {
-                //                 reverse: true,
-                //             },
-                //             display: true,
-
-                //         }]
-                //     }
-                // };
-            });
-
+            self.activeUser = responseUser.data.username;
+            self.fetchUserRank(responseUser.data.username);
         });
         self.$http.get("/analytics/riskIndex").then(function(response) {
             self.riskIndex = {};

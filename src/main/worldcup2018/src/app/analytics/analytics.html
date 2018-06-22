@@ -63,19 +63,19 @@
             <i class="fa fa-bar-chart"></i> User History</div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-6 text-left" ng-dropdown-multiselect="" options="vm.userDropdown.data" selected-model="vm.userDropdown.model" extra-settings="vm.userDropdown.settings"></div>
+                    <div class="col-6 text-left" ng-dropdown-multiselect="" options="vm.userDropdown.data" selected-model="vm.userDropdown.model" extra-settings="vm.userDropdown.settings" events="vm.userDropdown.events"></div>
                     <div class="col-6 text-right">
-                        <button type="button" class="btn btn-secondary">Points / Rank</button>
+                        <button type="button" class="btn btn-secondary" ng-click="vm.userRankHistoryClick()">{{vm.userRankHistory.selection}}</button>
                     </div>
                     <div class="col-12 text-center" ng-repeat="(key, value) in vm.userDropdown.model">
                         <span>{{value.label}}</span>
                     </div>
                 </div>
                 <br>
-                <canvas id="line" class="chart chart-line" chart-data="vm.userRankHistory.data" chart-labels="vm.userRankHistory.labels" chart-options="vm.userRankHistory.options" width="100" height="50"> </canvas>
+                <canvas id="line" class="chart chart-line" chart-data="vm.userRankHistory.data" chart-labels="vm.userRankHistory.labels" chart-options="vm.userRankHistory.options" chart-series="vm.userRankHistory.series" chart-dataset-override="vm.userRankHistory.datasetOverride" width="100" height="50"> </canvas>
             </div>
             <div class="card-footer text-center text-secondary clearfix small z-1">
-                Analytics Last Update @ {{vm.lastUpdateDate}}
+               <b>Analytics Last Update @ {{vm.lastUpdateDate}}</b>
             </div>
         </div>
     </div>
