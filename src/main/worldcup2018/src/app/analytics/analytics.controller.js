@@ -16,6 +16,7 @@
         var self = this;
         this.userDropdown.events = {
             onDeselectAll: function(item) {
+                self.usersIdx= [];
                 self.fetchUserRank(self.activeUser);
             },
             onItemDeselect: function(item) {
