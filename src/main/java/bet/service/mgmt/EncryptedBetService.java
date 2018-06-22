@@ -22,7 +22,10 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import javax.transaction.Transactional;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -166,7 +169,7 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 
 		List<EncryptedBetDto> validBets
 				= bets.stream()
-				.filter(encryptedBetDto -> encryptedBetDto.getOverResult() != null || encryptedBetDto.getScoreResult() != null)
+				.filter(encryptedBetDto -> encryptedBetDto.getScoreResult() != null)
 				.collect(Collectors.toList());
 
 
