@@ -103,6 +103,8 @@ public class LivescoresComLiveFeedImpl implements LiveFeed {
 
 		if("FT".equals(min)) {
 			dto.setStatus(GameStatus.FINISHED);
+		} else if("ET".equals(min)) {
+			dto.setStatus(GameStatus.FINISHED);
 		} else {
 			int minute = parseMinute(min);
 			if(minute > 90) {
@@ -161,12 +163,5 @@ public class LivescoresComLiveFeedImpl implements LiveFeed {
 		ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
 		return responseEntity.getBody();
 	}
-
-
-	public static void main(String[] args) {
-		LivescoresComLiveFeedImpl test = new LivescoresComLiveFeedImpl();
-		System.out.println(test.getLiveFeed());
-	}
-
 
 }
