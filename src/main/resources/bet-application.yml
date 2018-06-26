@@ -45,7 +45,7 @@ management:
 application:
     timezone: Europe/Athens
     encryptKey: 1234567890qwertyuiopasdf
-    allowedMatchDays: 1,2,3
+    allowedMatchDays: 4
     betDeadline: Wednesday, June 13 15:00
     live_feed:
       interval: 300000

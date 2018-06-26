@@ -1,15 +1,15 @@
-﻿<!-- <div class="row">
+﻿<div class="row" ng-show="vm.betDeadline">
     <div class="col-12 text-center">
         <div class="card text-white bg-danger o-hidden h-100">
             <div class="card-body">
-                <div class="mr-5">Please make sure to submit your picks by Wednesday, June 13, 15.00 UTC/GMT +3 (Athens).</div>
+                <div class="mr-5">Please make sure to submit your picks by {{vm.betDeadline}}.</div>
             </div>
         </div>
     </div>
 </div>
-<br> -->
-<h4 class="text-center" ng-show="vm.allowedMatchDays && vm.allowedMatchDays.length == 0">No bets to submit currently!</h4>
-<form name="editform" ng-show="vm.allowedMatchDays && vm.allowedMatchDays.length > 0">
+<br>
+<h4 class="text-center" ng-show="!vm.betDeadline">No bets to submit currently!</h4>
+<form name="editform" ng-show="vm.betDeadline">
     <div class="table-responsive">
         <table ng-table="vm.tableParams" class="table table-condensed table-striped">
             <tr ng-repeat="game in $data">
@@ -29,14 +29,14 @@
                         <option value="AWAY_2">2</option>
                     </select>
                 </td>
-                <td ng-if="game.game.matchDay > 3" class="text-center" title="'Under'">{{game.oddsUnder}}</td>
-                <td ng-if="game.game.matchDay > 3" class="text-center" title="'Over'">{{game.oddsOver}}</td>
-                <td ng-if="game.game.matchDay > 3" class="text-center" title="'OverUnderBet'">
+                <td ng-if="vm.isPlayoffStage" class="text-center" title="'Under'">{{game.oddsUnder}}</td>
+                <td ng-if="vm.isPlayoffStage" class="text-center" title="'Over'">{{game.oddsOver}}</td>
+                <td ng-if="vm.isPlayoffStage" class="text-center" title="'OverUnderBet'">
 <!--                     <select ng-model="vm.userOverBets[game.game.id]" style="{{ userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}" required> -->           
                     <select ng-model="vm.userOverBets[game.game.id]" required>
                         <option value=""></option>
-                        <option value="UNDER">UNDER</option>
-                        <option value="OVER">OVER</option>
+                        <option value="UNDER">U</option>
+                        <option value="OVER">O</option>
                     </select>
                 </td>
             </tr>

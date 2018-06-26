@@ -6,7 +6,6 @@ export default class LayoutController {
         this.$http = $http;
         this.$window = $window;
         this.$timeout = $timeout;
-
         var self = this;
         self.pollUser();
         $scope.$on('$stateChangeSuccess', (event, toState, toParams, fromState, fromParams) => {
@@ -23,7 +22,7 @@ export default class LayoutController {
                     self.$timeout.cancel(self.mytimeoutPoll);
                     self.pollUser();
                     if (response.data.username) {
-                        console.log('user    ', response.data.username);
+                        // console.log('user    ', response.data.username);
                     } else {
                         self.$window.location.reload();
                     }
