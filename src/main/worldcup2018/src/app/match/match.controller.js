@@ -4,12 +4,17 @@
         this.NgTableParams = NgTableParams;
         this.gameId = $stateParams.gameId; //getting gameId
         this.logger = logger;
-        this.activate();
+        var self = this;
+        // this.$http.get("/bets/allowedMatchDays").then(function(response) {
+            self.activate();
+        //     self.allowedMatchDays = response.data;
+        // });
     }
     activate() {
         var self = this;
         self.$http.get("/games/list?matchId=" + self.gameId).then(function(response) {
             self.selectedGame = response.data[0];
+            self.isPlayoffGame = self.selectedGame.game.matchDay  >= '4';
             self.$http.get("/bets/list?gameId=" + self.gameId).then(function(response) {
                 self.selectedGameId = self.gameId;
                 self.tableParams = new self.NgTableParams({

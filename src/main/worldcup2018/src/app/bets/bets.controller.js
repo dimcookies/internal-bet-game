@@ -1,42 +1,48 @@
 ﻿export default class BetsController {
-	constructor($scope, $http, $window, logger, NgTableParams) {
+	constructor($scope, $rootScope, $http, $window, logger, NgTableParams) {
 		this.$http = $http;
 		this.logger = logger;
-		this.$window = $window;		
+		this.$window = $window;
 		this.NgTableParams = NgTableParams;
 		this.activate();
 	}
 	activate() {
 		var self = this;
-		self.$http.get("/bets/allowedMatchDays").then(function(response) {
-			self.allowedMatchDays = response.data;
-			self.$http.get("/games/list?matchDays=" + self.allowedMatchDays).then(function(response) {
-				self.selectedGames = response.data;
-				self.$http.get("/bets/encrypted/list").then(function(response) {
-					self.savedBets = response.data;
-					// console.log('savedBets  > ', self.savedBets);
-					// self.pointsVisible = false;
-					// self.commentsVisible = false;
-					// self.matchesVisible = false;
-					// self.matchVisible = false;
-					// self.userVisible = false;
-					// self.editVisible = true;
-					self.userBets = {};
-					self.userOverBets = {};
-					self.editError = false;
-					self.editSuccess = false;
-					self.disableSubmit = false;
-					for (var idx in self.savedBets) {
-						const savedBet = self.savedBets[idx];
-						self.userBets[savedBet.gameId] = savedBet.scoreResult;
-						self.userOverBets[savedBet.gameId] = savedBet.overResult;
-					}
-					self.tableParams = new self.NgTableParams({
-						count: self.selectedGames.length // hides pager
-					}, {
-						dataset: self.selectedGames,
-						total: 1,
-						counts: [] // hides page sizes						
+		self.$http.get("/bets/betDeadline").then(function(response) {
+			self.betDeadline = response.data;
+			// console.log('betDeadline    >   ', response.data );
+			self.$http.get("/bets/allowedMatchDays").then(function(response) {
+				// console.log('allowedMatchDays    >   ', response.data );
+				self.allowedMatchDays = response.data;
+            	self.isPlayoffStage = _.includes(self.allowedMatchDays, '4');				
+				self.$http.get("/games/list?matchDays=" + self.allowedMatchDays).then(function(response) {
+					self.selectedGames = response.data;
+					self.$http.get("/bets/encrypted/list").then(function(response) {
+						self.savedBets = response.data;
+						// console.log('savedBets  > ', self.savedBets);
+						// self.pointsVisible = false;
+						// self.commentsVisible = false;
+						// self.matchesVisible = false;
+						// self.matchVisible = false;
+						// self.userVisible = false;
+						// self.editVisible = true;
+						self.userBets = {};
+						self.userOverBets = {};
+						self.editError = false;
+						self.editSuccess = false;
+						self.disableSubmit = false;
+						for (var idx in self.savedBets) {
+							const savedBet = self.savedBets[idx];
+							self.userBets[savedBet.gameId] = savedBet.scoreResult;
+							self.userOverBets[savedBet.gameId] = savedBet.overResult;
+						}
+						self.tableParams = new self.NgTableParams({
+							count: self.selectedGames.length // hides pager
+						}, {
+							dataset: self.selectedGames,
+							total: 1,
+							counts: [] // hides page sizes						
+						});
 					});
 				});
 			});
@@ -46,8 +52,8 @@
 		var self = this;
 		self.disableSubmit = true;
 		self.enableSubmit = true;
-		const isPlayoffStage = self.allowedMatchDays.split(',') < 3;
-		console.log(isPlayoffStage);
+		// const isPlayoffStage = self.allowedMatchDays.split(',') < 3;
+		// console.log(isPlayoffStage);
 		self.editError = false;
 		self.editSuccess = false;
 		// for (var i = 0; i < self.selectedGames.length; i++) {
@@ -79,7 +85,7 @@
 			self.editSuccess = true;
 			self.disableSubmit = true;
 			if (response.data.includes("DOCTYPE html") && typeof response.data === 'string') {
-                self.$window.location.reload();
+				self.$window.location.reload();
 			}
 
 		}).catch(function(data) {
@@ -87,4 +93,4 @@
 		});
 	};
 }
-BetsController.$inject = ['$scope', '$http', '$window', 'logger', 'NgTableParams'];
+BetsController.$inject = ['$scope','$rootScope', '$http', '$window', 'logger', 'NgTableParams'];
