@@ -48,6 +48,9 @@ public class BetsController {
     @Value("${application.allowedMatchDays}")
     private String[] allowedMatchDays;
 
+    @Value("${application.currentMatchDays}")
+    private String[] currentMatchDays;
+
     @Autowired
     private UserService userService;
 
@@ -169,6 +172,15 @@ public class BetsController {
     @RequestMapping(value = "/allowedMatchDays", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String[] allowedMatchDays() {
         return allowedMatchDays;
+    }
+
+    /**
+     * Get configured current matchdays for bets
+     * @return
+     */
+    @RequestMapping(value = "/currentMatchDays", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public String[] currentMatchDays() {
+        return currentMatchDays;
     }
 
     /**
