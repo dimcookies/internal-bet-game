@@ -8,18 +8,98 @@
     </div>
 </div>
 <div class="table-responsive">
-    <table ng-table="vm.tableParams" class="table table-condensed table-striped">
+
+    <h4 class="text-center text-secondary mt-4" ng-show="vm.tableParamsP8">Final</h4>        
+    <table ng-show="vm.tableParamsP8" ng-table="vm.tableParamsP8" class="table table-condensed table-striped">
         <tr ng-repeat="bet in $data">
             <td class="text-center" title="'Match'"><a ui-sref="match({gameId: bet.game.id})">{{ bet.game.homeName }} - {{ bet.game.awayName }}</a></td>
             <td class="text-center" title="'Date'">{{ bet.game.gameDate | date : 'MMM d, h:mm a'}}</td>
             <td class="text-center" title="'Score'">{{ bet.game.goalsHome }} - {{ bet.game.goalsAway }}</td>
-            <td class="text-center" title="'Status'" sortable="'status'">{{ bet.game.status }}</td>
+            <td class="text-center" title="'Status'" sortable="'status'" ng-class="{'table-success'
+            : bet.game.status == 'IN_PLAY'}">{{ bet.game.status }}</td>
             <td class="text-center" title="'3WayBet'" sortable="'scoreResult'">{{ bet.scoreResult | betName}}</td>
             <td class="text-center" title="'3WayBet Points'" sortable="'resultPoints'" ng-class="{'table-success'
             : bet.resultPoints > 0 }">{{ bet.resultPoints }}</td>
-            <td class="text-center" title="'OverUnderBet'" sortable="'overResult'">{{ bet.overResult }}</td>
-            <td class="text-center" title="'OverUnderBet Points'" sortable="'overPoints'" ng-class="{'table-success'
+            <td class="text-center" title="'U/OBet'" sortable="'overResult'">{{ bet.overResult | betName}}</td>
+            <td class="text-center" title="'U/OBet Points'" sortable="'overPoints'" ng-class="{'table-success'
             : bet.overPoints > 0 }">{{ bet.overPoints }}</td>
+        </tr>
+    </table>
+    <h4 class="text-center text-secondary mt-4" ng-show="vm.tableParamsP7">3rd place Play-off</h4>        
+    <table ng-show="vm.tableParamsP7" ng-table="vm.tableParamsP7" class="table table-condensed table-striped">
+        <tr ng-repeat="bet in $data">
+            <td class="text-center" title="'Match'"><a ui-sref="match({gameId: bet.game.id})">{{ bet.game.homeName }} - {{ bet.game.awayName }}</a></td>
+            <td class="text-center" title="'Date'">{{ bet.game.gameDate | date : 'MMM d, h:mm a'}}</td>
+            <td class="text-center" title="'Score'">{{ bet.game.goalsHome }} - {{ bet.game.goalsAway }}</td>
+            <td class="text-center" title="'Status'" sortable="'status'" ng-class="{'table-success'
+            : bet.game.status == 'IN_PLAY'}">{{ bet.game.status }}</td>
+            <td class="text-center" title="'3WayBet'" sortable="'scoreResult'">{{ bet.scoreResult | betName}}</td>
+            <td class="text-center" title="'3WayBet Points'" sortable="'resultPoints'" ng-class="{'table-success'
+            : bet.resultPoints > 0 }">{{ bet.resultPoints }}</td>
+            <td class="text-center" title="'U/OBet'" sortable="'overResult'">{{ bet.overResult | betName}}</td>
+            <td class="text-center" title="'U/OBet Points'" sortable="'overPoints'" ng-class="{'table-success'
+            : bet.overPoints > 0 }">{{ bet.overPoints }}</td>
+        </tr>
+    </table>
+    <h4 class="text-center text-secondary mt-4" ng-show="vm.tableParamsP6">Semi-finals</h4>        
+    <table ng-show="vm.tableParamsP6" ng-table="vm.tableParamsP6" class="table table-condensed table-striped">
+        <tr ng-repeat="bet in $data">
+            <td class="text-center" title="'Match'"><a ui-sref="match({gameId: bet.game.id})">{{ bet.game.homeName }} - {{ bet.game.awayName }}</a></td>
+            <td class="text-center" title="'Date'">{{ bet.game.gameDate | date : 'MMM d, h:mm a'}}</td>
+            <td class="text-center" title="'Score'">{{ bet.game.goalsHome }} - {{ bet.game.goalsAway }}</td>
+            <td class="text-center" title="'Status'" sortable="'status'" ng-class="{'table-success'
+            : bet.game.status == 'IN_PLAY'}">{{ bet.game.status }}</td>
+            <td class="text-center" title="'3WayBet'" sortable="'scoreResult'">{{ bet.scoreResult | betName}}</td>
+            <td class="text-center" title="'3WayBet Points'" sortable="'resultPoints'" ng-class="{'table-success'
+            : bet.resultPoints > 0 }">{{ bet.resultPoints }}</td>
+            <td class="text-center" title="'U/OBet'" sortable="'overResult'">{{ bet.overResult | betName}}</td>
+            <td class="text-center" title="'U/OBet Points'" sortable="'overPoints'" ng-class="{'table-success'
+            : bet.overPoints > 0 }">{{ bet.overPoints }}</td>
+        </tr>
+    </table>
+    <h4 class="text-center text-secondary mt-4" ng-show="vm.tableParamsP5">Quarter-finals</h4>    
+    <table ng-show="vm.tableParamsP5" ng-table="vm.tableParamsP5" class="table table-condensed table-striped">
+        <tr ng-repeat="bet in $data">
+            <td class="text-center" title="'Match'"><a ui-sref="match({gameId: bet.game.id})">{{ bet.game.homeName }} - {{ bet.game.awayName }}</a></td>
+            <td class="text-center" title="'Date'">{{ bet.game.gameDate | date : 'MMM d, h:mm a'}}</td>
+            <td class="text-center" title="'Score'">{{ bet.game.goalsHome }} - {{ bet.game.goalsAway }}</td>
+            <td class="text-center" title="'Status'" sortable="'status'" ng-class="{'table-success'
+            : bet.game.status == 'IN_PLAY'}">{{ bet.game.status }}</td>
+            <td class="text-center" title="'3WayBet'" sortable="'scoreResult'">{{ bet.scoreResult | betName}}</td>
+            <td class="text-center" title="'3WayBet Points'" sortable="'resultPoints'" ng-class="{'table-success'
+            : bet.resultPoints > 0 }">{{ bet.resultPoints }}</td>
+            <td class="text-center" title="'U/OBet'" sortable="'overResult'">{{ bet.overResult | betName}}</td>
+            <td class="text-center" title="'U/OBet Points'" sortable="'overPoints'" ng-class="{'table-success'
+            : bet.overPoints > 0 }">{{ bet.overPoints }}</td>
+        </tr>
+    </table>
+    <h4 class="text-center text-secondary mt-4" ng-show="vm.tableParamsP4">Round of 16</h4>
+    <table ng-show="vm.tableParamsP4" ng-table="vm.tableParamsP4" class="table table-condensed table-striped">
+        <tr ng-repeat="bet in $data">
+            <td class="text-center" title="'Match'"><a ui-sref="match({gameId: bet.game.id})">{{ bet.game.homeName }} - {{ bet.game.awayName }}</a></td>
+            <td class="text-center" title="'Date'">{{ bet.game.gameDate | date : 'MMM d, h:mm a'}}</td>
+            <td class="text-center" title="'Score'">{{ bet.game.goalsHome }} - {{ bet.game.goalsAway }}</td>
+            <td class="text-center" title="'Status'" sortable="'status'" ng-class="{'table-success'
+            : bet.game.status == 'IN_PLAY'}">{{ bet.game.status }}</td>
+            <td class="text-center" title="'3WayBet'" sortable="'scoreResult'">{{ bet.scoreResult | betName}}</td>
+            <td class="text-center" title="'3WayBet Points'" sortable="'resultPoints'" ng-class="{'table-success'
+            : bet.resultPoints > 0 }">{{ bet.resultPoints }}</td>
+            <td class="text-center" title="'U/OBet'" sortable="'overResult'">{{ bet.overResult | betName}}</td>
+            <td class="text-center" title="'U/OBet Points'" sortable="'overPoints'" ng-class="{'table-success'
+            : bet.overPoints > 0 }">{{ bet.overPoints }}</td>
+        </tr>
+    </table>
+    <h4 class="text-center text-secondary mt-4" ng-show="vm.tableParamsP123">Group Stage</h4>
+    <table ng-show="vm.tableParamsP123" ng-table="vm.tableParamsP123" class="table table-condensed table-striped">
+        <tr ng-repeat="bet in $data">
+            <td class="text-center" title="'Match'"><a ui-sref="match({gameId: bet.game.id})">{{ bet.game.homeName }} - {{ bet.game.awayName }}</a></td>
+            <td class="text-center" title="'Date'">{{ bet.game.gameDate | date : 'MMM d, h:mm a'}}</td>
+            <td class="text-center" title="'Score'">{{ bet.game.goalsHome }} - {{ bet.game.goalsAway }}</td>
+            <td class="text-center" title="'Status'" sortable="'status'" ng-class="{'table-success'
+            : bet.game.status == 'IN_PLAY'}">{{ bet.game.status }}</td>
+            <td class="text-center" title="'3WayBet'" sortable="'scoreResult'">{{ bet.scoreResult | betName}}</td>
+            <td class="text-center" title="'3WayBet Points'" sortable="'resultPoints'" ng-class="{'table-success'
+            : bet.resultPoints > 0 }">{{ bet.resultPoints }}</td>
         </tr>
     </table>
 </div>

@@ -14,7 +14,7 @@
 			self.$http.get("/bets/allowedMatchDays").then(function(response) {
 				// console.log('allowedMatchDays    >   ', response.data );
 				self.allowedMatchDays = response.data;
-            	self.isPlayoffStage = _.includes(self.allowedMatchDays, '4');				
+				self.isPlayoffStage = _.includes(self.allowedMatchDays, '4');
 				self.$http.get("/games/list?matchDays=" + self.allowedMatchDays).then(function(response) {
 					self.selectedGames = response.data;
 					self.$http.get("/bets/encrypted/list").then(function(response) {
@@ -79,18 +79,32 @@
 			}
 			ar.push(dct);
 		}
-		var parameter = JSON.stringify(ar);
-		self.$http.post("/bets/encrypted/add", parameter).then(function(response) {
-			self.enableSubmit = false;
-			self.editSuccess = true;
-			self.disableSubmit = true;
-			if (response.data.includes("DOCTYPE html") && typeof response.data === 'string') {
-				self.$window.location.reload();
+		self.ouHasError = false;
+		_.forEach(ar, function(value) {
+			// console.log('value    > ' , value );
+			if (self.isPlayoffStage && (value.scoreResult == null || value.scoreResult == '') && value.overResult) {
+				self.ouHasError = true;
 			}
-
-		}).catch(function(data) {
-			alert("Opps! Something went wrong");
 		});
+		var parameter = JSON.stringify(ar);
+		if (!self.ouHasError) {
+			self.$http.post("/bets/encrypted/add", parameter).then(function(response) {
+				self.enableSubmit = false;
+				self.editSuccess = true;
+				self.disableSubmit = true;
+				if (response.data.includes("DOCTYPE html") && typeof response.data === 'string') {
+					self.$window.location.reload();
+				}
+
+			}).catch(function(data) {
+				alert("Opps! Something went wrong");
+			});
+		} else {
+			self.enableSubmit = false;
+			self.ouHasError = false;
+			self.disableSubmit = true;
+			alert("U/OBet pick must have a 3WayBet pick");
+		}
 	};
 }
-BetsController.$inject = ['$scope','$rootScope', '$http', '$window', 'logger', 'NgTableParams'];
+BetsController.$inject = ['$scope', '$rootScope', '$http', '$window', 'logger', 'NgTableParams'];

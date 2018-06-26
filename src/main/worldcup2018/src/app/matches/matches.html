@@ -1,5 +1,6 @@
 ﻿<div class="table-responsive">
-    <table ng-show="vm.tableParamsP78" ng-table="vm.tableParamsP78" class="table table-condensed table-striped">
+    <h4 class="text-center text-secondary mt-4" ng-show="vm.tableParamsP8">Final</h4>        
+    <table ng-show="vm.tableParamsP8" ng-table="vm.tableParamsP8" class="table table-condensed table-striped">
         <tr ng-repeat="game in $data">
             <td class="text-center" title="'Match'"><a ui-sref="match({gameId: game.game.id})">{{ game.game.homeName }} - {{ game.game.awayName }}</a></td>
             <td class="text-center" title="'Date'">{{ game.game.gameDate | date : 'MMM d, h:mm a'}}</td>
@@ -14,6 +15,23 @@
             <td class="text-center" title="'O'" sortable="'oddsOver'">{{game.oddsOver}}</td>
         </tr>
     </table>
+    <h4 class="text-center text-secondary mt-4" ng-show="vm.tableParamsP7">3rd place Play-off</h4>        
+    <table ng-show="vm.tableParamsP7" ng-table="vm.tableParamsP7" class="table table-condensed table-striped">
+        <tr ng-repeat="game in $data">
+            <td class="text-center" title="'Match'"><a ui-sref="match({gameId: game.game.id})">{{ game.game.homeName }} - {{ game.game.awayName }}</a></td>
+            <td class="text-center" title="'Date'">{{ game.game.gameDate | date : 'MMM d, h:mm a'}}</td>
+            <td class="text-center" title="'Score'">{{ game.game.goalsHome }} - {{ game.game.goalsAway }}</td>
+            <td class="text-center" title="'Status'" sortable="'status'" ng-class="{'table-success'
+            : game.game.status == 'IN_PLAY'}"
+            >{{ game.game.status }}</td>
+            <td class="text-center" title="'1'" sortable="'oddsHome'">{{game.oddsHome | number: 2}}</td>
+            <td class="text-center" title="'X'" sortable="'oddsTie'">{{game.oddsTie | number: 2}}</td>
+            <td class="text-center" title="'2'" sortable="'oddsAway'">{{game.oddsAway | number: 2}}</td>
+            <td class="text-center" title="'U'" sortable="'oddsUnder'">{{game.oddsUnder}}</td>
+            <td class="text-center" title="'O'" sortable="'oddsOver'">{{game.oddsOver}}</td>
+        </tr>
+    </table>
+    <h4 class="text-center text-secondary mt-4" ng-show="vm.tableParamsP6">Semi-finals</h4>        
     <table ng-show="vm.tableParamsP6" ng-table="vm.tableParamsP6" class="table table-condensed table-striped">
         <tr ng-repeat="game in $data">
             <td class="text-center" title="'Match'"><a ui-sref="match({gameId: game.game.id})">{{ game.game.homeName }} - {{ game.game.awayName }}</a></td>
@@ -29,6 +47,7 @@
             <td class="text-center" title="'O'" sortable="'oddsOver'">{{game.oddsOver}}</td>
         </tr>
     </table>
+    <h4 class="text-center text-secondary mt-4" ng-show="vm.tableParamsP5">Quarter-finals</h4>    
     <table ng-show="vm.tableParamsP5" ng-table="vm.tableParamsP5" class="table table-condensed table-striped">
         <tr ng-repeat="game in $data">
             <td class="text-center" title="'Match'"><a ui-sref="match({gameId: game.game.id})">{{ game.game.homeName }} - {{ game.game.awayName }}</a></td>
@@ -44,6 +63,7 @@
             <td class="text-center" title="'O'" sortable="'oddsOver'">{{game.oddsOver}}</td>
         </tr>
     </table>
+    <h4 class="text-center text-secondary mt-4" ng-show="vm.tableParamsP4">Round of 16</h4>
     <table ng-show="vm.tableParamsP4" ng-table="vm.tableParamsP4" class="table table-condensed table-striped">
         <tr ng-repeat="game in $data">
             <td class="text-center" title="'Match'"><a ui-sref="match({gameId: game.game.id})">{{ game.game.homeName }} - {{ game.game.awayName }}</a></td>
@@ -59,6 +79,7 @@
             <td class="text-center" title="'O'" sortable="'oddsOver'">{{game.oddsOver}}</td>
         </tr>
     </table>
+    <h4 class="text-center text-secondary mt-4" ng-show="vm.tableParamsP123">Group Stage</h4>
     <table ng-show="vm.tableParamsP123" ng-table="vm.tableParamsP123" class="table table-condensed table-striped">
         <tr ng-repeat="game in $data">
             <td class="text-center" title="'Match'"><a ui-sref="match({gameId: game.game.id})">{{ game.game.homeName }} - {{ game.game.awayName }}</a></td>

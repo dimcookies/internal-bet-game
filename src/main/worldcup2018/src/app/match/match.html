@@ -23,7 +23,7 @@
                 </canvas>
             </div>
             <div class="col-xs-12 col-md-12 col-lg-3" ng-show="vm.isPlayoffGame">
-                <h6 ng-if="vm.data2[0] || vm.data2[1]" class="text-center">OverUnderBet stats</h6>
+                <h6 ng-if="vm.data2[0] || vm.data2[1]" class="text-center">U/OBet stats</h6>
                 <canvas id="pie" class="chart chart-pie"
                 chart-data="vm.data2" chart-labels="vm.labels2" chart-options="vm.options" labels="true">
                 </canvas>
@@ -47,8 +47,8 @@
             <td class="text-right" title="'3WayBet'" filter="{ scoreResult: 'text'}" sortable="'scoreResult'">{{ entry.scoreResult | betName}}</td>
             <td class="text-right" title="'3WayBet Points'" sortable="'resultPoints'" ng-class="{'table-success'
             : entry.resultPoints > 0 }">{{ entry.resultPoints }}</td>
-            <td class="text-center" title="'OverUnderBet'" sortable="'overResult'" ng-show="vm.isPlayoffGame">{{ entry.overResult }}</td>
-            <td class="text-center" title="'OverUnderBet Points'" sortable="'overPoints'" ng-class="{'table-success'
+            <td class="text-center" title="'U/OBet'" sortable="'overResult'" ng-show="vm.isPlayoffGame">{{ entry.overResult }}</td>
+            <td class="text-center" title="'U/OBet Points'" sortable="'overPoints'" ng-class="{'table-success'
             : entry.overPoints > 0 }" ng-show="vm.isPlayoffGame">{{ entry.overPoints }}</td>
         </tr>
     </table>    
