@@ -60,12 +60,21 @@
                 });
             }
 
-            if (_.last(self.allowedMatchDays) >= '8') {
-                const p78 = _.concat(groupedByMatchDay["7"], groupedByMatchDay["8"]);
-                self.tableParamsP78 = new self.NgTableParams({
-                    count: p78.length // hides pager
+            if (_.last(self.allowedMatchDays) >= '7') {
+                self.tableParamsP7 = new self.NgTableParams({
+                    count: groupedByMatchDay["7"].length // hides pager
                 }, {
-                    dataset: p78,
+                    dataset: groupedByMatchDay["7"],
+                    total: 1,
+                    counts: [] // hides page sizes                   
+                });
+            }
+
+            if (_.last(self.allowedMatchDays) >= '8') {
+                self.tableParamsP8 = new self.NgTableParams({
+                    count: groupedByMatchDay["8"].length // hides pager
+                }, {
+                    dataset: groupedByMatchDay["8"],
                     total: 1,
                     counts: [] // hides page sizes                   
                 });

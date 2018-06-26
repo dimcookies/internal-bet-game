@@ -29,9 +29,9 @@
                         <option value="AWAY_2">2</option>
                     </select>
                 </td>
-                <td ng-if="vm.isPlayoffStage" class="text-center" title="'Under'">{{game.oddsUnder}}</td>
-                <td ng-if="vm.isPlayoffStage" class="text-center" title="'Over'">{{game.oddsOver}}</td>
-                <td ng-if="vm.isPlayoffStage" class="text-center" title="'OverUnderBet'">
+                <td ng-if="vm.isPlayoffStage" class="text-center" title="'U'">{{game.oddsUnder}}</td>
+                <td ng-if="vm.isPlayoffStage" class="text-center" title="'O'">{{game.oddsOver}}</td>
+                <td ng-if="vm.isPlayoffStage" class="text-center" title="'U/OBet'">
 <!--                     <select ng-model="vm.userOverBets[game.game.id]" style="{{ userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}" required> -->           
                     <select ng-model="vm.userOverBets[game.game.id]" required>
                         <option value=""></option>
