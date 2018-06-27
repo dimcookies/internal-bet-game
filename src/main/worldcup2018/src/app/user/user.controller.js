@@ -5,7 +5,7 @@
         this.NgTableParams = NgTableParams;
         this.userName = $stateParams.userName; //getting userName
         var self =this;
-        this.$http.get("/bets/allowedMatchDays").then(function(response) {
+        this.$http.get("/bets/currentMatchDay").then(function(response) {
             self.allowedMatchDays = response.data;
             self.activate();
         });

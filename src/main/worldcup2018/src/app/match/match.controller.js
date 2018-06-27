@@ -5,10 +5,7 @@
         this.gameId = $stateParams.gameId; //getting gameId
         this.logger = logger;
         var self = this;
-        // this.$http.get("/bets/allowedMatchDays").then(function(response) {
-            self.activate();
-        //     self.allowedMatchDays = response.data;
-        // });
+        self.activate();
     }
     activate() {
         var self = this;

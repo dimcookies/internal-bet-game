@@ -47,7 +47,7 @@
             <td class="text-right" title="'3WayBet'" filter="{ scoreResult: 'text'}" sortable="'scoreResult'">{{ entry.scoreResult | betName}}</td>
             <td class="text-right" title="'3WayBet Points'" sortable="'resultPoints'" ng-class="{'table-success'
             : entry.resultPoints > 0 }">{{ entry.resultPoints }}</td>
-            <td class="text-center" title="'U/OBet'" sortable="'overResult'" ng-show="vm.isPlayoffGame">{{ entry.overResult }}</td>
+            <td class="text-center" title="'U/OBet'" sortable="'overResult'" filter="{ overResult: 'text'}" ng-show="vm.isPlayoffGame">{{ entry.overResult }}</td>
             <td class="text-center" title="'U/OBet Points'" sortable="'overPoints'" ng-class="{'table-success'
             : entry.overPoints > 0 }" ng-show="vm.isPlayoffGame">{{ entry.overPoints }}</td>
         </tr>

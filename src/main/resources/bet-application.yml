@@ -46,8 +46,8 @@ application:
     timezone: Europe/Athens
     encryptKey: 1234567890qwertyuiopasdf
     currentMatchDays: 4
-    allowedMatchDays:
-    betDeadline: Wednesday, June 13 15:00
+    allowedMatchDays: 4
+    betDeadline: 
     live_feed:
       interval: 300000
       footballapiorg:

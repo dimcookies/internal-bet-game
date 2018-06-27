@@ -6,7 +6,7 @@
         this.logger = logger;
         this.NgTableParams = NgTableParams;
         var self = this;
-        this.$http.get("/bets/allowedMatchDays").then(function(response) {
+        this.$http.get("/bets/currentMatchDay").then(function(response) {
             self.allowedMatchDays = response.data;
             self.activate();
         });

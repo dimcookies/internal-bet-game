@@ -88,17 +88,18 @@
 		});
 		var parameter = JSON.stringify(ar);
 		if (!self.ouHasError) {
-			self.$http.post("/bets/encrypted/add", parameter).then(function(response) {
-				self.enableSubmit = false;
-				self.editSuccess = true;
-				self.disableSubmit = true;
-				if (response.data.includes("DOCTYPE html") && typeof response.data === 'string') {
-					self.$window.location.reload();
-				}
+alert('posted')
+			// self.$http.post("/bets/encrypted/add", parameter).then(function(response) {
+			// 	self.enableSubmit = false;
+			// 	self.editSuccess = true;
+			// 	self.disableSubmit = true;
+			// 	if (response.data.includes("DOCTYPE html") && typeof response.data === 'string') {
+			// 		self.$window.location.reload();
+			// 	}
 
-			}).catch(function(data) {
-				alert("Opps! Something went wrong");
-			});
+			// }).catch(function(data) {
+			// 	alert("Opps! Something went wrong");
+			// });
 		} else {
 			self.enableSubmit = false;
 			self.ouHasError = false;
