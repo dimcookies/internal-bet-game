@@ -21,8 +21,8 @@
                 <td class="text-center" title="'X'">{{game.oddsTie | number: 2}}</td>
                 <td class="text-center" title="'2'">{{game.oddsAway | number: 2}}</td>
                 <td class="text-center" title="'3WayBet'">
-<!--                     <select ng-model="vm.userBets[game.game.id]" required class="betSelect" style="{{ vm.userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}"> -->
-                    <select ng-model="vm.userBets[game.game.id]" required class="betSelect">
+
+                    <select ng-model="vm.userBets[game.game.id]" ng-required="vm.userOverBets && vm.userOverBets[game.game.id]" class="betSelect">
                         <option value=""></option>
                         <option value="HOME_1">1</option>
                         <option value="DRAW_X">X</option>
@@ -32,11 +32,10 @@
                 <td ng-if="vm.isPlayoffStage" class="text-center" title="'U'">{{game.oddsUnder}}</td>
                 <td ng-if="vm.isPlayoffStage" class="text-center" title="'O'">{{game.oddsOver}}</td>
                 <td ng-if="vm.isPlayoffStage" class="text-center" title="'U/OBet'">
-<!--                     <select ng-model="vm.userOverBets[game.game.id]" style="{{ userBets[game.game.id] == null ?  'border: 1px solid red;' : ''}}" required> -->           
-                    <select ng-model="vm.userOverBets[game.game.id]" required>
+                    <select ng-model="vm.userOverBets[game.game.id]" ng-required="vm.userBets && vm.userBets[game.game.id]">
                         <option value=""></option>
-                        <option value="UNDER">U</option>
-                        <option value="OVER">O</option>
+                        <option value="UNDER">UNDER</option>
+                        <option value="OVER">OVER</option>
                     </select>
                 </td>
             </tr>
@@ -44,7 +43,7 @@
     </div>
     <br/>
     <div class="float-right">
-        <button type="button" ng-disabled="vm.enableSubmit" class="btn btn-success col-m" ng-click="vm.saveBets()">Submit Picks</button>
+        <button type="button" ng-disabled="vm.enableSubmit || editform.$invalid" class="btn btn-success col-m" ng-click="vm.saveBets()">Submit Picks</button>
     </div>
     <div class="row">
         <div ng-show="vm.editError" class="col-12 text-center" style="color:red">Missing fields</div>

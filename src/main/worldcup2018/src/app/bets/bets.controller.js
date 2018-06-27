@@ -19,13 +19,6 @@
 					self.selectedGames = response.data;
 					self.$http.get("/bets/encrypted/list").then(function(response) {
 						self.savedBets = response.data;
-						// console.log('savedBets  > ', self.savedBets);
-						// self.pointsVisible = false;
-						// self.commentsVisible = false;
-						// self.matchesVisible = false;
-						// self.matchVisible = false;
-						// self.userVisible = false;
-						// self.editVisible = true;
 						self.userBets = {};
 						self.userOverBets = {};
 						self.editError = false;
@@ -52,23 +45,9 @@
 		var self = this;
 		self.disableSubmit = true;
 		self.enableSubmit = true;
-		// const isPlayoffStage = self.allowedMatchDays.split(',') < 3;
-		// console.log(isPlayoffStage);
 		self.editError = false;
 		self.editSuccess = false;
-		// for (var i = 0; i < self.selectedGames.length; i++) {
-		// 	const game = self.selectedGames[i];
-		// 	if (self.userBets[game.game.id] == null) {
-		// 		self.editError = true;
-		// 		self.enableSubmit = false;
-		// 		return;
-		// 	}
-		// 	if (isPlayoffStage && self.userOverBets[game.game.id] == null) {
-		// 		self.editError = true;
-		// 		self.enableSubmit = false;				
-		// 		return;
-		// 	}
-		// }
+
 		const ar = [];
 		for (var key in self.userBets) {
 			var value = self.userBets[key];
@@ -79,33 +58,19 @@
 			}
 			ar.push(dct);
 		}
-		self.ouHasError = false;
-		_.forEach(ar, function(value) {
-			// console.log('value    > ' , value );
-			if (self.isPlayoffStage && (value.scoreResult == null || value.scoreResult == '') && value.overResult) {
-				self.ouHasError = true;
-			}
-		});
-		var parameter = JSON.stringify(ar);
-		if (!self.ouHasError) {
-alert('posted')
-			// self.$http.post("/bets/encrypted/add", parameter).then(function(response) {
-			// 	self.enableSubmit = false;
-			// 	self.editSuccess = true;
-			// 	self.disableSubmit = true;
-			// 	if (response.data.includes("DOCTYPE html") && typeof response.data === 'string') {
-			// 		self.$window.location.reload();
-			// 	}
 
-			// }).catch(function(data) {
-			// 	alert("Opps! Something went wrong");
-			// });
-		} else {
-			self.enableSubmit = false;
-			self.ouHasError = false;
-			self.disableSubmit = true;
-			alert("U/OBet pick must have a 3WayBet pick");
-		}
+		var parameter = JSON.stringify(ar);
+			self.$http.post("/bets/encrypted/add", parameter).then(function(response) {
+				self.enableSubmit = false;
+				self.editSuccess = true;
+				self.disableSubmit = true;
+				if (response.data.includes("DOCTYPE html") && typeof response.data === 'string') {
+					self.$window.location.reload();
+				}
+
+			}).catch(function(data) {
+				alert("Opps! Something went wrong");
+			});
 	};
 }
 BetsController.$inject = ['$scope', '$rootScope', '$http', '$window', 'logger', 'NgTableParams'];
