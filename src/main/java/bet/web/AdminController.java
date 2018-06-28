@@ -9,6 +9,7 @@ import bet.service.livefeed.LiveScoreFeedScheduler;
 import bet.service.mgmt.EncryptedBetService;
 import bet.service.mgmt.UserService;
 import bet.service.rss.RssFeedScheduler;
+import bet.service.utils.EhCacheUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
@@ -138,6 +139,7 @@ public class AdminController {
     @RequestMapping(value = "/clearCache", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
     public String manualClearCaches() {
         cacheManager.getCacheNames().parallelStream().forEach(name -> cacheManager.getCache(name).clear());
+        EhCacheUtils.clearCache();
         return "OK";
     }
 

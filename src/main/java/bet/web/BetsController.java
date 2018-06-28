@@ -190,7 +190,7 @@ public class BetsController {
      */
     @Cacheable(value = "userBets3")
     @RequestMapping(value = "/gameStats", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Map<String, Long> allBets(@RequestParam(value = "gameId") Integer gameId) {
+    public Map<String, Long> gameStats(@RequestParam(value = "gameId") Integer gameId) {
         List<Bet> bets;
         if(gameId != null) {
             bets = betRepository.findByGame(new Game(gameId));
