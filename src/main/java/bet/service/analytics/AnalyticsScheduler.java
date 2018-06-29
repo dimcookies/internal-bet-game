@@ -3,6 +3,7 @@ package bet.service.analytics;
 import bet.api.constants.GameStatus;
 import bet.model.Game;
 import bet.service.cache.ClearCacheTask;
+import bet.service.utils.EhCacheUtils;
 import bet.service.utils.GamesSchedule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +50,7 @@ public class AnalyticsScheduler {
 		}
 		LOGGER.info("Analytics run");
         clearCacheTask.clearCaches();
+		EhCacheUtils.clearCache();
 		//get all reporting modules and run
 		Map<String,Object> customPageActions = context.getBeansWithAnnotation(Analytics.class);
 		customPageActions.forEach((s, o) -> ((AnalyticsModule)o).run());
