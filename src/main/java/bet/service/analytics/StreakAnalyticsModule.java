@@ -64,8 +64,7 @@ public class StreakAnalyticsModule implements AnalyticsModule {
             List<Integer> userStreaks = new ArrayList<>();
 
             for(Bet bet: userBets) {
-                boolean isCurrentCorrect = bet.getResultPoints() > 0
-                        && (bet.getGame().isGroupStage() || bet.getOverPoints() > 0);
+                boolean isCurrentCorrect = bet.getResultPoints() > 0;
                 //in case of status change
                 if (isCurrentCorrect != isPrevCorrect) {
                     //save streak
