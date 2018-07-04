@@ -109,6 +109,20 @@ public class AdminController {
     }
 
     /**
+     * Toggle user eligibility
+     *
+     * @return
+     */
+    @RequestMapping(value = "/toggleEligibleUser", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
+    public String toggleEligibleUser(String username) {
+        User user = userRepository.findOneByUsername(username);
+        UserDto userDto = new UserDto();
+        userDto.fromEntity(user);
+        userDto.setEligible(!user.getEligible());
+        userService.update(userDto);
+        return "OK";
+    }
+    /**
      * Manual run analytics
      *
      * @return

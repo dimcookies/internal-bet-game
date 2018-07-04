@@ -133,7 +133,7 @@ public class BetsController {
     @RequestMapping(value = "/points", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Map<String, Object>> allPoints() {
         Map<String, String> names = userService.list().stream()
-                .collect(Collectors.toMap(UserDto::getUsername, UserDto::getName));
+                .collect(Collectors.toMap(UserDto::getUsername, userDto -> userDto.getName() + (userDto.getEligible() ? "" : " (DNP)")));
         Map<String, Double> riskIndex = customBetRepository.listRiskIndex();
         Map<String, Long> allBets =
                 StreamSupport.stream(betRepository.findAll().spliterator(), false)
