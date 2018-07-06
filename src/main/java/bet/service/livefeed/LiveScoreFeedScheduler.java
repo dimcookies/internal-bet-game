@@ -132,10 +132,10 @@ public class LiveScoreFeedScheduler {
 		Odd odd = oddRepository.findOneByGame(game);
 
 		//over points = betting factor * 0.5 * multiplier
-		int overPoints = (int) Math.floor(odd.getOddForOver(game.getOverResult()) * 0.5 * odd.getMultiplier());
+		int overPoints = (int) Math.round(odd.getOddForOver(game.getOverResult()) * 0.5 * odd.getMultiplier());
 
 		//score points = betting factor * multiplier
-		int scorePoints = (int) Math.floor(odd.getOddForScore(game.getScoreResult()) * odd.getMultiplier());
+		int scorePoints = (int) Math.round(odd.getOddForScore(game.getScoreResult()) * odd.getMultiplier());
 
 		return new int[] { scorePoints, overPoints };
 	}
@@ -147,4 +147,5 @@ public class LiveScoreFeedScheduler {
 	public void setLastUpdateDate(ZonedDateTime lastUpdateDate) {
 		this.lastUpdateDate = lastUpdateDate;
 	}
+
 }
