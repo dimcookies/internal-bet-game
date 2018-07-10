@@ -174,7 +174,8 @@ public class BetsController {
      */
     @RequestMapping(value = "/allowedMatchDays", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String[] allowedMatchDays() {
-        return getCurrentDeadline().getAllowedMatchDays().split(",");
+        String allowedMatchDays = getCurrentDeadline().getAllowedMatchDays();
+        return  allowedMatchDays == null ? null : allowedMatchDays.split(",");
     }
 
     /**
@@ -183,7 +184,8 @@ public class BetsController {
      */
     @RequestMapping(value = "/currentMatchDays", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String[] currentMatchDays() {
-        return getCurrentDeadline().getCurrentMatchDays().split(",");
+        String currentMatchDays = getCurrentDeadline().getCurrentMatchDays();
+        return  currentMatchDays == null ? null : currentMatchDays.split(",");
     }
 
     /**
