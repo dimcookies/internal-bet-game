@@ -10,6 +10,7 @@ import bet.repository.*;
 import bet.service.mgmt.EncryptedBetService;
 import bet.service.mgmt.UserService;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -175,7 +176,7 @@ public class BetsController {
     @RequestMapping(value = "/allowedMatchDays", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String[] allowedMatchDays() {
         String allowedMatchDays = getCurrentDeadline().getAllowedMatchDays();
-        return  allowedMatchDays == null ? null : allowedMatchDays.split(",");
+        return  allowedMatchDays == null ? ArrayUtils.toArray() : allowedMatchDays.split(",");
     }
 
     /**
@@ -185,7 +186,7 @@ public class BetsController {
     @RequestMapping(value = "/currentMatchDays", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String[] currentMatchDays() {
         String currentMatchDays = getCurrentDeadline().getCurrentMatchDays();
-        return  currentMatchDays == null ? null : currentMatchDays.split(",");
+        return  currentMatchDays == null ? ArrayUtils.toArray() : currentMatchDays.split(",");
     }
 
     /**
