@@ -195,7 +195,8 @@ public class BetsController {
      */
     @RequestMapping(value = "/betDeadline", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
     public String betDeadline() {
-        return getCurrentDeadline().getBetDeadlineText();
+        String deadlineText = getCurrentDeadline().getBetDeadlineText();
+        return deadlineText == null ? "" : deadlineText;
     }
 
 
