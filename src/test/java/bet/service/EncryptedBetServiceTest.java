@@ -4,14 +4,8 @@ import bet.api.constants.OverResult;
 import bet.api.constants.ScoreResult;
 import bet.api.dto.EncryptedBetDto;
 import bet.base.AbstractBetIntegrationTest;
-import bet.model.Bet;
-import bet.model.EncryptedBet;
-import bet.model.Game;
-import bet.model.User;
-import bet.repository.BetRepository;
-import bet.repository.EncryptedBetRepository;
-import bet.repository.GameRepository;
-import bet.repository.UserRepository;
+import bet.model.*;
+import bet.repository.*;
 import bet.service.GamesInitializer;
 import bet.service.mgmt.EncryptedBetService;
 import com.google.common.collect.Lists;
@@ -48,6 +42,9 @@ public class EncryptedBetServiceTest extends AbstractBetIntegrationTest {
 
     @Autowired
     private GameRepository gameRepository;
+
+    @Autowired
+    private DeadlineRepository deadlineRepository;
 
     @Before
     public void setUp() {
@@ -122,11 +119,13 @@ public class EncryptedBetServiceTest extends AbstractBetIntegrationTest {
         User user = users.get(0);
         int gameId1 = games.get(0).getId();
         int gameId2 = games.get(1).getId();
-        String now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC")).toString();
+        ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
+
+        deadlineRepository.save(new Deadline(null, now.minusDays(10), now.plusDays(1), "1", ""+games.get(0).getMatchDay()+",11,12", "text"));
 
         IntStream.range(0,3).forEach(value -> {
-            List<EncryptedBetDto> bets = Arrays.asList(new EncryptedBetDto(null, gameId1, null, ScoreResult.HOME_1.toString(), OverResult.OVER.toString(), now),
-                    new EncryptedBetDto(null, gameId2, null, ScoreResult.AWAY_2.toString(), OverResult.UNDER.toString(), now));
+            List<EncryptedBetDto> bets = Arrays.asList(new EncryptedBetDto(null, gameId1, null, ScoreResult.HOME_1.toString(), OverResult.OVER.toString(), now.toString()),
+                    new EncryptedBetDto(null, gameId2, null, ScoreResult.AWAY_2.toString(), OverResult.UNDER.toString(), now.toString()));
 
             encryptedBetService.createAll(bets, user);
 
@@ -139,6 +138,48 @@ public class EncryptedBetServiceTest extends AbstractBetIntegrationTest {
                     && bet.getScoreResult().equals(ScoreResult.AWAY_2.toString()) && bet.getOverResult().equals(OverResult.UNDER.toString())));
         });
 
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testNullAllowedDays() {
+
+        List<User> users = Lists.newArrayList(userRepository.findAll());
+        List<Game> games = Lists.newArrayList(gameRepository.findAll());
+        User user = users.get(0);
+        int gameId1 = games.get(0).getId();
+        int gameId2 = games.get(1).getId();
+        ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
+
+        deadlineRepository.save(new Deadline(null, now.minusDays(10), now.plusDays(1), "1", null, null));
+
+        IntStream.range(0,3).forEach(value -> {
+            List<EncryptedBetDto> bets = Arrays
+                    .asList(new EncryptedBetDto(null, gameId1, null, ScoreResult.HOME_1.toString(), OverResult.OVER.toString(), now.toString()),
+                            new EncryptedBetDto(null, gameId2, null, ScoreResult.AWAY_2.toString(), OverResult.UNDER.toString(), now.toString()));
+
+            encryptedBetService.createAll(bets, user);
+        });
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testInvalidAllowedDays() {
+
+        List<User> users = Lists.newArrayList(userRepository.findAll());
+        List<Game> games = Lists.newArrayList(gameRepository.findAll());
+        User user = users.get(0);
+        int gameId1 = games.get(0).getId();
+        int gameId2 = games.get(1).getId();
+        ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
+
+        deadlineRepository.save(new Deadline(null, now.minusDays(10), now.plusDays(1), "1", "10", null));
+
+        IntStream.range(0,3).forEach(value -> {
+            List<EncryptedBetDto> bets = Arrays
+                    .asList(new EncryptedBetDto(null, gameId1, null, ScoreResult.HOME_1.toString(), OverResult.OVER.toString(), now.toString()),
+                            new EncryptedBetDto(null, gameId2, null, ScoreResult.AWAY_2.toString(), OverResult.UNDER.toString(), now.toString()));
+
+            encryptedBetService.createAll(bets, user);
+        });
     }
 
 }

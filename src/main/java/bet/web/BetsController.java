@@ -3,12 +3,10 @@ package bet.web;
 import bet.api.dto.EncryptedBetDto;
 import bet.api.dto.UserDto;
 import bet.model.Bet;
+import bet.model.Deadline;
 import bet.model.Game;
 import bet.model.User;
-import bet.repository.BetRepository;
-import bet.repository.CustomBetRepository;
-import bet.repository.FriendRepository;
-import bet.repository.UserRepository;
+import bet.repository.*;
 import bet.service.mgmt.EncryptedBetService;
 import bet.service.mgmt.UserService;
 import com.google.common.collect.Lists;
@@ -19,6 +17,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,11 +45,14 @@ public class BetsController {
     @Autowired
     private CustomBetRepository customBetRepository;
 
-    @Value("${application.allowedMatchDays}")
-    private String[] allowedMatchDays;
+    @Autowired
+    private DeadlineRepository deadlineRepository;
 
-    @Value("${application.currentMatchDays}")
-    private String[] currentMatchDays;
+//    @Value("${application.allowedMatchDays}")
+//    private String[] allowedMatchDays;
+//
+//    @Value("${application.currentMatchDays}")
+//    private String[] currentMatchDays;
 
     @Autowired
     private UserService userService;
@@ -171,7 +174,7 @@ public class BetsController {
      */
     @RequestMapping(value = "/allowedMatchDays", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String[] allowedMatchDays() {
-        return allowedMatchDays;
+        return getCurrentDeadline().getAllowedMatchDays().split(",");
     }
 
     /**
@@ -180,7 +183,22 @@ public class BetsController {
      */
     @RequestMapping(value = "/currentMatchDays", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String[] currentMatchDays() {
-        return currentMatchDays;
+        return getCurrentDeadline().getCurrentMatchDays().split(",");
+    }
+
+    /**
+     * Get bet deadline info
+     * @return
+     */
+    @RequestMapping(value = "/betDeadline", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
+    public String betDeadline() {
+        return getCurrentDeadline().getBetDeadlineText();
+    }
+
+
+    private Deadline getCurrentDeadline() {
+        ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
+        return deadlineRepository.findActiveDeadline(now, now);
     }
 
     /**
@@ -203,13 +221,6 @@ public class BetsController {
         return stats;
     }
 
-    /**
-     * Get bet deadline info
-     * @return
-     */
-    @RequestMapping(value = "/betDeadline", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
-    public String betDeadline() {
-        return betDeadline;
-    }
+
 
 }

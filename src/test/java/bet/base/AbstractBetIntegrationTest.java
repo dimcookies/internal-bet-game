@@ -88,7 +88,7 @@ public abstract class AbstractBetIntegrationTest extends AbstractBetTest {
 		// Delete all data from Postgres
 		truncatePostgresTables(jdbcTemplate,
 				Game.class, Bet.class, Odd.class, User.class, Comment.class, EncryptedBet.class,
-				Friend.class, RankHistory.class, RssFeed.class, UserStreak.class, CommentLike.class);
+				Friend.class, RankHistory.class, RssFeed.class, UserStreak.class, CommentLike.class, Deadline.class);
 
 		CacheManager manager = CacheManager.getInstance();
 		for (String s : manager.getCacheNames()) {
