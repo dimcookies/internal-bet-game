@@ -10,6 +10,7 @@ import bet.repository.OddRepository;
 import bet.service.cache.ClearCacheTask;
 import bet.service.utils.EhCacheUtils;
 import bet.service.utils.GamesSchedule;
+import bet.web.BetsController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Periodically runs live feed and updates results and compute user bets
@@ -53,6 +56,9 @@ public class LiveScoreFeedScheduler {
 
 	@Autowired
 	private ClearCacheTask clearCacheTask;
+
+	@Autowired
+	private BetsController betsController;
 
 	@CacheEvict(allEntries = true, cacheNames = {"points1","points2","games"})
 	@Scheduled(fixedRate = interval)
@@ -122,10 +128,28 @@ public class LiveScoreFeedScheduler {
 				//save bet
 				betRepository.save(bet);
 			});
+			logWinners();
 		}
 
 		//update game entry
 		gameRepository.save(liveGame);
+	}
+
+	private void logWinners() {
+		try {
+			LOGGER.info("##########");
+			List<Map<String, Object>> points = betsController.allPoints();
+			points.subList(0, 10).forEach(entry -> {
+				LOGGER.info(String.format(" %s %s %s ", entry.get("idx").toString(), entry.get("name").toString(), entry.get("points").toString()));
+			});
+			LOGGER.info("-------------");
+			points.subList(points.size() - 4, points.size() - 1).forEach(entry -> {
+				LOGGER.info(String.format(" %s %s %s ", entry.get("idx").toString(), entry.get("name").toString(), entry.get("points").toString()));
+			});
+			LOGGER.info("##########");
+		} catch (Throwable e) {
+			LOGGER.error("Error during logging winners ", e);
+		}
 	}
 
 	private int[] getPoints(Game game) {
