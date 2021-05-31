@@ -25,16 +25,24 @@ public class UserDto implements ManagementDto<User, Integer> {
 
 	private Boolean optOut;
 
+	private Boolean eligible;
+
 	public UserDto() {
 	}
 
 	public UserDto(String name, String email, String password, String role, String username, Boolean optOut) {
+		this(name, email, password, role, username, optOut, true);
+	}
+
+	public UserDto(String name, String email, String password, String role, String username, Boolean optOut, Boolean eligible) {
 		this.name = name;
 		this.username = username;
 		this.email = email;
 		this.password = password;
 		this.role = role;
 		this.optOut = optOut;
+		this.eligible = eligible;
+
 	}
 
 	@Override
@@ -47,12 +55,13 @@ public class UserDto implements ManagementDto<User, Integer> {
 			setPassword(entity.getPassword());
 			setRole(entity.getRole());
 			setOptOut(entity.getOptOut());
+			setEligible(entity.getEligible());
 		}
 	}
 
 	@Override
 	public User toEntity() {
-		return new User(this.id, this.name, this.email, this.password, this.role, this.username, this.optOut);
+		return new User(this.id, this.name, this.email, this.password, this.role, this.username, this.optOut, this.eligible);
 	}
 
 }

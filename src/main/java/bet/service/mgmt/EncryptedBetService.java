@@ -8,6 +8,7 @@ import bet.model.EncryptedBet;
 import bet.model.Game;
 import bet.model.User;
 import bet.repository.BetRepository;
+import bet.repository.DeadlineRepository;
 import bet.repository.EncryptedBetRepository;
 import bet.repository.GameRepository;
 import bet.service.email.EmailSender;
@@ -31,8 +32,8 @@ import java.util.stream.Collectors;
 @Service
 public class EncryptedBetService extends AbstractManagementService<EncryptedBet, Integer, EncryptedBetDto> {
 
-	@Value("${application.allowedMatchDays}")
-	private String[] allowedMatchDays;
+//	@Value("${application.allowedMatchDays}")
+//	private String[] allowedMatchDays;
 
 	@Autowired
 	private EncryptHelper encryptHelper;
@@ -51,6 +52,9 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 
 	@Autowired
 	private SpringTemplateEngine templateEngine;
+
+	@Autowired
+	private DeadlineRepository deadlineRepository;
 
 
 	@Override
@@ -155,6 +159,9 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 	 */
 	@Transactional
 	public List<EncryptedBetDto> createAll(List<EncryptedBetDto> bets, User user) {
+		ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
+		String [] allowedMatchDays = deadlineRepository.findActiveDeadline(now, now)
+				.getAllowedMatchDays().split(",");
 		//the configured days that are allowed to get bets for
 		List<Integer> allowedDays = Arrays.asList(allowedMatchDays).stream().map(Integer::parseInt).collect(Collectors.toList());
 
@@ -180,7 +187,6 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 		//delete current bets
 		encryptedBetRepository.deleteByUser(user);
 
-		ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
 		List<EncryptedBetDto> result = validBets.stream().map(encryptedBetDto -> {
 			encryptedBetDto.setId(null);
 			//set user of bet to current user

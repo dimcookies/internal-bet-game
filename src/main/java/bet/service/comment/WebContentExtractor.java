@@ -2,6 +2,7 @@ package bet.service.comment;
 
 import com.linkedin.urls.detection.UrlDetector;
 import com.linkedin.urls.detection.UrlDetectorOptions;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class WebContentExtractor {
     }
 
     public boolean stringContainsHtml(String text) {
+        text = StringEscapeUtils.unescapeHtml4(text);
         final Matcher matcher = HTML_TAG_PATTERN.matcher(text);
         return matcher.find();
     }

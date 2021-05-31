@@ -14,7 +14,7 @@
 			self.$http.get("/bets/allowedMatchDays").then(function(response) {
 				// console.log('allowedMatchDays    >   ', response.data );
 				self.allowedMatchDays = response.data;
-				self.isPlayoffStage = _.includes(self.allowedMatchDays, '4');
+				self.isPlayoffStage = _.last(self.allowedMatchDays) >= '4'//_.includes(self.allowedMatchDays, '4');
 				self.$http.get("/games/list?matchDays=" + self.allowedMatchDays).then(function(response) {
 					self.selectedGames = response.data;
 					self.$http.get("/bets/encrypted/list").then(function(response) {
