@@ -14,8 +14,8 @@ import bet.repository.GameRepository;
 import bet.service.email.EmailSender;
 import bet.service.encrypt.EncryptHelper;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
@@ -160,10 +160,15 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 	@Transactional
 	public List<EncryptedBetDto> createAll(List<EncryptedBetDto> bets, User user) {
 		ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
-		String [] allowedMatchDays = deadlineRepository.findActiveDeadline(now, now)
-				.getAllowedMatchDays().split(",");
+		String allowedMatchDays = deadlineRepository.findActiveDeadline(now, now)
+				.getAllowedMatchDays();
+		if(StringUtils.isEmpty(allowedMatchDays)) {
+			throw new RuntimeException("User " + user.getUsername() + " tried to create bet while not allowed. " +
+					                           "Whole request:" + bets);
+		}
 		//the configured days that are allowed to get bets for
-		List<Integer> allowedDays = Arrays.asList(allowedMatchDays).stream().map(Integer::parseInt).collect(Collectors.toList());
+		List<Integer> allowedDays = Arrays.stream(allowedMatchDays.split(","))
+				.map(Integer::parseInt).collect(Collectors.toList());
 
 
 		//check if a provided bet is for a game outside allowed days
