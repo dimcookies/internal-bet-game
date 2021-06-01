@@ -48,6 +48,9 @@ public class AnalyticsController {
     @Autowired
     private OddRepository oodOddRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Value("${application.timezone}")
     private String timezone;
 
@@ -142,9 +145,11 @@ public class AnalyticsController {
     @RequestMapping(value = "/userStreakHistoryLimits", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Map<String, UserStreakHistory> userStreakHistoryLimits() {
         UserStreakHistory minStreak = StreamSupport.stream(userStreakHistoryRepository.findAll().spliterator(), false)
-                .min(Comparator.comparing(UserStreakHistory::getMinStreak)).get();
+                .min(Comparator.comparing(UserStreakHistory::getMinStreak))
+                .orElseGet(() -> new UserStreakHistory(0,0, userRepository.findAll().iterator().next()));
         UserStreakHistory maxStreak = StreamSupport.stream(userStreakHistoryRepository.findAll().spliterator(), false)
-                .max(Comparator.comparing(UserStreakHistory::getMaxStreak)).get();
+                .max(Comparator.comparing(UserStreakHistory::getMaxStreak))
+                .orElseGet(() -> new UserStreakHistory(0,0, userRepository.findAll().iterator().next()));
         return new HashMap<String, UserStreakHistory>() {{
             put("max", maxStreak);
             put("min", minStreak);
