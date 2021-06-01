@@ -26,8 +26,26 @@ feed is implemented based on football-api.org (and there is a backup option on f
 * Java 8
 * maven version 3.x
 * Postgres 9.3+
+* (Node 12.X for testing gui)
 
 ## Init the module database / user /schema:
 
     mvn clean install -DskipTests -Dinit.database.skip=false -Ddb.host=rdbms -Ddb.port=5432 -Ddb.root.password=postgres -Ddb.module.password=postgres flyway:migrate
 
+## Frontend:
+
+    npm install
+    npm run build (copies frontend in resources folder and served by tomcat)
+    npm start (for dev, changes ports in webpack.config.js)
+
+## Steps to init project
+
+* Check that livefeed implementation works (activated by spring profile). Check if tokens work
+* Download matches, add in classpath (resources) and fix GameInitializer to import them in database  
+* Need to import odds some days before each round starts 
+* Create deadlines in database based on tournament schedule (current days and allowed days for betting. Use 
+  array for multiple values)
+* Fix email credentials
+* Change encryption key  
+* After all bets have been set, decrypt them
+* Check rss feeds
