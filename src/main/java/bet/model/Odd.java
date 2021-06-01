@@ -111,7 +111,7 @@ public class Odd implements Serializable {
 		case 8:
 			return 300;
 		default:
-			throw new RuntimeException("Invalida match day:" + game.getMatchDay());
+			throw new RuntimeException("Invalid match day:" + game.getMatchDay());
 		}
 	}
 }

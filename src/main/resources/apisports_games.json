@@ -1,0 +1,221 @@
+{
+    "errors": [],
+    "get": "fixtures",
+    "paging": {
+        "current": 1,
+        "total": 1
+    },
+    "parameters": {
+        "date": "2021-06-14",
+        "league": "4",
+        "season": "2020"
+    },
+    "response": [
+        {
+            "fixture": {
+                "date": "2021-06-14T13:00:00+00:00",
+                "id": 657681,
+                "periods": {
+                    "first": null,
+                    "second": null
+                },
+                "referee": null,
+                "status": {
+                    "elapsed": null,
+                    "long": "Not Started",
+                    "short": "ET"
+                },
+                "timestamp": 1623675600,
+                "timezone": "UTC",
+                "venue": {
+                    "city": "Glasgow",
+                    "id": 2617,
+                    "name": "Hampden Park"
+                }
+            },
+            "goals": {
+                "away": 3,
+                "home": 2
+            },
+            "league": {
+                "country": "World",
+                "flag": null,
+                "id": 4,
+                "logo": "https://media.api-sports.io/football/leagues/4.png",
+                "name": "Euro Championship",
+                "round": "Group D - 1",
+                "season": 2020
+            },
+            "score": {
+                "extratime": {
+                    "away": null,
+                    "home": null
+                },
+                "fulltime": {
+                    "away": null,
+                    "home": null
+                },
+                "halftime": {
+                    "away": null,
+                    "home": null
+                },
+                "penalty": {
+                    "away": null,
+                    "home": null
+                }
+            },
+            "teams": {
+                "away": {
+                    "id": 770,
+                    "logo": "https://media.api-sports.io/football/teams/770.png",
+                    "name": "Czech Republic",
+                    "winner": null
+                },
+                "home": {
+                    "id": 1108,
+                    "logo": "https://media.api-sports.io/football/teams/1108.png",
+                    "name": "Scotland",
+                    "winner": null
+                }
+            }
+        },
+        {
+            "fixture": {
+                "date": "2021-06-14T16:00:00+00:00",
+                "id": 657682,
+                "periods": {
+                    "first": null,
+                    "second": null
+                },
+                "referee": null,
+                "status": {
+                    "elapsed": null,
+                    "long": "Not Started",
+                    "short": "FT"
+                },
+                "timestamp": 1623686400,
+                "timezone": "UTC",
+                "venue": {
+                    "city": "St. Petersburg",
+                    "id": null,
+                    "name": "Saint-Petersburg Stadium"
+                }
+            },
+            "goals": {
+                "away": 2,
+                "home": 1
+            },
+            "league": {
+                "country": "World",
+                "flag": null,
+                "id": 4,
+                "logo": "https://media.api-sports.io/football/leagues/4.png",
+                "name": "Euro Championship",
+                "round": "Group E - 1",
+                "season": 2020
+            },
+            "score": {
+                "extratime": {
+                    "away": null,
+                    "home": null
+                },
+                "fulltime": {
+                    "away": null,
+                    "home": null
+                },
+                "halftime": {
+                    "away": null,
+                    "home": null
+                },
+                "penalty": {
+                    "away": null,
+                    "home": null
+                }
+            },
+            "teams": {
+                "away": {
+                    "id": 773,
+                    "logo": "https://media.api-sports.io/football/teams/773.png",
+                    "name": "Slovakia",
+                    "winner": null
+                },
+                "home": {
+                    "id": 24,
+                    "logo": "https://media.api-sports.io/football/teams/24.png",
+                    "name": "Poland",
+                    "winner": null
+                }
+            }
+        },
+        {
+            "fixture": {
+                "date": "2021-06-14T19:00:00+00:00",
+                "id": 657683,
+                "periods": {
+                    "first": null,
+                    "second": null
+                },
+                "referee": null,
+                "status": {
+                    "elapsed": null,
+                    "long": "Not Started",
+                    "short": "FT"
+                },
+                "timestamp": 1623697200,
+                "timezone": "UTC",
+                "venue": {
+                    "city": "Sevilla",
+                    "id": null,
+                    "name": "Estadio Ol\u00edmpico de Sevilla"
+                }
+            },
+            "goals": {
+                "away": 1,
+                "home": 2
+            },
+            "league": {
+                "country": "World",
+                "flag": null,
+                "id": 4,
+                "logo": "https://media.api-sports.io/football/leagues/4.png",
+                "name": "Euro Championship",
+                "round": "Group E - 1",
+                "season": 2020
+            },
+            "score": {
+                "extratime": {
+                    "away": null,
+                    "home": null
+                },
+                "fulltime": {
+                    "away": null,
+                    "home": null
+                },
+                "halftime": {
+                    "away": null,
+                    "home": null
+                },
+                "penalty": {
+                    "away": null,
+                    "home": null
+                }
+            },
+            "teams": {
+                "away": {
+                    "id": 5,
+                    "logo": "https://media.api-sports.io/football/teams/5.png",
+                    "name": "Sweden",
+                    "winner": null
+                },
+                "home": {
+                    "id": 9,
+                    "logo": "https://media.api-sports.io/football/teams/9.png",
+                    "name": "Spain",
+                    "winner": null
+                }
+            }
+        }
+    ],
+    "results": 3
+}
+

@@ -128,7 +128,7 @@ public class LiveScoreFeedScheduler {
 				//save bet
 				betRepository.save(bet);
 			});
-			logWinners();
+			//logWinners();
 		}
 
 		//update game entry
