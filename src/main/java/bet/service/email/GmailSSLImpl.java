@@ -1,5 +1,6 @@
 package bet.service.email;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+@Slf4j
 @Component
 @Profile("live")
 public class GmailSSLImpl implements EmailSender {
@@ -54,6 +56,7 @@ public class GmailSSLImpl implements EmailSender {
 
 		} catch (MessagingException e) {
 			//throw new RuntimeException(e);
+			log.error("Error sending mail: " + subject, e);
 		}
 	}
 }

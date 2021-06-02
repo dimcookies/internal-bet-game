@@ -107,7 +107,7 @@ public class UserService extends AbstractManagementService<User, Integer, UserDt
 		context.setVariable("password", password);
 		String html = templateEngine.process("email-user", context);
 
-		emailSender.sendEmail(email, "Upstream WC2018 account", html, false);
+		emailSender.sendEmail(email, "Euro 2020 account", html, false);
 	}
 
 }
