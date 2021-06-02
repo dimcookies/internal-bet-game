@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/preboot/angularjs-webpack",
   "dependencies": {
-    "angular": "1.5.9",
+    "angular": "^1.8.2",
     "angular-animate": "1.4.8",
     "angular-chart.js": "^1.1.1",
     "angular-data-table": "^0.7.1",
@@ -64,6 +64,6 @@
     "rimraf": "^2.5.1",
     "style-loader": "^0.21.0",
     "webpack": "^2.7.0",
-    "webpack-dev-server": "^2.11.2"
+    "webpack-dev-server": "^2.11.5"
   }
 }
