@@ -70,7 +70,7 @@
                 });
             }
 
-            if (_.last(self.allowedMatchDays) >= '8') {
+            if (_.last(self.allowedMatchDays) >= '8' && groupedByMatchDay["8"]) {
                 self.tableParamsP8 = new self.NgTableParams({
                     count: groupedByMatchDay["8"].length // hides pager
                 }, {
