@@ -43,6 +43,7 @@ flyway:
 management:
   add-application-context-header: false
 application:
+    swaggerHost: localhost:8080
     timezone: Europe/Athens
     encryptKey: 1234567890qwertyuiopasdf
     currentMatchDays: 4
