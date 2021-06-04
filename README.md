@@ -44,8 +44,13 @@ feed is implemented based on football-api.org (and there is a backup option on f
 * Download matches, add in classpath (resources) and fix GameInitializer to import them in database  
 * Need to import odds some days before each round starts 
 * Create deadlines in database based on tournament schedule (current days and allowed days for betting. Use 
-  array for multiple values)
+  array for multiple values, empty deadline message does not show bets in gui)
+  * "currentMatchDays": "1,2,3", "allowedMatchDays": "1,2,3", "betDeadlineText": "date text"  
+  * "currentMatchDays": "1,2,3", "allowedMatchDays": null, "betDeadlineText": null
+  * "currentMatchDays": "1,2,3,4", "allowedMatchDays": "4", "betDeadlineText": "date text"
+  * "currentMatchDays": "1,2,3,4,5,6,7,8", "allowedMatchDays": "8,7", "betDeadlineText": "date text"
 * Fix email credentials
 * Change encryption key  
 * After all bets have been set, decrypt them
 * Check rss feeds
+* Upload odds.csv using the management endpoint for each stage

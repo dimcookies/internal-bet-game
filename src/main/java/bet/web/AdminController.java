@@ -2,7 +2,11 @@ package bet.web;
 
 import bet.api.dto.GameDto;
 import bet.api.dto.UserDto;
+import bet.model.Game;
+import bet.model.Odd;
 import bet.model.User;
+import bet.repository.GameRepository;
+import bet.repository.OddRepository;
 import bet.repository.UserRepository;
 import bet.service.analytics.AnalyticsScheduler;
 import bet.service.livefeed.LiveScoreFeedScheduler;
@@ -10,22 +14,31 @@ import bet.service.mgmt.EncryptedBetService;
 import bet.service.mgmt.UserService;
 import bet.service.rss.RssFeedScheduler;
 import bet.service.utils.EhCacheUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.stream.Collectors;
 
 /**
  * Helper services for administration tasks
  */
+@Slf4j
 @RestController
 @RequestMapping("/config")
 public class AdminController {
@@ -53,6 +66,12 @@ public class AdminController {
 
     @Autowired
     private CacheManager cacheManager;
+
+    @Autowired
+    private OddRepository oddRepository;
+
+    @Autowired
+    private GameRepository gameRepository;
 
     /**
      * Manually perform a score update from the live feed
@@ -158,6 +177,43 @@ public class AdminController {
     }
 
 
+    @RequestMapping(value = "/uploadOdds", method = RequestMethod.POST)
+    public String submit(@RequestParam("file") MultipartFile file) {
+        try {
+            new BufferedReader(new InputStreamReader(file.getInputStream())).lines()
+                    .forEach(s -> {
+                        if(!NumberUtils.isNumber(s.substring(0,1))) {
+                            log.info("Ignoring header line:" + s);
+                            return;
+                        }
+                        String[] values = s.split(",");
+                        Game game = gameRepository.findOne(Integer.parseInt(values[0]));
+                        if(game != null) {
+                            Odd odd = oddRepository.findOneByGame(game);
+                            if (odd != null) {
+                                odd.setOddsHome(Float.parseFloat(values[4]));
+                                odd.setOddsTie(Float.parseFloat(values[5]));
+                                odd.setOddsAway(Float.parseFloat(values[6]));
+                                if(values.length > 7) {
+                                    odd.setOddsUnder(Float.parseFloat(values[7]));
+                                    odd.setOddsOver(Float.parseFloat(values[8]));
+                                }
+                                oddRepository.save(odd);
+                                log.info("Odd updated:" + odd);
+                            } else {
+                                throw new RuntimeException("Odd not found for:" + s);
+                            }
+                        } else {
+                            throw new RuntimeException("Game not found for:" + s);
+                        }
+                    });
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        manualClearCaches();
+        return "OK";
+    }
 
 
 
