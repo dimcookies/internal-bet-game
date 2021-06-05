@@ -41,7 +41,9 @@ feed is implemented based on football-api.org (and there is a backup option on f
 ## Steps to init project
 
 * Check that livefeed implementation works (activated by spring profile). Check if tokens work
-* Download matches, add in classpath (resources) and fix GameInitializer to import them in database  
+* Download matches, add in classpath (resources) and fix GameInitializer 
+  to import them in database  (dto is based on api v1 response from http://api.football-data.
+  org/v2/competitions/2001/matches?status=SCHEDULED)
 * Need to import odds some days before each round starts 
 * Create deadlines in database based on tournament schedule (current days and allowed days for betting. Use 
   array for multiple values, empty deadline message does not show bets in gui)
@@ -54,3 +56,6 @@ feed is implemented based on football-api.org (and there is a backup option on f
 * After all bets have been set, decrypt them
 * Check rss feeds
 * Upload odds.csv using the management endpoint for each stage
+* Change in leaderboard.html the condition to show different color for winners
+* The implementation is based on world cup 2018 with 8 rounds, some tweaks 
+might be needed for tournaments with more/less rounds or different format
