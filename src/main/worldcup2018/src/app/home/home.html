@@ -59,12 +59,12 @@
     <!-- <hr class="mt-2"> -->
     <div class="card-columns">
       <div class="card mb-3" ng-repeat="rss in vm.allRss">
-        <a target="_blank" href="{{ rss.link }}">
+        <a target="_blank" href="{{ rss.link }}" rel="noopener noreferrer">
           <img class="img-thumbnail" ng-src="{{ rss.image }}" alt="">
         </a>
         <div class="card-body">
           <h6 class="card-title mb-1">
-          <a target="_blank" href="{{ rss.link }}">{{ rss.title }}</a>
+          <a target="_blank" href="{{ rss.link }}" rel="noopener noreferrer">{{ rss.title }}</a>
           </h6>
         </div>
       </div>

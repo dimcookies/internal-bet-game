@@ -7,7 +7,7 @@ public class SimpleLinkConverter implements LinkConverter {
 
 
     public String convertLink(String link) {
-        return String.format("<a target=\"_blank\" href=\"%s\" >%s</a>", link, link);
+        return String.format("<a target=\"_blank\" href=\"%s\" rel=\"noopener noreferrer\" >%s</a>", link, link);
     }
 
     public boolean isApplicable(String link) {
