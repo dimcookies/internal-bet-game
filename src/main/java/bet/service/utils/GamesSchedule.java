@@ -20,14 +20,14 @@ import java.util.stream.Collectors;
 @Component
 public class GamesSchedule {
 
-	private final List<GameStatus> activeStatuses = Arrays.asList(GameStatus.TIMED, GameStatus.IN_PLAY);
+	private final List<GameStatus> activeStatuses = Arrays.asList(GameStatus.TIMED, GameStatus.IN_PLAY, GameStatus.SCHEDULED);
 
 	@Autowired
 	private GameRepository gameRepository;
 
 	/**
 	 * Checks if there is a currently active game.
-	 * Start date has passed and status is TIMED or IN_PLAY
+	 * Start date has passed and status is TIMED or IN_PLAY or SCHEDULED
 	 * @param date
 	 * @return
 	 */
