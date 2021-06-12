@@ -1,5 +1,6 @@
 package bet.service;
 
+import bet.api.constants.GameStatus;
 import bet.api.dto.GamesV2Dto;
 import bet.model.Odd;
 import bet.repository.GameRepository;
@@ -43,7 +44,10 @@ public class GamesInitializer {
 			try {
 				GamesV2Dto games = mapper.readValue(inputStream, GamesV2Dto.class);
 				//save games
-				gameRepository.save(games.getMatches().stream().map(gameDto -> gameDto.toGame().toEntity()).collect(Collectors.toList()));
+				gameRepository.save(games.getMatches().stream()
+						                    .map(gameDto -> gameDto.toGame().toEntity())
+						                    .peek(game -> game.setStatus(GameStatus.SCHEDULED))
+						                    .collect(Collectors.toList()));
 
 				//create an initial odd for this game (to be updated manually later)
 				games.getMatches().forEach(gameDto -> {

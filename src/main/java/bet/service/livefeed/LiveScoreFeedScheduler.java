@@ -82,7 +82,7 @@ public class LiveScoreFeedScheduler {
 		LOGGER.info("Getting live feed");
 		clearCacheTask.clearCaches();
 		EhCacheUtils.clearCache();
-		liveFeed.getLiveFeed().forEach(gameDto -> checkMatchChanged(gameDto));
+		liveFeed.getLiveFeed().forEach(this::checkMatchChanged);
 		this.lastUpdateDate = now;
 	}
 

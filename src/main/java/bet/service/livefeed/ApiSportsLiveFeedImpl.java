@@ -159,11 +159,11 @@ public class ApiSportsLiveFeedImpl implements LiveFeed {
 	}
 
 	private GameStatus getStatus(String st) {
-		GameStatus status = GameStatus.TIMED;
+		GameStatus status = GameStatus.SCHEDULED;
 		switch (st) {
 			case "TBD":
 			case "NS":
-				status = GameStatus.TIMED;
+				status = GameStatus.SCHEDULED;
 				break;
 			case "1H":
 			case "HT":

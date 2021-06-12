@@ -59,3 +59,4 @@ feed is implemented based on football-api.org (and there is a backup option on f
 * Change in leaderboard.html the condition to show different color for winners
 * The implementation is based on world cup 2018 with 8 rounds, some tweaks 
 might be needed for tournaments with more/less rounds or different format
+* Inititial status of games should be SCHEDULED
