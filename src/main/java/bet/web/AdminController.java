@@ -1,19 +1,32 @@
 package bet.web;
 
+import bet.api.dto.EncryptedBetDto;
 import bet.api.dto.GameDto;
 import bet.api.dto.UserDto;
 import bet.model.Game;
 import bet.model.Odd;
 import bet.model.User;
+import bet.repository.DeadlineRepository;
 import bet.repository.GameRepository;
 import bet.repository.OddRepository;
 import bet.repository.UserRepository;
 import bet.service.analytics.AnalyticsScheduler;
+import bet.service.email.EmailSender;
 import bet.service.livefeed.LiveScoreFeedScheduler;
 import bet.service.mgmt.EncryptedBetService;
 import bet.service.mgmt.UserService;
 import bet.service.rss.RssFeedScheduler;
 import bet.service.utils.EhCacheUtils;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,19 +34,12 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.stream.Collectors;
 
 /**
  * Helper services for administration tasks
@@ -72,6 +78,12 @@ public class AdminController {
 
     @Autowired
     private GameRepository gameRepository;
+
+    @Autowired
+    private DeadlineRepository deadlineRepository;
+
+    @Autowired
+    private EmailSender emailSender;
 
     /**
      * Manually perform a score update from the live feed
@@ -216,5 +228,41 @@ public class AdminController {
     }
 
 
+    /**
+     * Send reminder email
+     *
+     * @return
+     */
+    @RequestMapping(value = "/betReminder", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public List<String> sendReminderBetEmail(boolean sendEmail, String emailBody, String emailSubject) {
+        Map<Integer, Long> betUsers = encryptedBetService.list().stream()
+            .collect(Collectors.groupingBy(EncryptedBetDto::getUserId, Collectors.counting()));
+        ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
+
+        String allowedMatchDays = deadlineRepository.findActiveDeadline(now, now)
+            .getAllowedMatchDays();
+        //the configured days that are allowed to get bets for
+        List<Integer> allowedDays = Arrays.stream(allowedMatchDays.split(","))
+            .map(Integer::parseInt).collect(Collectors.toList());
+
+        long matchNum = allowedDays.stream()
+            .mapToLong(day -> gameRepository.findByMatchDay(day).size())
+            .sum();
+
+        Set<UserDto> missingBetUsers = userService.list().stream()
+            .filter(user -> betUsers.getOrDefault(user.getId(), 0L) < matchNum)
+            .collect(Collectors.toSet());
+
+        String text = "This is a reminder that you have not placed your bets for match days:" + allowedDays + ". ";
+
+        if(sendEmail) {
+            missingBetUsers.forEach(user -> {
+                emailSender.sendEmail(user.getEmail(), emailSubject, text + emailBody, true);
+            });
+
+        }
+
+        return missingBetUsers.stream().map(UserDto::getUsername).collect(Collectors.toList());
+    }
 
 }
