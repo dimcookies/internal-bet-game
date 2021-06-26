@@ -174,6 +174,7 @@ public class ApiSportsLiveFeedImpl implements LiveFeed {
 				status = GameStatus.IN_PLAY;
 				break;
 			case "ET":
+			case "BT":
 			case "P":
 			case "FT":
 			case "AET":
