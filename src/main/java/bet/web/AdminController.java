@@ -252,6 +252,7 @@ public class AdminController {
             .sum();
 
         Set<UserDto> missingBetUsers = userService.list().stream()
+            .filter(userDto -> userDto.getRole().equals("USER"))
             .filter(user -> betUsers.getOrDefault(user.getId(), 0L) < matchNum)
             .collect(Collectors.toSet());
 
