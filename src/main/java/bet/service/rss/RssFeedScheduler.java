@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  * Get rss feeds from the selected sources and stores to database
  */
 @Component
-//@Profile("live")
+@Profile("live")
 public class RssFeedScheduler {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RssFeedScheduler.class);

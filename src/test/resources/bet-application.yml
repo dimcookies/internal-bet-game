@@ -16,7 +16,7 @@ spring:
   jpa:
     database: POSTGRESQL
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
+    show-sql: false
     properties:
       hibernate.cache.use_second_level_cache: true
       hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
@@ -43,11 +43,12 @@ flyway:
 management:
   add-application-context-header: false
 application:
+    swaggerHost: localhost:8080
     timezone: Europe/Athens
     encryptKey: 1234567890qwertyuiopasdf
     currentMatchDays: 4
-    allowedMatchDays: 1,2,3
-    betDeadline: Wednesday, June 13 15:00
+    allowedMatchDays:
+    betDeadline:
     live_feed:
       interval: 300000
       footballapiorg:
@@ -60,13 +61,17 @@ application:
       #       url: http://data.fifa.com/livescores/live/matches
       livescorescom:
               url: http://www.livescores.com/soccer/%s/
+      apisports:
+              url: https://v3.football.api-sports.io/fixtures?league=4&season=2020&date=%s
+#              url: http://localhost:8000/apisports_games.json
+              token:
       scorespro:
               url: https://www.scorespro.com/rss2/live-soccer.xml
     database-schema: bet
     email:
       username: X
       password: X
-    rss_feed: https://www.fifa.com/worldcup/news/rss.xml, http://www.espnfc.com/fifa-world-cup/4/rss, https://www.uefa.com/rssfeed/worldcup/rss.xml
+    rss_feed: https://www.uefa.com/rss/uefaeuro/rss.xml
     node:
          state-write-interval-mins: 30
          list-read-interval-secs: 1

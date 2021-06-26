@@ -135,7 +135,7 @@ public class LiveScoreFeedSchedulerTest extends AbstractBetIntegrationTest {
         checkPoints(bet2.getId(), 0, 0);
 
         betRepository.deleteAll();
-        List<Game> finalGames = gameRepository.findByMatchDay(8);
+        List<Game> finalGames = gameRepository.findByMatchDay(7);
         GameDto finalGame = new GameDto();
         finalGame.fromEntity(finalGames.get(0));
         updateOdd(finalGame.getId(), 1.2f,3.4f,2.2f,5.5f,4.5f);

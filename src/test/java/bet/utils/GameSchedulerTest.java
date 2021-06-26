@@ -39,7 +39,7 @@ public class GameSchedulerTest extends AbstractBetIntegrationTest {
 		});
 
 		assertTrue(gameRepository.findAll().iterator().hasNext());
-		ZonedDateTime c1 = ZonedDateTime.parse("2018-06-14T14:00:00Z[UTC]");
+		ZonedDateTime c1 = ZonedDateTime.parse("2021-06-11T18:00:00Z[UTC]");
 
 		assertFalse(gameScheduler.hasActiveGame(c1));
 		assertTrue(gameScheduler.hasActiveGame(c1.plusMinutes(61)));
@@ -64,7 +64,7 @@ public class GameSchedulerTest extends AbstractBetIntegrationTest {
 			gameRepository.save(game);
 		});
 
-		ZonedDateTime c1 = ZonedDateTime.parse("2018-06-15T14:00:00Z[UTC]");
+		ZonedDateTime c1 = ZonedDateTime.parse("2021-06-14T14:00:00Z[UTC]");
 
 		assertEquals(3, gameScheduler.getGamesAtDate(c1, Arrays.asList(GameStatus.FINISHED)).size());
 

@@ -9,14 +9,13 @@ import bet.model.Odd;
 import bet.model.User;
 import bet.service.GamesInitializer;
 import com.google.common.collect.Lists;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class BetRepositoryTest extends AbstractBetIntegrationTest {
 

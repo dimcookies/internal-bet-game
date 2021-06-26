@@ -67,7 +67,7 @@ public class AdminController {
     @Autowired
     private AnalyticsScheduler analyticsScheduler;
 
-    @Autowired
+    @Autowired(required = false)
     private RssFeedScheduler rssFeedScheduler;
 
     @Autowired
@@ -172,7 +172,9 @@ public class AdminController {
      */
     @RequestMapping(value = "/manualRss", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
     public String manualRss() throws Exception {
-        rssFeedScheduler.getRssFeed();
+        if(rssFeedScheduler != null) {
+            rssFeedScheduler.getRssFeed();
+        }
         return "OK";
     }
 
