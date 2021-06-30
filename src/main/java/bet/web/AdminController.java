@@ -253,6 +253,7 @@ public class AdminController {
 
         Set<UserDto> missingBetUsers = userService.list().stream()
             .filter(userDto -> userDto.getRole().equals("USER"))
+            .filter(UserDto::getEligible)
             .filter(user -> betUsers.getOrDefault(user.getId(), 0L) < matchNum)
             .collect(Collectors.toSet());
 
