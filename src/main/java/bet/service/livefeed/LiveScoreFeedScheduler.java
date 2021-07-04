@@ -34,7 +34,7 @@ public class LiveScoreFeedScheduler {
 
 	//interval for live update
 	@Value("${application.live_feed.interval:300000}")
-	private final int interval = 300000;
+	private int interval;
 
 	//last update date of live feed
 	private ZonedDateTime lastUpdateDate;
@@ -61,7 +61,7 @@ public class LiveScoreFeedScheduler {
 	private BetsController betsController;
 
 	@CacheEvict(allEntries = true, cacheNames = {"points1","points2","games"})
-	@Scheduled(fixedRate = interval)
+	@Scheduled(fixedRateString="${application.live_feed.interval}")
 	public void getLiveScores() {
 		getLiveScores(true);
 	}
