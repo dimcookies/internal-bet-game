@@ -40,7 +40,7 @@ public class GamesInitializer {
 
 			TypeReference<GamesV2Dto> typeReference = new TypeReference<GamesV2Dto>() {};
 			//get games from file
-			InputStream inputStream = TypeReference.class.getResourceAsStream("/euro_games.json");
+			InputStream inputStream = TypeReference.class.getResourceAsStream("/games_2022.json");
 			try {
 				GamesV2Dto games = mapper.readValue(inputStream, GamesV2Dto.class);
 				//save games

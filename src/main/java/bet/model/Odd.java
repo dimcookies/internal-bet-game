@@ -99,6 +99,8 @@ public class Odd implements Serializable {
 	@Transient
 	public int getMultiplier() {
 		switch (game.getMatchDay()) {
+		case 0:
+			return 0;
 		case 1:
 		case 2:
 		case 3:

@@ -61,7 +61,7 @@ application:
       livescorescom:
               url: http://www.livescores.com/soccer/%s/
       apisports:
-              url: https://v3.football.api-sports.io/fixtures?league=4&season=2020&date=%s
+              url: https://v3.football.api-sports.io/fixtures?league=1&season=2022&date=%s
 #              url: http://localhost:8000/apisports_games.json
               token:
       scorespro:
@@ -70,7 +70,7 @@ application:
     email:
       username: X
       password: X
-    rss_feed: https://www.uefa.com/rss/uefaeuro/rss.xml
+    rss_feed: https://www.espn.com/espn/rss/soccer/news,https://api.foxsports.com/v2/content/optimized-rss?partnerKey=MB0Wehpmuj2lUhuRhQaafhBjAJqaPU244mlTDK1i&size=30&tags=soccer/wc/league/12
     node:
          state-write-interval-mins: 30
          list-read-interval-secs: 1
