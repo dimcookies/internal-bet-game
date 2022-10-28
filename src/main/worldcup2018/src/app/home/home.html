@@ -50,14 +50,28 @@
       </div>
     </div> -->
   </div>
-  <div class="col-lg-8 order-2 order-lg-1">
+
+  <div class="col-lg-4 order-2 order-lg-1">
     <!-- Card Columns Example Social Feed-->
-    <div class="card mb-0 ">
+    <div class="card mb-0 "></div>
+    <!--     <i class="fa fa-newspaper-o"></i> News Feed</div>
+    -->
+    <div class="card-header">Tweets</div>
+    <!-- <hr class="mt-2"> -->
+    <div>
+      <a class="twitter-timeline" href="https://twitter.com/FIFAWorldCup?ref_src=twsrc%5Etfw">Tweets by FIFAWorldCup</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    </div>
+    <!-- /Card Columns-->
+  </div>
+
+  <div class="col-lg-4 order-2 order-lg-1">
+    <!-- Card Columns Example Social Feed-->
+    <div class="card mb-0 "></div>
     <!--     <i class="fa fa-newspaper-o"></i> News Feed</div>
     -->
     <div class="card-header">News Feed</div>
     <!-- <hr class="mt-2"> -->
-    <div class="card-columns">
+    <div>
       <div class="card mb-3" ng-repeat="rss in vm.allRss">
         <a target="_blank" href="{{ rss.link }}" rel="noopener noreferrer">
           <img class="img-thumbnail" ng-src="{{ rss.image }}" alt="">
