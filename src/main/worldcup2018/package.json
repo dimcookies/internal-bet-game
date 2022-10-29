@@ -35,7 +35,7 @@
     "ng-table": "^3.0.1"
   },
   "devDependencies": {
-    "ajv": "^6.12.6",
+    "ajv": "^7.0.0",
     "angular-mocks": "^1.7.0",
     "autoprefixer": "^10.4.13",
     "babel-core": "^6.26.3",
