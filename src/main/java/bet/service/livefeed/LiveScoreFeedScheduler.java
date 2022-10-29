@@ -86,16 +86,22 @@ public class LiveScoreFeedScheduler {
 		this.lastUpdateDate = now;
 	}
 
+
+	@CacheEvict(allEntries = true, cacheNames = {"points1","points2","games"})
+	public void checkMatchChanged(GameDto gameDto) {
+		this.checkMatchChanged(gameDto, false);
+	}
+
 	/**
 	 * Checks if a game score has changed and updates results
 	 * for user bets
 	 * @param gameDto
 	 */
 	@CacheEvict(allEntries = true, cacheNames = {"points1","points2","games"})
-	public void checkMatchChanged(GameDto gameDto) {
+	public void checkMatchChanged(GameDto gameDto, boolean ignoreStatus) {
 		//if game already finished, do not check
 		Game dbGame = gameRepository.findOne(gameDto.getId());
-		if (dbGame.getStatus().equals(GameStatus.FINISHED)) {
+		if (dbGame.getStatus().equals(GameStatus.FINISHED) && !ignoreStatus) {
 			return;
 		}
 		Game liveGame = gameDto.toEntity();

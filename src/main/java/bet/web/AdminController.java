@@ -105,7 +105,7 @@ public class AdminController {
     @CacheEvict(allEntries = true, cacheNames = {"points1","points2","games"})
     @RequestMapping(value = "/manualScoreUpdate", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
     public String manualScoreUpdate(@RequestBody GameDto gameDto) {
-        liveScoreFeedScheduler.checkMatchChanged(gameDto);
+        liveScoreFeedScheduler.checkMatchChanged(gameDto, true);
         liveScoreFeedScheduler.setLastUpdateDate(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC")));
         return "OK";
     }
