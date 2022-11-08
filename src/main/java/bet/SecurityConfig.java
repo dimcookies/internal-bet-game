@@ -39,33 +39,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	/**
-	 * Use md5 for password hashing and base64 for representation
-	 * @return
-	 */
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new PasswordEncoder() {
-			@Override public String encode(CharSequence charSequence) {
-				return hashPassword(charSequence.toString());
-			}
-
-			private String hashPassword(String password) {
-				try {
-					MessageDigest md = MessageDigest.getInstance("MD5");
-					md.update(password.getBytes());
-					return new String(Base64.getEncoder().encode(md.digest()));
-				} catch (Exception e) {
-					throw new RuntimeException(e);
-				}
-			}
-
-			@Override public boolean matches(CharSequence charSequence, String s) {
-				return hashPassword(charSequence.toString()).equals(s);
-			}
-		};
-	}
-
-	/**
 	 * Configured protected resources
 	 * @param http
 	 * @throws Exception
