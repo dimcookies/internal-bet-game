@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -21,6 +22,9 @@ import java.util.stream.Collectors;
  */
 @Component
 public class GamesInitializer {
+
+	@Value("${application.initFile}")
+	private String initFile;
 
 	public GamesInitializer() {
 		super();
@@ -40,7 +44,7 @@ public class GamesInitializer {
 
 			TypeReference<GamesV2Dto> typeReference = new TypeReference<GamesV2Dto>() {};
 			//get games from file
-			InputStream inputStream = TypeReference.class.getResourceAsStream("/games_2022.json");
+			InputStream inputStream = TypeReference.class.getResourceAsStream(initFile);
 			try {
 				GamesV2Dto games = mapper.readValue(inputStream, GamesV2Dto.class);
 				//save games

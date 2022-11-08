@@ -43,6 +43,7 @@ flyway:
 management:
   add-application-context-header: false
 application:
+    initFile: /euro_games.json
     swaggerHost: localhost:8080
     timezone: Europe/Athens
     encryptKey: 1234567890qwertyuiopasdf
