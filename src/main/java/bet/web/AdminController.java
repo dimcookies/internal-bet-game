@@ -21,13 +21,11 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
@@ -227,6 +225,39 @@ public class AdminController {
 
         manualClearCaches();
         return "OK";
+    }
+
+    @RequestMapping(value = "/uploadUsers", method = RequestMethod.POST)
+    public Map<String, String> uploadUsers(@RequestParam("file") MultipartFile file) {
+        Map<String, String> res = new HashMap<>();
+        try {
+            new BufferedReader(new InputStreamReader(file.getInputStream())).lines()
+                    .forEach(s -> {
+                        if(StringUtils.isBlank(s)) {
+                            return;
+                        }
+                        String[] values = s.split(",");
+                        if(values.length != 2) {
+                            res.put(s, "ERROR");
+                            return;
+                        }
+                        String name = values[0];
+                        String email = values[1];
+                        String username = email.split("@")[0];
+                        try {
+                            UserDto user = new UserDto(name, email, null, "USER", username, true, true);
+                            userService.create(user);
+                            res.put(email, "OK");
+                        } catch (Exception e) {
+                            log.error("Error creating user:"+email, e);
+                            res.put(email, "ERROR");
+                        }
+                    });
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return res;
     }
 
 
