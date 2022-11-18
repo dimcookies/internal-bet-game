@@ -170,6 +170,9 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 		List<Integer> allowedDays = Arrays.stream(allowedMatchDays.split(","))
 				.map(Integer::parseInt).collect(Collectors.toList());
 
+		long matchNum = allowedDays.stream()
+				.mapToLong(day -> gameRepository.findByMatchDay(day).size())
+				.sum();
 
 		//check if a provided bet is for a game outside allowed days
 		bets.forEach(encryptedBetDto -> {
@@ -181,12 +184,19 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 
 		List<EncryptedBetDto> validBets
 				= bets.stream()
-				.filter(encryptedBetDto -> encryptedBetDto.getScoreResult() != null)
+				.filter(encryptedBetDto -> StringUtils.isNotBlank(encryptedBetDto.getScoreResult()))
 				.collect(Collectors.toList());
 
+		String title = "World Cup Challenge 2022 Bet";
+		if(validBets.size() < matchNum) {
+			title = "(INCOMPLETE!!!) " + title + " (INCOMPLETE!!!)";
+		}
 
 		Context context = new Context();
 		context.setVariable("bets", getMailBets(validBets));
+		context.setVariable("betsNum", validBets.size());
+		context.setVariable("matchNum", matchNum);
+		context.setVariable("title", title);
 		String html = templateEngine.process("email-bet", context);
 
 		//delete current bets
@@ -202,7 +212,7 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 		}).map(encryptedBetDto -> create(encryptedBetDto)).collect(Collectors.toList()); //save bet and return list
 
 		//Send an email to user with saved bets
-		emailSender.sendEmail(user.getEmail(), "World Cup Challenge 2022 Bet", html, true);
+		emailSender.sendEmail(user.getEmail(), title, html, true);
 
 		return result;
 	}
