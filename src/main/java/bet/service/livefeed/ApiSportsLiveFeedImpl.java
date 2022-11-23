@@ -81,7 +81,7 @@ public class ApiSportsLiveFeedImpl implements LiveFeed {
 
 					Optional<Game> game = dayGames.stream().filter(g ->
 								matchNames(g.getHomeName(),homeTeamName)
-								&& matchNames(g.getAwayName(), awayTeamName)
+								|| matchNames(g.getAwayName(), awayTeamName)
 					).findFirst();
 
 					if(!game.isPresent()) {
@@ -96,7 +96,10 @@ public class ApiSportsLiveFeedImpl implements LiveFeed {
 
 					String status = jsonNode.get("fixture").get("status").get("short").textValue();
 
+					String elapsed = jsonNode.get("fixture").get("status").get("elapsed").textValue();
+
 					dto.setStatus(getStatus(status));
+					dto.setElapsed(elapsed);
 
 					return dto;
 				})

@@ -35,6 +35,8 @@ public class GameDto implements ManagementDto<Game, Integer> {
 
 	private ResultDto result;
 
+	private String elapsed;
+
 	public GameDto() {
 	}
 
