@@ -1,13 +1,17 @@
 package bet.web;
 
+import bet.api.dto.UserDto;
 import bet.model.Game;
 import bet.model.Odd;
 import bet.model.RssFeed;
 import bet.repository.OddRepository;
 import bet.repository.RssFeedRepository;
 import bet.service.livefeed.LiveScoreFeedScheduler;
+import bet.service.mgmt.UserService;
 import bet.service.utils.GamesSchedule;
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.text.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -22,12 +26,15 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
  * Misc web services
  */
 @RestController
+@Slf4j
 public class HelperController {
 
 	@Autowired
@@ -44,6 +51,12 @@ public class HelperController {
 
 	@Autowired
 	private GamesSchedule gamesSchedule;
+
+	@Autowired
+	private UserService userService;
+
+	Pattern pattern = Pattern.compile("^(.+)@upstreamsystems.com$");
+
 
 	/**
 	 * Get last update date of live feed
@@ -97,13 +110,20 @@ public class HelperController {
 		return rssFeedRepository.findAllOrdered(new PageRequest(0, limit, new Sort(Sort.Direction.DESC, "publish_date")));
 	}
 
+	@RequestMapping(value = "/user/create", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public String createUser(String email) {
+		Matcher matcher = pattern.matcher(email);
+		if(!matcher.matches()) {
+			log.error("Invalid email:" + email);
+			return "Invalid email:" + email;
+		}
+		String username = matcher.group(1);
+		String name = WordUtils.capitalizeFully(username.replaceAll("[^a-zA-Z]", " "));
+		UserDto user = new UserDto(name, email, null, "USER", username, true, true);
+		userService.create(user);
 
+		return "User created. An email with credentials has been sent to:" + email;
 
-
-
-
-
-
-
+	}
 }
 

@@ -38,6 +38,8 @@ feed is implemented based on football-api.org (and there is a backup option on f
     npm run build (copies frontend in resources folder and served by tomcat)
     npm start (for dev, changes ports in webpack.config.js)
 
+Do not update copy-webpack-plugin package
+
 ## Steps to init project
 
 * Check that livefeed implementation works (activated by spring profile). Check if tokens work

@@ -56,7 +56,7 @@ public class GmailSSLImpl implements EmailSender {
 
 		} catch (MessagingException e) {
 			//throw new RuntimeException(e);
-			log.error("Error sending mail: " + subject, e);
+			log.error("Error sending mail: " + emailTo, e);
 		}
 	}
 }

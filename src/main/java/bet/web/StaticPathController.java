@@ -22,5 +22,9 @@ public class StaticPathController {
 		return "login";
 	}
 
+	@GetMapping("/user/form")
+	public String createUser() {
+		return "createuser";
+	}
 
 }

@@ -293,6 +293,10 @@ public class AdminController {
         if(sendEmail) {
             missingBetUsers.forEach(user -> {
                 emailSender.sendEmail(user.getEmail(), emailSubject, text + emailBody, true);
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                }
             });
 
         }
