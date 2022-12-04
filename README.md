@@ -38,7 +38,7 @@ feed is implemented based on football-api.org (and there is a backup option on f
     npm run build (copies frontend in resources folder and served by tomcat)
     npm start (for dev, changes ports in webpack.config.js)
 
-Do not update copy-webpack-plugin package
+Do not update depedencies :(
 
 ## Steps to init project
 
@@ -46,7 +46,6 @@ Do not update copy-webpack-plugin package
 * Download matches, add in classpath (resources) and fix GameInitializer 
   to import them in database  (dto is based on api v1 response from http://api.football-data.
   org/v2/competitions/2001/matches?status=SCHEDULED)
-* Need to import odds some days before each round starts 
 * Create deadlines in database based on tournament schedule (current days and allowed days for betting. Use 
   array for multiple values, empty deadline message does not show bets in gui)
   * "currentMatchDays": "1,2,3", "allowedMatchDays": "1,2,3", "betDeadlineText": "date text"  
@@ -55,7 +54,7 @@ Do not update copy-webpack-plugin package
   * "currentMatchDays": "1,2,3,4,5,6,7,8", "allowedMatchDays": "8,7", "betDeadlineText": "date text"
 * Fix email credentials
 * Change encryption key  
-* After all bets have been set, decrypt them
+* After all bets have been set, decrypt them (first call might timeout in gateway)
 * Check rss feeds
 * Upload odds.csv using the management endpoint for each stage
 * Change in leaderboard.html the condition to show different color for winners
@@ -64,5 +63,5 @@ Do not update copy-webpack-plugin package
 might be needed for tournaments with more/less rounds or different format
 * Initial status of games should be SCHEDULED
 * Change image for home background
-* Change texts 
-* Create new password and change in database
+* Change texts
+* /user/form to manually create users
