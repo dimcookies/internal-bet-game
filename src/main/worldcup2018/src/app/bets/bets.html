@@ -43,7 +43,7 @@
     </div>
     <br/>
     <div class="float-right">
-        <button type="button" ng-disabled="vm.enableSubmit || editform.$invalid" class="btn btn-success col-m" ng-click="vm.saveBets()">Submit Picks</button>
+        <button type="button" ng-disabled="vm.enableSubmit || editform.$invalid" class="btn btn-success col-m" ng-click="vm.validateAndSubmitBets()">Submit Picks</button>
     </div>
     <div class="row">
         <div ng-show="vm.editError" class="col-12 text-center" style="color:red">Missing fields</div>
@@ -51,3 +51,22 @@
     </div>
     <br/>
 </form>
+
+<!-- confirm partial submit modal -->
+<div class="modal fade" id="confirmPartialSubmitModal" tabindex="-1" aria-labelledby="confirmPartialSubmitModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmPartialSubmitModalLabel">Missing bets</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" ng-click="vm.closeModal()" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" ng-click="vm.closeModal()">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="vm.partialSubmitConfirmed()">Submit Anyway!</button>
+            </div>
+        </div>
+    </div>
+</div>
