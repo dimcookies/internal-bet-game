@@ -41,6 +41,7 @@
 			});
 		});
 	}
+
 	saveBets() {
 		var self = this;
 		self.disableSubmit = true;
@@ -71,6 +72,41 @@
 			}).catch(function(data) {
 				alert("Opps! Something went wrong");
 			});
-	};
+	}
+
+	validateAndSubmitBets() {
+		var self = this;
+		var totalAvailableBets = self.selectedGames.length
+		var placedBets = self.countPlacedBets(self);
+
+		if (placedBets < totalAvailableBets) {
+			$('.modal-body').text("You are about to place " + placedBets + " out of " + totalAvailableBets + " total bets available.");
+			$('#confirmPartialSubmitModal').modal('show');
+		} else {
+			self.saveBets();
+		}
+	}
+
+	countPlacedBets(self) {
+		let selectedBets = 0;
+		for (var key in self.userBets) {
+			var value = self.userBets[key];
+			if (value !== "") {
+				selectedBets++;
+			}
+		}
+		return selectedBets;
+	}
+
+	partialSubmitConfirmed() {
+		var self = this;
+		self.closeModal();
+		self.saveBets();
+	}
+
+	closeModal() {
+		$('#confirmPartialSubmitModal').modal('hide');
+	}
+
 }
 BetsController.$inject = ['$scope', '$rootScope', '$http', '$window', 'logger', 'NgTableParams'];
