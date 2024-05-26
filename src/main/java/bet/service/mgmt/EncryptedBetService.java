@@ -187,7 +187,7 @@ public class EncryptedBetService extends AbstractManagementService<EncryptedBet,
 				.filter(encryptedBetDto -> StringUtils.isNotBlank(encryptedBetDto.getScoreResult()))
 				.collect(Collectors.toList());
 
-		String title = "World Cup Challenge 2022 Bet";
+		String title = "Euro 2024 Challenge Bet";
 		if(validBets.size() < matchNum) {
 			title = "(INCOMPLETE!!!) " + title + " (INCOMPLETE!!!)";
 		}
