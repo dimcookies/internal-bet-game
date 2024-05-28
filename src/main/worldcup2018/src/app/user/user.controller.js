@@ -64,7 +64,7 @@
                 });
             }
 
-            if (_.last(self.allowedMatchDays) >= '8' && groupedByMatchDay["7"] && groupedByMatchDay["7"].length > 0) {
+            if (_.last(self.allowedMatchDays) >= '7' && groupedByMatchDay["7"] && groupedByMatchDay["7"].length > 0) {
                 self.tableParamsP7 = new self.NgTableParams({
                     count: groupedByMatchDay["7"].length // hides pager
                 }, {

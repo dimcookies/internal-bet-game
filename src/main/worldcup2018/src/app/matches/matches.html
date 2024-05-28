@@ -15,7 +15,7 @@
             <td class="text-center" title="'O'" sortable="'oddsOver'">{{game.oddsOver | number: 2}}</td>
         </tr>
     </table>
-    <h4 class="text-center text-secondary mt-4" ng-show="vm.tableParamsP7">3rd place Play-off</h4>
+    <h4 class="text-center text-secondary mt-4" ng-show="vm.tableParamsP7">Final</h4>
     <table ng-show="vm.tableParamsP7" ng-table="vm.tableParamsP7" class="table table-condensed table-striped">
         <tr ng-repeat="game in $data">
             <td class="text-center" title="'Match'"><a ui-sref="match({gameId: game.game.id})">{{ game.game.homeName }} - {{ game.game.awayName }}</a></td>
