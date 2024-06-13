@@ -57,6 +57,7 @@ Do not update depedencies :(
 * After all bets have been set, decrypt them (first call might timeout in gateway)
 * Check rss feeds
 * Upload odds.csv using the management endpoint for each stage
+  *  \copy ( select g.id, game_date,  home_name, away_name, o.odds_home, o.odds_away, o.odds_tie   from game g, odd o where g.id = o.game_id  and g.match_day in (1,2,3) order by game_date, id, match_day) TO '/tmp/odds.csv' DELIMITER ',' CSV HEADER;
 * Change in leaderboard.html the condition to show different color for winners
 * Change in home.html the last X players filter
 * The implementation is based on world cup 2018 with 8 rounds, some tweaks 
