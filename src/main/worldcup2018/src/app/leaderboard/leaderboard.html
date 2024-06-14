@@ -1,6 +1,6 @@
 ﻿<div class="table-responsive">
     <table ng-table="vm.tableParams" class="table table-condensed table-striped" show-filter="true">
-        <tr ng-repeat="entry in $data" ng-class="{'table-success': entry.idx < 11 || entry.idx == 167}">
+        <tr ng-repeat="entry in $data" ng-class="{'table-success': entry.idx < 11 || entry.idx == 108}">
             <td class="text-center" title="'#'">{{entry.idx}}</td>
             <td class="text-left" title="'Player'"  filter="{ 'name': 'text'}"  sortable="'username'">{{entry.name}}</a></td>
             <td class="text-right" title="'Points'" sortable="'points'">{{ entry.points }}</td>
