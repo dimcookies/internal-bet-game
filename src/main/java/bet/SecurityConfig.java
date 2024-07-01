@@ -48,7 +48,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.cors().and().csrf().disable().
 				authorizeRequests()
-				.antMatchers(new String[]{"/css/**", "/js/**", "/images/**", "/vendor/**", "/img/**", "/app*", "/user/*"}).permitAll()
+				.antMatchers(new String[]{"/css/**", "/js/**", "/images/**", "/vendor/**", "/img/**", "/app*", "/user/*"
+						, "/register", "/accounts/register"}).permitAll()
 				//restrict configuration web services to admin user
 					.antMatchers("/config/**").hasAuthority("ADMIN")// hasRole("ADMIN")
 				//restrict swagger to admin user
