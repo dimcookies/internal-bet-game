@@ -17,6 +17,7 @@ Implementation of the custom bet game
   * Extra points given by guessing right is: 0.5 * Base Points * "O/U betting factor"
 * Note: All results are "90-min period" results (any overtime will be recorded as a tie = "X"); applies both on 1/x/2 and O/U
 * Most points win!
+* Users can be registered on the platform at `/register`
 
 The implementation is for World Cup 2018, but can easily be adapted to other tournaments. Live score 
 feed is implemented based on football-api.org (and there is a backup option on fifa.com live scores)
@@ -65,4 +66,5 @@ might be needed for tournaments with more/less rounds or different format
 * Initial status of games should be SCHEDULED
 * Change image for home background
 * Change texts
+* Users can be registered on the platform at `/register`
 * /user/form to manually create users

@@ -1,14 +1,17 @@
 package bet.service.mgmt;
 
 import bet.api.dto.UserDto;
+import bet.exception.UserAlreadyExistException;
 import bet.model.User;
 import bet.service.email.EmailSender;
 import bet.service.encrypt.EncryptHelper;
 import bet.service.utils.PasswordGenerator;
 import com.google.common.collect.Lists;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
@@ -86,7 +89,25 @@ public class UserService extends AbstractManagementService<User, Integer, UserDt
 
 		//all users are created with role USER
 		dto.setRole("USER");
-		dto = super.create(dto);
+		try {
+			dto = super.create(dto);
+		} catch (DataIntegrityViolationException e) {
+			Throwable cause = e.getCause();
+			if (cause instanceof ConstraintViolationException) {
+				ConstraintViolationException constraintViolationException = (ConstraintViolationException) cause;
+				String constraintName = constraintViolationException.getConstraintName();
+				if ("allowed_users_u01".equals(constraintName) ||
+						"allowed_users_u02".equals(constraintName) ||
+						"allowed_users_u03".equals(constraintName)) {
+					throw new UserAlreadyExistException();
+				} else {
+					throw new RuntimeException("An unexpected error occurred while creating user");
+				}
+			} else {
+				throw new RuntimeException("An unexpected error occurred while creating user");
+			}
+		}
+
 		//send email to user to provide the password
 		sendPasswordEmail(dto, password, email);
 		return dto;
